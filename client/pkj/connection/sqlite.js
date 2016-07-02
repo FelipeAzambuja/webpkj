@@ -52,4 +52,3 @@ function SqliteConnection(fileName, size, version) {
         });
     }
 }
-
