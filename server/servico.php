@@ -1,6 +1,10 @@
 <?php
 include './pkj/all.php';
 
+
 function teste($form) {
-    echo json_encode($form);
+    $bind = bind($form);
+    
+    bind($form)->setValue("nome", 'Felip"\'""""\'e');
+//    echo json_encode($form);
 }

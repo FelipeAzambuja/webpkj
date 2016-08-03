@@ -1,14 +1,13 @@
-var loads = ["onsen", "remote", "bind", "popup", "mask"];
+var loads = ["bind","onsen", "remote", "popup", "mask"];
 var conexao = null;
 PKJ.require(loads, function () {
-  $("body").show();
-  conexao = new RemoteConnection("http://localhost/webpkj/server/pkj/driver.php","felipe","123");
-  conexao.execute("delete from usuarios");
-  conexao.query("select * from usuarios",function(data){
-    console.log(data);
-  });
-  conexao.execute("insert into usuarios (nome,telefone,idade) values(?,?,?)",["Felipe","",26]);
+    $("body").show();
+//    ons.ready(function () {
+//        bindRefresh();
+//    });
+    PKJ.refresh();
 });
+
 window.fn = {};
 
 window.fn.open = function () {
@@ -22,6 +21,8 @@ window.fn.load = function (page) {
     content.load(page)
             .then(menu.close.bind(menu));
 };
-function teste(value) {
+var index = {};
+index.teste = function(value){
     console.log(value);
 }
+

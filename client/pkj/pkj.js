@@ -52,6 +52,10 @@ PKJ.refresh = function () {
                     }
                 });
                 break;
+            case "bind":
+                $("*").removeAttr("bind");
+                bindRefresh();
+                break;
         }
     });
 };

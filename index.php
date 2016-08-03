@@ -1,3 +1,9 @@
+<?php
+
+function teste($form) {
+    alert("ok");
+}
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -28,7 +34,7 @@
             </ons-splitter-side>
             <ons-splitter-content id="content" page="home.html"></ons-splitter-content>
         </ons-splitter>
-
+        <ons-navigator id="navegador" page="home.html"></ons-navigator>
         <ons-template id="home.html">
             <ons-page>
                 <ons-toolbar>
@@ -38,12 +44,13 @@
                         </ons-toolbar-button>
                     </div>
                     <div class="center">
-                        Main
                     </div>
                 </ons-toolbar>
-                <p style="text-align: center; opacity: 0.6; padding-top: 20px;">
-                    Swipe right to open the menu!
-                </p>
+                <p style="text-align: center; opacity: 0.6; padding-top: 20px;"></p>
+                <form style="text-align: center">
+                    <ons-input input-id="nome" type="text" float placeholder="Nome" modifier="underbar" ></ons-input>
+                    <ons-button click="teste()" page="server/servico.php" >Enviar</ons-button>
+                </form>
             </ons-page>
         </ons-template>
 
