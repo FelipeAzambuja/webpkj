@@ -24,11 +24,69 @@ if (isset($_POST["CMD"])) {
 }
 
 /**
+ * New instance of OnsNavigator
+ * @param type $id
+ * @return \OnsNavigator
+ */
+function ons_navigator($id) {
+    return new OnsNavigator($id);
+}
+
+class OnsNavigator {
+
+    var $id;
+    //TODO Implementar metodos do onsen
+    function __construct($id) {
+        $this->id = $id;
+    }
+
+    function pushPage($page, $done = "") {
+        ?>document.getElementById("<?php echo $this->id ?>").pushPage("<?php echo $page ?>").then(function () {<?php if ($page != ""): ?>bindCall("<?php echo $_POST["PAGE"] ?>", "<?php echo $done ?>", {});<?php endif; ?>});<?php
+    }
+
+}
+
+/**
  * New instance of Bind
  * @return \Bind
  */
 function bind($form) {
     return new Bind($form);
+}
+
+class JS {
+//TODO implementar javascript
+    public static function alert($mensagem) {
+        ?>alert("<?php echo JS::addslashes($mensagem) ?>")<?php
+    }
+
+    public static function addslashes($s) {
+        $o = "";
+        $l = strlen($s);
+        for ($i = 0; $i < $l; $i++) {
+            $c = $s[$i];
+            switch ($c) {
+                case '<': $o.='\\x3C';
+                    break;
+                case '>': $o.='\\x3E';
+                    break;
+                case '\'': $o.='\\\'';
+                    break;
+                case '\\': $o.='\\\\';
+                    break;
+                case '"': $o.='\\"';
+                    break;
+                case "\n": $o.='\\n';
+                    break;
+                case "\r": $o.='\\r';
+                    break;
+                default:
+                    $o.=$c;
+            }
+        }
+        return $o;
+    }
+
 }
 
 class Bind {
@@ -47,7 +105,7 @@ class Bind {
      * @return \Bind
      */
     function setValue($id, $value) {
-        $value = $this->jsaddslashes($value);
+        $value = JS::addslashes($value);
         ?>$("*[input-id='<?php echo $id ?>'],*[id='<?php echo $id ?>']").val("<?php echo $value ?>");<?php
         return $this;
     }
@@ -76,7 +134,7 @@ class Bind {
      * @param type $html
      */
     function setHtml($id, $html) {
-        $html = $this->jsaddslashes($html);
+        $html = JS::addslashes($html);
         ?>$("*[id='<?php echo $id ?>'],*[input-id='<?php echo $id ?>']").html("<?php echo $html ?>");<?php
         return $this;
     }
@@ -97,18 +155,18 @@ class Bind {
      * @param type $text
      */
     function setText($id, $text) {
-        $text = $this->jsaddslashes($text);
+        $text = JS::addslashes($text);
         ?>$("*[id='<?php echo $id ?>'],*[input-id='<?php echo $id ?>']").html("<?php echo $text ?>");<?php
         return $this;
     }
-    
+
     /**
      * Set text to html element
      * @param type $id
      * @param type $text
      */
     function append($id, $text) {
-        $text = $this->jsaddslashes($text);
+        $text = JS::addslashes($text);
         ?>$("*[id='<?php echo $id ?>'],*[input-id='<?php echo $id ?>']").append("<?php echo $text ?>");<?php
         return $this;
     }
@@ -170,31 +228,20 @@ class Bind {
         return new UploadParser($this->form[$id]);
     }
 
-    private function jsaddslashes($s) {
-        $o = "";
-        $l = strlen($s);
-        for ($i = 0; $i < $l; $i++) {
-            $c = $s[$i];
-            switch ($c) {
-                case '<': $o.='\\x3C';
-                    break;
-                case '>': $o.='\\x3E';
-                    break;
-                case '\'': $o.='\\\'';
-                    break;
-                case '\\': $o.='\\\\';
-                    break;
-                case '"': $o.='\\"';
-                    break;
-                case "\n": $o.='\\n';
-                    break;
-                case "\r": $o.='\\r';
-                    break;
-                default:
-                    $o.=$c;
-            }
-        }
-        return $o;
+    function setInterval($function, $parameters) {
+        //TODO implementar interval
+    }
+
+    function setTimeout($function, $parameters) {
+        //TODO implementar timeout
+    }
+
+    function stopInterval($function) {
+        //TODO implementar stopinterval
+    }
+
+    function stopTimeout($function) {
+        //TODO implementar stoptimeout
     }
 
 }

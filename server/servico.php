@@ -1,10 +1,11 @@
 <?php
+
 include './pkj/all.php';
 
-
 function teste($form) {
-    $bind = bind($form);
-    
-    bind($form)->setValue("nome", 'Felip"\'""""\'e');
-//    echo json_encode($form);
+    ons_navigator("navegador")->pushPage("demo/login.html", "termina");
+}
+
+function termina($form) {
+    JS::alert("Pronto");
 }

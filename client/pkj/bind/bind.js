@@ -22,6 +22,7 @@ function sisBindInterval(e, tipo) {
             lock(e)
         }
         sisfunHAppyyyy.CMD = funName;
+        sisfunHAppyyyy.PAGE = pagina;
         $.post(pagina, sisfunHAppyyyy, function (resp) {
             if (len(trim(resp)) > 0) {
                 try {
@@ -119,6 +120,17 @@ $(function () {
 });
 function bindCall(pagina, funcao, data) {
     data.CMD = funcao;
+    data.PAGE = pagina;
+    if (data === undefined) {
+        data = {};
+        data.post0 = "";
+    }
+    if (data === {}) {
+        data.post0 = "";
+    }
+    if(data.post0 === undefined){
+        data.post0 = "";
+    }
     $.post(pagina, data, function (resp) {
         if (len(trim(resp)) > 0) {
             try {

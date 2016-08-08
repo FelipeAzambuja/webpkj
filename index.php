@@ -1,5 +1,5 @@
 <?php
-
+include './server/pkj/all.php';
 function teste($form) {
     alert("ok");
 }
@@ -16,7 +16,7 @@ function teste($form) {
     </head>
     <body>
     <ons-painel>
-        <ons-splitter>
+<!--        <ons-splitter>
             <ons-splitter-side id="menu" side="left" width="220px" collapse swipeable>
                 <ons-page>
                     <ons-list>
@@ -33,7 +33,7 @@ function teste($form) {
                 </ons-page>
             </ons-splitter-side>
             <ons-splitter-content id="content" page="home.html"></ons-splitter-content>
-        </ons-splitter>
+        </ons-splitter>-->
         <ons-navigator id="navegador" page="home.html"></ons-navigator>
         <ons-template id="home.html">
             <ons-page>
@@ -47,6 +47,9 @@ function teste($form) {
                     </div>
                 </ons-toolbar>
                 <p style="text-align: center; opacity: 0.6; padding-top: 20px;"></p>
+                <?php
+                s($_SERVER);
+                ?>
                 <form style="text-align: center">
                     <ons-input input-id="nome" type="text" float placeholder="Nome" modifier="underbar" ></ons-input>
                     <ons-button click="teste()" page="server/servico.php" >Enviar</ons-button>
