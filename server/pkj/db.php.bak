@@ -30,10 +30,6 @@ function commit_transaction() {
     }
 }
 
-function back_transaction(){
-  rollback_transaction();
-}
-
 function rollback_transaction() {
     if (conf::$servidor != "odbc") {
         query("ROLLBACK");

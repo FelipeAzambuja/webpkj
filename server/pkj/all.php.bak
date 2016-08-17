@@ -10,7 +10,6 @@ function show_errors($v = true) {
         error_reporting(0);
     }
 }
-include 'session.php';
 include "string.php";
 include "conf.php";
 include "pkj.php";

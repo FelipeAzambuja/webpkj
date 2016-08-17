@@ -22,6 +22,28 @@ if (isset($_POST["CMD"])) {
     call_user_func($cmd, $tmp2);
     exit();
 }
+/**
+ * New instance of OnsSlitter
+ * @param type $id
+ * @return \OnsSlitter
+ */
+function ons_splitter($id){
+  return new OnsSplitter($id);
+}
+class OnsSplitter {
+
+    var $id;
+
+    function __construct($id) {
+        $this->id = $id;
+    }
+    
+    function load($page,$done = ""){
+        ?>document.getElementById("<?php echo $this->id ?>").load("<?php echo $page ?>").then(function () {bindRefresh(); <?php if ($done != ""): ?>bindCall("<?php echo $_POST["PAGE"] ?>", "<?php echo $done ?>", {});<?php endif; ?>});<?php
+        bindUpdate();
+    }
+
+}
 
 /**
  * New instance of OnsNavigator
@@ -35,29 +57,90 @@ function ons_navigator($id) {
 class OnsNavigator {
 
     var $id;
+
     //TODO Implementar metodos do onsen
     function __construct($id) {
         $this->id = $id;
     }
 
     function pushPage($page, $done = "") {
-        ?>document.getElementById("<?php echo $this->id ?>").pushPage("<?php echo $page ?>").then(function () {<?php if ($page != ""): ?>bindCall("<?php echo $_POST["PAGE"] ?>", "<?php echo $done ?>", {});<?php endif; ?>});<?php
+        ?>document.getElementById("<?php echo $this->id ?>").pushPage("<?php echo $page ?>").then(function () {  bindRefresh();  <?php if ($done != ""): ?>bindCall("<?php echo $_POST["PAGE"] ?>", "<?php echo $done ?>", {}); <?php endif; ?>});<?php
+        bindUpdate();
     }
 
 }
 
 /**
- * New instance of Bind
- * @return \Bind
+ * New Ons modal
+ * @param type $id
+ * @return \OnsModal
  */
-function bind($form) {
-    return new Bind($form);
+function ons_modal($id) {
+    return new OnsModal($id);
+}
+
+class OnsModal {
+
+    var $id;
+
+    function __construct($id) {
+        $this->id = $id;
+    }
+
+    function show() {
+        ?>document.getElementById('<?php echo $this->id ?>').show();<?php
+    }
+
+    function hide() {
+        ?>document.getElementById('<?php echo $this->id ?>').hide();<?php
+    }
+
+    function toggle() {
+        ?>document.getElementById('<?php echo $this->id ?>').toggle();<?php
+    }
+
+}
+
+/**
+ * New Ons modal
+ * @param type $id
+ * @return \OnsModal
+ */
+function ons_dialog($id) {
+    return new OnsDialog($id);
+}
+
+class OnsDialog {
+
+    var $id;
+
+    function __construct($id) {
+        $this->id = $id;
+    }
+
+    function show() {
+        ?>document.getElementById('<?php echo $this->id ?>').show();<?php
+    }
+
+    function hide() {
+        ?>document.getElementById('<?php echo $this->id ?>').hide();<?php
+    }
+
+    function toggle() {
+        ?>document.getElementById('<?php echo $this->id ?>').toggle();<?php
+    }
+
 }
 
 class JS {
+
 //TODO implementar javascript
     public static function alert($mensagem) {
-        ?>alert("<?php echo JS::addslashes($mensagem) ?>")<?php
+        ?>alert("<?php echo JS::addslashes($mensagem) ?>");<?php
+    }
+
+    public static function console($mensagem) {
+        ?>console.log("<?php echo JS::addslashes($mensagem) ?>");<?php
     }
 
     public static function addslashes($s) {
@@ -88,7 +171,16 @@ class JS {
     }
 
 }
-
+/**
+ * New instance of Bind
+ * @return \Bind
+ */
+function bind($form) {
+    return new Bind($form);
+}
+function bindUpdate(){
+  bind(array())->update();
+}
 class Bind {
 
     var $ids;
@@ -97,7 +189,9 @@ class Bind {
     function __construct($form) {
         $this->form = $form;
     }
-
+    function update(){
+      ?>$("*").removeAttr("bind");bindRefresh();<?php
+    }
     /**
      * Set value to html input
      * @param type $id
@@ -326,7 +420,7 @@ class UploadParser {
     }
 
     /**
-     * Get my raw format dont use please 
+     * Get my raw format dont use please
      * @return type
      */
     function getRaw() {
@@ -334,7 +428,7 @@ class UploadParser {
     }
 
     /**
-     * Save data in a file 
+     * Save data in a file
      * @param type $fileName
      * @return boolean
      */
