@@ -1,9 +1,7 @@
 Bem vindo a WebPKJ
 ===================
 
-Este framework foi feito para agilizar o desenvolvimento de aplicativos na internet.
-Inicialmente era apenas o arquivo **pkj.php**, posteriormente notei que precisava de muitos mais recursos.
-Conforme encontrava outros frameworks e plugins acrescentei ao meu projeto, alguns deles apresentam incompatibilidades entre si ou alguma caraterística que me incomodou então resolvi mudar.
+Partindo do projeto inicial **pkj.php**, este framework foi criado para agilizar o desenvolvimento de aplicativos para internet, ao qual foi implementado recursos, frameworks e plugins, de diversos outros colaboradores, a fim de  corrigir algumas incompatibilidades com os mesmos e agregar algumas funções ao projeto.
 
 Qualquer duvida prefira enviar um e-mail para felipe@newbgp.com.br
 [Enviar email](mailto:felipe@newbgp.com.br?subject=WEBPKJ)
