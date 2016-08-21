@@ -47,23 +47,23 @@ function sisBindInterval(e, tipo) {
     return true
 }
 function bindRefresh() {
-    if($.inArray("onsen",PKJ.loadedLibrarys) > 0){
-      //console.log("Desejo um prato do dia e um suco o mais rapido possivel");
-      if(typeof(ons) !== "undefined"){
-        if(!ons.isReady()){
-          //console.log("se acalme vamos buscar seu suco");
-          setTimeout(function(){
-            bindRefresh();
-          },128);
-          return;
+    if ($.inArray("onsen", PKJ.loadedLibrarys) > 0) {
+        //console.log("Desejo um prato do dia e um suco o mais rapido possivel");
+        if (typeof (ons) !== "undefined") {
+            if (!ons.isReady()) {
+                //console.log("se acalme vamos buscar seu suco");
+                setTimeout(function () {
+                    bindRefresh();
+                }, 128);
+                return;
+            }
+        } else {
+            //console.log("volte mais tarde, seu almoï¿½o ainda nï¿½o estï¿½ pronto");
+            setTimeout(function () {
+                bindRefresh();
+            }, 128);
+            return;
         }
-      }else{
-        //console.log("volte mais tarde, seu almoço ainda não está pronto");
-        setTimeout(function(){
-          bindRefresh();
-        },128);
-        return;
-      }
     }
     setTimeout(function () {
         $.each($("ons-button ,ons-range,ons-input,ons-switch,input,select,a,button,img,textarea"), function (e, t) {
@@ -119,16 +119,16 @@ $(document).ready(function () {
     });
 });
 function bindCall(pagina, funcao, data) {
-    data.CMD = funcao;
-    data.PAGE = pagina;
     if (data === undefined) {
         data = {};
         data.post0 = "";
     }
+    data.CMD = funcao;
+    data.PAGE = pagina;
     if (data === {}) {
         data.post0 = "";
     }
-    if(data.post0 === undefined){
+    if (data.post0 === undefined) {
         data.post0 = "";
     }
     $.post(pagina, data, function (resp) {
@@ -152,11 +152,11 @@ function formData(formulario) {
     $(formulario).find(':input').each(function () {
         var self = $(this);
         var id = self.attr('id');
-        //espero que não de merda :D
-        if(id === undefined){
-          return;
+        //espero que nï¿½o de merda :D
+        if (id === undefined) {
+            return;
         }
-        var name  = self.attr('name');
+        var name = self.attr('name');
         var qtde = 0;
         if (id !== undefined) {
             qtde = $('#' + (id.replace('[]', '')) + "\\[\\]").size();//aeowwww
@@ -164,28 +164,28 @@ function formData(formulario) {
         var valor = "";
         if (self.attr("type") === "checkbox" || self.attr("type") === "radio") {
             valor = (self.is(":checked")) + "";
-            if(self.attr("type") === "radio"){
-              valor = $("input[type='radio'][name='"+name+"']:checked").val();
-              if(valor === undefined){
-                valor = "false";
-              }
+            if (self.attr("type") === "radio") {
+                valor = $("input[type='radio'][name='" + name + "']:checked").val();
+                if (valor === undefined) {
+                    valor = "false";
+                }
             }
-            //verifica se é um grupo pelo name
-            var possivelArray = $("input[name='"+name+"']").toArray();
+            //verifica se ï¿½ um grupo pelo name
+            var possivelArray = $("input[name='" + name + "']").toArray();
             //if(possivelArray.length > 1 && self.attr("type") === "checkbox"){
-            if(self.attr("type") === "checkbox"){
-              var ferramenta = $("input[type='checkbox'][name='"+name+"']:checked").get();
-              var valor = [];
-              for (var i = 0; i < ferramenta.length; i++) {
-                valor[i] = $(ferramenta[i]).val();
-              }
+            if (self.attr("type") === "checkbox") {
+                var ferramenta = $("input[type='checkbox'][name='" + name + "']:checked").get();
+                var valor = [];
+                for (var i = 0; i < ferramenta.length; i++) {
+                    valor[i] = $(ferramenta[i]).val();
+                }
             }
         } else {
             valor = self.val();
         }
         if (id !== undefined) {
-            //não coisar o já coisado
-            if (id.indexOf('[]') !== -1 && typeof(valor) !== "object") {
+            //nï¿½o coisar o jï¿½ coisado
+            if (id.indexOf('[]') !== -1 && typeof (valor) !== "object") {
                 id = id.replace('[]', '');
                 if (form[id] !== undefined) {
                     form[id] = form[id] + '|pkj|' + valor;
@@ -197,16 +197,16 @@ function formData(formulario) {
                     }
                 }
             } else {
-                if(typeof(valor) === "array" || typeof(valor) === "object"){
-                  if(valor.length < 1){
-                    delete form[id];
-                    id = id.replace('[]','');
-                    form[id] = "false";
-                  }else{
+                if (typeof (valor) === "array" || typeof (valor) === "object") {
+                    if (valor.length < 1) {
+                        delete form[id];
+                        id = id.replace('[]', '');
+                        form[id] = "false";
+                    } else {
+                        form[id] = valor;
+                    }
+                } else {
                     form[id] = valor;
-                  }
-                }else{
-                  form[id] = valor;
                 }
             }
         }

@@ -22,14 +22,16 @@ if (isset($_POST["CMD"])) {
     call_user_func($cmd, $tmp2);
     exit();
 }
+
 /**
  * New instance of OnsSlitter
  * @param type $id
  * @return \OnsSlitter
  */
-function ons_splitter($id){
-  return new OnsSplitter($id);
+function ons_splitter($id) {
+    return new OnsSplitter($id);
 }
+
 class OnsSplitter {
 
     var $id;
@@ -37,8 +39,8 @@ class OnsSplitter {
     function __construct($id) {
         $this->id = $id;
     }
-    
-    function load($page,$done = ""){
+
+    function load($page, $done = "") {
         ?>document.getElementById("<?php echo $this->id ?>").load("<?php echo $page ?>").then(function () {bindRefresh(); <?php if ($done != ""): ?>bindCall("<?php echo $_POST["PAGE"] ?>", "<?php echo $done ?>", {});<?php endif; ?>});<?php
         bindUpdate();
     }
@@ -143,6 +145,13 @@ class JS {
         ?>console.log("<?php echo JS::addslashes($mensagem) ?>");<?php
     }
 
+    public static function redirect($pagina, $data = "") {
+        if ($data !== "") {
+            $data = "?" . http_build_query($data);
+        }
+        ?>window.location.href="<?=$pagina.$data?>";<?php
+    }
+
     public static function addslashes($s) {
         $o = "";
         $l = strlen($s);
@@ -171,16 +180,19 @@ class JS {
     }
 
 }
+
 /**
  * New instance of Bind
  * @return \Bind
  */
-function bind($form) {
+function bind($form = array()) {
     return new Bind($form);
 }
-function bindUpdate(){
-  bind(array())->update();
+
+function bindUpdate() {
+    bind(array())->update();
 }
+
 class Bind {
 
     var $ids;
@@ -189,9 +201,11 @@ class Bind {
     function __construct($form) {
         $this->form = $form;
     }
-    function update(){
-      ?>$("*").removeAttr("bind");bindRefresh();<?php
+
+    function update() {
+        ?>if (typeof (PKJ) === "undefined") {$("*").removeAttr("bind");bindRefresh();}else{PKJ.refresh();}<?php
     }
+
     /**
      * Set value to html input
      * @param type $id
@@ -239,7 +253,7 @@ class Bind {
      * @param type $html
      */
     function html($id, $html) {
-        $this->html($id, $html);
+        $this->setHtml($id, $html);
         return $this;
     }
 
