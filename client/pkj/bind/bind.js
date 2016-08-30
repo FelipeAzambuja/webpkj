@@ -47,6 +47,7 @@ function sisBindInterval(e, tipo) {
     return true
 }
 function bindRefresh() {
+    /*
     if ($.inArray("onsen", PKJ.loadedLibrarys) > 0) {
         //console.log("Desejo um prato do dia e um suco o mais rapido possivel");
         if (typeof (ons) !== "undefined") {
@@ -65,6 +66,7 @@ function bindRefresh() {
             return;
         }
     }
+    */
     setTimeout(function () {
         $.each($("ons-button ,ons-range,ons-input,ons-switch,input,select,a,button,img,textarea"), function (e, t) {
             if ($(t).attr("bind") === undefined) {
@@ -88,6 +90,8 @@ function bindRefresh() {
                 if ($(t).attr("click") !== undefined) {
                     n = "click";
                     $(t).attr("on" + n, "sisBindInterval(this, '" + n + "')").attr("bind", true);
+                    //csp 
+//                    $(t).on(n,function(){sisBindInterval(this, '" + n + "')}).attr("bind", true);
                 }
                 if ($(t).attr("change") !== undefined) {
                     n = "change";
@@ -108,16 +112,7 @@ function bindRefresh() {
         });
     }, 128);
 }
-$(document).ready(function () {
-    bindRefresh();
-    $('form').on('keyup keypress', function (e) {
-        var code = e.keyCode || e.which;
-        if (code === 13) {
-            e.preventDefault();
-            return false;
-        }
-    });
-});
+
 function bindCall(pagina, funcao, data) {
     if (data === undefined) {
         data = {};

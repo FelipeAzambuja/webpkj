@@ -7,7 +7,9 @@ public static $endereco = "127.0.0.1";
 public static $usuario = "root";
 public static $senha = "";
 public static $base = "webpkj";
+public static $quick = true; 
 public static $pkj_bd_sis_conexao = null;
 public static $lastError = "";
+public static $random = "";
 }
 ?>

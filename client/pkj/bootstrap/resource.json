@@ -1,0 +1,7 @@
+{
+    "name": "bootstrap",
+    "files": ["css/bootstrap.min.css","css/bootstrap-theme.min.css","js/bootstrap.min.js"],
+    "onload": "",
+    "update": "document.querySelectorAll(\"input,select,textarea\").forEach(function (e) {if (!in_array(\"form-control\", e.classList)) {e.classList.add(\"form-control\");}});",
+    "author": "Bootstrap Team"
+}

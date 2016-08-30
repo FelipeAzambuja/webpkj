@@ -41,78 +41,34 @@ function in_array(texto, array) {
     }
 }
 PKJ = {};
-PKJ.loadedLibrarys = [];
-PKJ.refresh = function () {
+PKJ.refresh = function (load) {
     PKJ.loadedLibrarys.forEach(function (e) {
         switch (e) {
             case "bootstrap":
-                document.querySelectorAll("input,select,textarea").forEach(function (e) {
-                    if (!in_array("form-control", e.classList)) {
-                        e.classList.add("form-control");
-                    }
-                });
+                document.querySelectorAll("input,select,textarea").forEach(function (e) {if (!in_array("form-control", e.classList)) {e.classList.add("form-control");}});
                 break;
             case "bind":
-                $("*").removeAttr("bind");
-                bindRefresh();
+                if (typeof (bindRefresh) !== "undefined") {
+                    $("*").removeAttr("bind");
+                    bindRefresh();
+                } else {
+                    setTimeout(function () {
+                        PKJ.refresh();
+                    }, 1000);
+                }
                 break;
+        }
+        if (typeof (load) !== "undefined") {
+            load();
         }
     });
 };
-PKJ.getRootPath = function () {
-    var local = location.href;
-    var tmp = document.getElementsByTagName("script");
-    var currentScript = null;
-    for (var i = 0; i < tmp.length; i++) {
-        if(tmp[i].src.indexOf("pkj.js") >= 0){
-          currentScript = tmp[i].src;
-          break;
-        }
-    }
-    var parser = document.createElement('a');
-    parser.href = currentScript;
-    local = parser.pathname.replace("pkj/pkj.js","");
-    if (local.substring(local.lenght - 1) === "/") {
-        return local;
-    }
-    local = local.replace(/\/[a-zA-Z]{0,}\.{1}[a-zA-Z]{0,5}/gi, "/");
-    return local;
-};
-PKJ.injectJavaScript = function (src, ok) {
-    src = PKJ.getRootPath() + src;
-    var js = document.createElement("script");
-    js.setAttribute("src", src);
-    js.setAttribute("type", "text/javascript");
-    js.onload = ok;
-    document.head.appendChild(js);
-    return true;
-};
-PKJ.injectCss = function (src, ok) {
-    src = PKJ.getRootPath() + src;
-    var css = document.createElement("link");
-    css.setAttribute("href", src);
-    css.setAttribute("rel", "stylesheet");
-    css.onload = ok;
-    document.head.appendChild(css);
-    return true;
-};
-PKJ.require = function (librarys, onload) {
-    var e = "";
-    PKJ.injectCss("pkj/pkj.css");
-    for (var i = 0; i < librarys.length; i++) {
-        e = librarys[i];
-        if (i === (librarys.length - 1)) {
-            PKJ.loadLibrary(e, onload);
-        } else {
-            PKJ.loadLibrary(e);
-        }
-    }
-};
+
 PKJ.loadLibrary = function (name, ok) {
     var load = true;
     PKJ.loadedLibrarys.forEach(function (e) {
         if (e === name) {
-            console.error("Library " + name + " is loaded");
+            //console.error("Library " + name + " is loaded");
             load = false;
         }
     });
@@ -125,8 +81,8 @@ PKJ.loadLibrary = function (name, ok) {
     PKJ.loadedLibrarys.push(name);
     switch (name) {
         case "remote":
-          PKJ.injectJavaScript("pkj/connection/remote.js", ok);
-          break;
+            PKJ.injectJavaScript("pkj/connection/remote.js", ok);
+            break;
         case "onsenui":
         case "onsen":
             PKJ.injectCss("pkj/onsen/css/onsenui.css");

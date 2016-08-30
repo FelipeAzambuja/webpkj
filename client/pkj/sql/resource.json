@@ -1,0 +1,5 @@
+{
+    "name": "sql",
+    "files": ["remote.js","sqlite.js"],
+    "author": "Felipe Nunes Azambuja"
+}

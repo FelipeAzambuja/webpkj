@@ -1,12 +1,3 @@
-var loads = ["bind","onsen", "remote", "popup", "mask"];
-var conexao = null;
-PKJ.require(loads, function () {
-    $("body").show();
-//    ons.ready(function () {
-//        bindRefresh();
-//    });
-    PKJ.refresh();
-});
 
 window.fn = {};
 
@@ -19,10 +10,13 @@ window.fn.load = function (page) {
     var content = document.getElementById('content');
     var menu = document.getElementById('menu');
     content.load(page)
-            .then(menu.close.bind(menu));
+            .then(function () {
+                menu.close.bind(menu);
+                bindRefresh()
+            });
 };
 var index = {};
-index.teste = function(value){
+index.teste = function (value) {
     console.log(value);
 }
 

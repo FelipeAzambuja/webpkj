@@ -1,0 +1,5 @@
+{
+    "name": "ui",
+    "files": ["js.js","css.css"],
+    "author": "jquery ui team"
+}

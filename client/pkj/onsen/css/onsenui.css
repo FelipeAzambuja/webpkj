@@ -1,4 +1,4 @@
-/*! onsenui - v2.0.0-rc.11 - 2016-06-15 */
+/*! onsenui - v2.0.0-rc.17 - 2016-08-08 */
 /*
 Copyright 2013-2015 ASIAL CORPORATION
 
@@ -147,9 +147,8 @@ ons-list-item[disabled] {
 }
 
 ons-pull-hook {
-  position: absolute;
-  left: 0;
-  right: 0;
+  position: relative;
+  display: block;
   margin: auto;
   text-align: center;
   z-index: 20002;
@@ -200,6 +199,17 @@ ons-splitter-side[mode="collapse"] {
 ons-splitter-side[side="right"][mode="collapse"] {
   right: auto;
   left: 100%;
+}
+
+ons-splitter-side[mode="split"] ~ ons-splitter-mask {
+  display: none !important;
+}
+
+ons-splitter-side[mode="split"] {
+  -webkit-transform: none !important;
+          transform: none !important;
+  -webkit-transition: none !important;
+  transition: none !important;
 }
 
 ons-toolbar-button > ons-icon[icon*="ion-"] {
@@ -428,30 +438,8 @@ ons-input .text-input__container {
   display: inline-block;
 }
 
-ons-input .text-input--material__label {
-  position: absolute;
-  left: 0px;
-  top: 2px;
-  font-size: 16px;
-  font-weight: 400;
-  font-family: 'Roboto', 'Noto', sans-serif;
-  pointer-events: none;
-}
-
 ons-input .text-input__label:not(.text-input--material__label) {
   display: none;
-}
-
-ons-input .text-input__label--active {
-  transform: translate(0, -75%) scale(0.75);
-  -webkit-transform: translate(0, -75%) scale(0.75);
-  transform-origin: left top;
-  -webkit-transform-origin: left top;
-  -webkit-transition: color 0.1s ease-in, -webkit-transform 0.1s ease-in;
-  transition: color 0.1s ease-in, -webkit-transform 0.1s ease-in;
-  transition: transform 0.1s ease-in, color 0.1s ease-in;
-  transition: transform 0.1s ease-in, color 0.1s ease-in, -webkit-transform 0.1s ease-in;
-  -webkit-transition: transform 0.1s ease-in, color 0.1s ease-in;
 }
 
 ons-input:not([float]) .text-input__label--active {

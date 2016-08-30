@@ -1,0 +1,5 @@
+{
+    "name": "onsen",
+    "files": ["js/onsenui.min.js","css/onsenui.css","css/onsen-css-components.css","css/onsen-css-components-default.css"],
+    "author": "https://onsen.io/"
+}

@@ -1,0 +1,5 @@
+{
+    "name": "bpopup",
+    "files": ["jquery.bpopup.min.js","popup.css","util.js"],
+    "author": "https://github.com/dinbror"
+}

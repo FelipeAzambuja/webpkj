@@ -69,6 +69,11 @@ class OnsNavigator {
         ?>document.getElementById("<?php echo $this->id ?>").pushPage("<?php echo $page ?>").then(function () {  bindRefresh();  <?php if ($done != ""): ?>bindCall("<?php echo $_POST["PAGE"] ?>", "<?php echo $done ?>", {}); <?php endif; ?>});<?php
         bindUpdate();
     }
+    
+    function resetToPage($page, $done = "") {
+        ?>document.getElementById("<?php echo $this->id ?>").resetToPage("<?php echo $page ?>").then(function () {  bindRefresh();  <?php if ($done != ""): ?>bindCall("<?php echo $_POST["PAGE"] ?>", "<?php echo $done ?>", {}); <?php endif; ?>});<?php
+        bindUpdate();
+    }
 
 }
 
