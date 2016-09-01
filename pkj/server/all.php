@@ -31,4 +31,7 @@ if (conf::$servidor == "mysql") {
     query('SET character_set_results=utf8');
 }
 include "orm.php";
+foreach (glob(__DIR__."/../db/*.php") as $db):
+    include $db;
+endforeach;
 include "bind.php";

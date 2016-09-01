@@ -113,6 +113,7 @@ class DBTable {
             }
         }
         $sql .= ')';
+        echo $sql;
         return query($sql);
     }
 
@@ -181,7 +182,7 @@ class DBTable {
         if (query(SQLinsert($this->getName(), $sql))) {
             return intval(oneCol("select id from " . $this->getName() . " order by id desc limit 1"));
         } else {
-            throw new Exception(bd_get_error());
+            throw new Exception(db_get_error());
         }
     }
 

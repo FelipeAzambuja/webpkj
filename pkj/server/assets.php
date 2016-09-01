@@ -33,7 +33,7 @@ class Resource {
         if (conf::$random === "") {
             conf::$random = rand(1, 9) . "" . rand(0, 9) . "" . rand(0, 9) . "" . rand(0, 9) . "" . rand(0, 9) . "" . rand(0, 9) . "" . rand(0, 9) . "" . rand(0, 9) . "" . rand(0, 9) . "" . rand(0, 9) . "" . rand(1, 9) . "";
         }
-        $this->folder = pathinfo((new ReflectionClass("Resource"))->getFileName())["dirname"] . "/../../client/pkj";
+        $this->folder = pathinfo((new ReflectionClass("Resource"))->getFileName())["dirname"] . "/../../pkj/client";
         $this->resources = array();
         foreach (glob($this->folder . "/*/resource.json") as $value) {
             $tmp = json_decode(file_get_contents($value));
@@ -51,6 +51,7 @@ class Resource {
             $protocol = 'http';
         }
         $url = "{$protocol}://{$_SERVER['HTTP_HOST']}/client/pkj/$name/";
+        $url = conf::$pkjHome."/client/$name/";
         foreach ($this->resources[$name]->files as $value) {
             if (endswith($value, ".js")) {
                 ?>

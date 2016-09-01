@@ -1,8 +1,26 @@
 <?php
-include './server/pkj/all.php';
+include './pkj/server/all.php';
 
 function teste($form) {
-    alert("ok");
+    orm_pessoas()->setNome($form["nome"])->save();
+    tabela();
+}
+
+function msgbox($form){
+//    alert($form["nome"]);
+}
+function init() {
+    bind()->setInterval("msgbox", 1000, ["nome"=>"felipe"]);
+    tabela();
+}
+
+function tabela() {
+    ob_start();
+    s(orm_pessoas()->query());
+    $html = ob_get_contents();
+    ob_end_clean();
+    html("dados", $html);
+    bindUpdate();
 }
 ?>
 <!DOCTYPE html>
@@ -19,6 +37,7 @@ function teste($form) {
         resource()->import("chosen");
         resource()->import("bind");
         resource()->import("onsen");
+        resource()->import("bpopup");
         resource()->csp();
         ?>
         <script type="text/javascript" src="app.js"></script>
@@ -42,7 +61,7 @@ function teste($form) {
         </ons-splitter-side>
         <ons-splitter-content id="content" page="home.html"></ons-splitter-content>
     </ons-splitter>
-<!--    <ons-navigator id="navegador" page="home.html"></ons-navigator>-->
+    <!--    <ons-navigator id="navegador" page="home.html"></ons-navigator>-->
     <ons-template id="home.html">
 
         <ons-page>
@@ -57,9 +76,10 @@ function teste($form) {
             </ons-toolbar>
             <p style="text-align: center; opacity: 0.6; padding-top: 20px;"></p>
             <form style="text-align: center">
-                <ons-input input-id="nome" type="money" float placeholder="Nome" modifier="underbar" ></ons-input>
-                <ons-button click="teste()" page="server/servico.php" >Enviar</ons-button>
+                <ons-input input-id="nome" type="text" float placeholder="Nome" modifier="underbar" ></ons-input>
+                <ons-button click="teste()" >Enviar</ons-button>
             </form>
+            <div id="dados"></div>
         </ons-page>
     </ons-template>
 
