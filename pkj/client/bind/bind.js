@@ -1,4 +1,5 @@
 var bind_out = "body";
+var bind_router = "";
 var eventos = [];
 function sisBindInterval(e, tipo) {
     if (e === undefined) {
@@ -24,6 +25,9 @@ function sisBindInterval(e, tipo) {
         }
         sisfunHAppyyyy.CMD = funName;
         sisfunHAppyyyy.PAGE = pagina;
+        if (bind_router !== "") {
+            pagina = bind_router;
+        }
         $.post(pagina, sisfunHAppyyyy, function (resp) {
             if (len(trim(resp)) > 0) {
                 try {
@@ -49,25 +53,25 @@ function sisBindInterval(e, tipo) {
 }
 function bindRefresh() {
     /*
-    if ($.inArray("onsen", PKJ.loadedLibrarys) > 0) {
-        //console.log("Desejo um prato do dia e um suco o mais rapido possivel");
-        if (typeof (ons) !== "undefined") {
-            if (!ons.isReady()) {
-                //console.log("se acalme vamos buscar seu suco");
-                setTimeout(function () {
-                    bindRefresh();
-                }, 128);
-                return;
-            }
-        } else {
-            //console.log("volte mais tarde, seu almo�o ainda n�o est� pronto");
-            setTimeout(function () {
-                bindRefresh();
-            }, 128);
-            return;
-        }
-    }
-    */
+     if ($.inArray("onsen", PKJ.loadedLibrarys) > 0) {
+     //console.log("Desejo um prato do dia e um suco o mais rapido possivel");
+     if (typeof (ons) !== "undefined") {
+     if (!ons.isReady()) {
+     //console.log("se acalme vamos buscar seu suco");
+     setTimeout(function () {
+     bindRefresh();
+     }, 128);
+     return;
+     }
+     } else {
+     //console.log("volte mais tarde, seu almo�o ainda n�o est� pronto");
+     setTimeout(function () {
+     bindRefresh();
+     }, 128);
+     return;
+     }
+     }
+     */
     setTimeout(function () {
         $.each($("ons-button ,ons-range,ons-input,ons-switch,input,select,a,button,img,textarea"), function (e, t) {
             if ($(t).attr("bind") === undefined) {
@@ -126,6 +130,9 @@ function bindCall(pagina, funcao, data) {
     }
     if (data.post0 === undefined) {
         data.post0 = "";
+    }
+    if (bind_router !== "" && pagina === "") {
+        pagina = bind_router;
     }
     $.post(pagina, data, function (resp) {
         if (len(trim(resp)) > 0) {

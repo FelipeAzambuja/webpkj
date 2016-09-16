@@ -13,6 +13,10 @@ if (isset($_POST["CMD"])) {
         }
         exit();
     }
+    if(isset($_POST["PAGE"])){
+        show_errors(false);
+        include __DIR__."/../../".$_POST["PAGE"];
+    }
     $tmp2 = $_POST;
     addslashes_array($tmp2);
     unset($tmp2["CMD"]);
