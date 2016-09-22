@@ -1,6 +1,6 @@
 <?php
 include './pkj/server/all.php';
-
+//orm_pessoas()->create();
 function teste($form) {
     orm_pessoas()->setNome($form["nome"])->save();
     tabela();

@@ -131,7 +131,7 @@ function bindCall(pagina, funcao, data) {
     if (data.post0 === undefined) {
         data.post0 = "";
     }
-    if (bind_router !== "" && pagina === "") {
+    if (bind_router !== "") {
         pagina = bind_router;
     }
     $.post(pagina, data, function (resp) {
