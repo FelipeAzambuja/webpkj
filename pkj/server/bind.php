@@ -210,6 +210,15 @@ function bindUpdate() {
     bind(array())->update();
 }
 
+function mustache($id,$html,$data=array()){
+	$html = JS::addslashes($html);
+	?>
+	var bind_tmp1 = Mustache.render("<?php echo $html ?>", <?php echo json_encode($data) ?>);
+	Mustache.parse(bind_tmp1);
+	$("*[id='<?php echo $id ?>']").html(bind_tmp1);
+	<?php
+	bindUpdate();
+}
 class Bind {
 
     var $ids;

@@ -1,0 +1,5 @@
+{
+    "name": "mustache",
+    "files": ["mustache.min.js"],
+    "author": "Mustache JS"
+}

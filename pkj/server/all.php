@@ -12,7 +12,7 @@ function show_errors($v = true) {
         error_reporting(0);
     }
 }
-
+show_errors();
 include 'session.php';
 include "string.php";
 include "conf.php";

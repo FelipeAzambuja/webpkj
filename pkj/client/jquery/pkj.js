@@ -42,10 +42,16 @@ function in_array(texto, array) {
 }
 PKJ = {};
 PKJ.refresh = function (load) {
-    PKJ.loadedLibrarys.forEach(function (e) {
+    ["bootstrap","bind"].forEach(function (e) {
         switch (e) {
             case "bootstrap":
+            	try{
                 document.querySelectorAll("input,select,textarea").forEach(function (e) {if (!in_array("form-control", e.classList)) {e.classList.add("form-control");}});
+            	}catch(e){
+            		
+            	}finally{
+            		
+            	}
                 break;
             case "bind":
                 if (typeof (bindRefresh) !== "undefined") {

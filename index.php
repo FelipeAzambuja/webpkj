@@ -1,27 +1,15 @@
 <?php
 include './pkj/server/all.php';
-//orm_pessoas()->create();
-function teste($form) {
-    orm_pessoas()->setNome($form["nome"])->save();
-    tabela();
-}
+show_errors();
 
-function msgbox($form){
-//    alert($form["nome"]);
-}
 function init() {
-    bind()->setInterval("msgbox", 1000, ["nome"=>"felipe"]);
-    tabela();
+    //bind()->setInterval("msgbox", 1000, ["nome"=>"felipe"]);
+    //tabela();
+    $dados = array();
+    $dados["nome"] = "felipe";
+    mustache("dados","{{nome}}",$dados);
 }
 
-function tabela() {
-    ob_start();
-    s(orm_pessoas()->query());
-    $html = ob_get_contents();
-    ob_end_clean();
-    html("dados", $html);
-    bindUpdate();
-}
 ?>
 <!DOCTYPE html>
 <html>
@@ -38,6 +26,7 @@ function tabela() {
         resource()->import("bind");
         resource()->import("onsen");
         resource()->import("bpopup");
+        resource()->import("mustache");
         resource()->csp();
         ?>
         <script type="text/javascript" src="app.js"></script>
