@@ -3,13 +3,16 @@ include './pkj/server/all.php';
 show_errors();
 
 function init() {
-    //bind()->setInterval("msgbox", 1000, ["nome"=>"felipe"]);
-    //tabela();
-    $dados = array();
-    $dados["nome"] = "felipe";
-    mustache("dados","{{nome}}",$dados);
+    
 }
 
+function teste($form) {
+    if (startswith($form["nome"], "#")) {
+        alert("Ok");
+    } else {
+        alert("Milho");
+    }
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -26,7 +29,6 @@ function init() {
         resource()->import("bind");
         resource()->import("onsen");
         resource()->import("bpopup");
-        resource()->import("mustache");
         resource()->csp();
         ?>
         <script type="text/javascript" src="app.js"></script>

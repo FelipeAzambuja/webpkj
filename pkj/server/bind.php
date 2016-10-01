@@ -13,9 +13,9 @@ if (isset($_POST["CMD"])) {
         }
         exit();
     }
-    if(isset($_POST["PAGE"])){
+    if (isset($_POST["PAGE"])) {
         show_errors(false);
-        include __DIR__."/../../".$_POST["PAGE"];
+        include __DIR__ . "/../../" . $_POST["PAGE"];
     }
     $tmp2 = $_POST;
     addslashes_array($tmp2);
@@ -210,15 +210,16 @@ function bindUpdate() {
     bind(array())->update();
 }
 
-function mustache($id,$html,$data=array()){
-	$html = JS::addslashes($html);
-	?>
-	var bind_tmp1 = Mustache.render("<?php echo $html ?>", <?php echo json_encode($data) ?>);
-	Mustache.parse(bind_tmp1);
-	$("*[id='<?php echo $id ?>']").html(bind_tmp1);
-	<?php
-	bindUpdate();
+function mustache($id, $html, $data = array()) {
+    $html = JS::addslashes($html);
+    ?>
+    var bind_tmp1 = Mustache.render("<?php echo $html ?>", <?php echo json_encode($data) ?>);
+    Mustache.parse(bind_tmp1);
+    $("*[id='<?php echo $id ?>']").html(bind_tmp1);
+    <?php
+    bindUpdate();
 }
+
 class Bind {
 
     var $ids;
@@ -269,7 +270,11 @@ class Bind {
      */
     function setHtml($id, $html) {
         $html = JS::addslashes($html);
-        ?>$("*[id='<?php echo $id ?>'],*[input-id='<?php echo $id ?>']").html("<?php echo $html ?>");<?php
+        if (startswith($id, "#")) {
+            ?>$("*[id='<?php echo $id ?>'],*[input-id='<?php echo $id ?>']").html("<?php echo $html ?>");<?php
+        } else {
+            ?>$("*[id='<?php echo $id ?>'],*[input-id='<?php echo $id ?>']").html("<?php echo $html ?>");<?php
+        }
         return $this;
     }
 
