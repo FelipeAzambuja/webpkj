@@ -1,15 +1,19 @@
 <?php
 
 class conf {
-    public static $pkjHome = "/github projects/webpkj/pkj";
+
+    public static $pkjHome = "/pkj";
     public static $dateFormat = "d/m/Y";
 // mysql postgre mssql odbc oledb sqlite
-    public static $servidor = "sqlite";
-    public static $endereco = "banco.db";
-    public static $usuario = "root";
-    public static $senha = "";
+    public static $servidor = "postgre";
+//    public static $endereco = "../../banco.sqlite";
+    public static $endereco = "localhost";
+    public static $usuario = "webpkj";
+    public static $senha = "webpkj";
     public static $base = "webpkj";
     public static $quick = true;
+    //session default,database,javascript
+    public static $session = "database";
     public static $pkj_bd_sis_conexao = null;
     public static $lastError = "";
     public static $random = "";

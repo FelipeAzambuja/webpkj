@@ -30,8 +30,8 @@ function commit_transaction() {
     }
 }
 
-function back_transaction(){
-  rollback_transaction();
+function back_transaction() {
+    rollback_transaction();
 }
 
 function rollback_transaction() {
@@ -150,7 +150,7 @@ function execute($comando, $oo = false) {
     $comando = str_replace("\t", ' ', $comando);
     $comando = trim($comando);
     $select = explode(" ", $comando);
-    $isSelect = (strtolower($select[0]) == "select" || strtolower($select[0]) == "pragma") ? true : false;
+    $isSelect = (strtolower($select[0]) == "select" || in_array(strtolower($select[0]), array("pragma", "desc", "describe", "show")) ) ? true : false;
     $query = false;
     conectar();
     switch (conf::$servidor) {
@@ -477,8 +477,76 @@ function SQLselect($tabela, $campos, $where) {
     return $sql;
 }
 
-function SQLExists($table, $where) {
-    return (count(query("select id from $table where $where")) > 0);
+function SQLExists($table, $where=null) {
+    if($where == null){
+    	$sql = "select id from $table limit 1";
+    }else {
+    	$sql = "select id from $table where $where";
+    }
+    $r = query($sql);
+    return (count($r) > 0);
+}
+
+function table_exists($name){
+	$sql = "select * from $name limit 1";
+	$r = query($sql);
+	return is_array($r);
+}
+function table_fields($name) {
+    
+    switch (conf::$servidor) {
+        case "postgre":
+            $sql = <<<SQL
+                    SELECT 
+                            COLUMN_NAME AS NAME,
+                            IS_NULLABLE IS_NULL,
+                            DATA_TYPE AS TYPE,
+                            CASE WHEN CHARACTER_OCTET_LENGTH IS NULL THEN NUMERIC_PRECISION ELSE CHARACTER_OCTET_LENGTH END AS SIZE,
+                            CASE WHEN COLUMN_NAME = 'id' AND IS_NULLABLE = 'NO' THEN 'YES' ELSE 'NO' END AS COLUMN_KEY,
+                            CASE WHEN LEFT(COLUMN_DEFAULT,7) = 'nextval' THEN 'primary key' ELSE '' END AS EXTRA,
+                            'UNDEFINED' AS COLUMN_COMMENT
+                    FROM 
+                            INFORMATION_SCHEMA.COLUMNS
+                    WHERE 
+                            TABLE_NAME = '$name'                
+SQL;
+            return query($sql);
+            break;
+        case "sqlite":
+            $retorno = array();
+            foreach(query("pragma table_info($name)") as $tmp){
+                $tmp2 = new stdClass();
+                $tmp2->NAME = $tmp->name;
+                $tmp2->IS_NULL = ($tmp->notnull == "0")?"NO":"YES";
+                $tmp2->TYPE = $tmp->type;
+                $tmp2->SIZE = 0;
+                $tmp2->COLUMN_KEY = ($tmp->pk == "1")?"YES":"NO";
+                $tmp2->EXTRA = "";
+                $tmp2->COLUMN_COMMENT = "UNDEFINED";
+                $retorno[]=$tmp2;
+            }
+            return $retorno;
+            break;
+        case "mysql":
+            $sql = <<<SQL
+                    SELECT 
+                            COLUMN_NAME AS NAME,
+                            IS_NULLABLE IS_NULL,
+                            DATA_TYPE AS TYPE,
+                            IF(CHARACTER_OCTET_LENGTH IS NULL,NUMERIC_PRECISION,CHARACTER_OCTET_LENGTH) AS SIZE,
+                            COLUMN_KEY AS KEY,
+                            EXTRA,
+                            COLUMN_COMMENT AS COMMENT
+                    FROM 
+                            INFORMATION_SCHEMA.COLUMNS
+                    WHERE 
+                            TABLE_NAME = '$name'
+SQL;
+            return query($sql);
+            break;
+        default:
+            return array();
+    }
 }
 
 //Não use isso, seu cachorro pode morrer

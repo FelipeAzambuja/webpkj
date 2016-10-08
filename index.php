@@ -1,18 +1,5 @@
 <?php
 include './pkj/server/all.php';
-show_errors();
-
-function init() {
-    
-}
-
-function teste($form) {
-    if (startswith($form["nome"], "#")) {
-        alert("Ok");
-    } else {
-        alert("Milho");
-    }
-}
 ?>
 <!DOCTYPE html>
 <html>
@@ -25,84 +12,28 @@ function teste($form) {
         <?php
         resource()->import("jquery");
         resource()->import("bootstrap");
-        resource()->import("chosen");
+//        resource()->import("chosen");
         resource()->import("bind");
         resource()->import("onsen");
         resource()->import("bpopup");
         resource()->csp();
         ?>
-        <script type="text/javascript" src="app.js"></script>
+        <!--<script type="text/javascript" src="app.js"></script>-->
     </head>
     <body>
-    <ons-splitter>
-        <ons-splitter-side id="menu" side="left" width="220px" collapse swipeable>
-            <ons-page>
-                <ons-list>
-                    <ons-list-item onclick="fn.load('home.html')" tappable>
-                        Home
-                    </ons-list-item>
-                    <ons-list-item onclick="fn.load('settings.html')" tappable>
-                        Settings
-                    </ons-list-item>
-                    <ons-list-item onclick="fn.load('about.html')" tappable>
-                        About
-                    </ons-list-item>
-                </ons-list>
-            </ons-page>
-        </ons-splitter-side>
-        <ons-splitter-content id="content" page="home.html"></ons-splitter-content>
-    </ons-splitter>
-    <!--    <ons-navigator id="navegador" page="home.html"></ons-navigator>-->
-    <ons-template id="home.html">
-
-        <ons-page>
-            <ons-toolbar>
-                <div class="left">
-                    <ons-toolbar-button onclick="fn.open()">
-                        <ons-icon icon="md-menu"></ons-icon>
-                    </ons-toolbar-button>
+        <form class="container">
+            <div class="row" style="padding:5px">
+                <div class="col-sm-6"><input type="text" class="form-control" id="chave" placeholder="Chave" /></div>
+                <div class="col-sm-6"><input type="text" class="form-control" id="valor" placeholder="Valor"/></div>
+            </div>
+            <div class="row" style="padding:5px">
+                <div class="col-sm-6">
+                    <input type="button" class="form-control btn-primary" click="ler()" page="pkj/lab.php" value="Ler" />
                 </div>
-                <div class="center">
+                <div class="col-sm-6">
+                    <input type="button" class="form-control btn-primary" click="gravar()" page="pkj/lab.php" value="Gravar" />
                 </div>
-            </ons-toolbar>
-            <p style="text-align: center; opacity: 0.6; padding-top: 20px;"></p>
-            <form style="text-align: center">
-                <ons-input input-id="nome" type="text" float placeholder="Nome" modifier="underbar" ></ons-input>
-                <ons-button click="teste()" >Enviar</ons-button>
-            </form>
-            <div id="dados"></div>
-        </ons-page>
-    </ons-template>
-
-    <ons-template id="settings.html">
-        <ons-page>
-            <ons-toolbar>
-                <div class="left">
-                    <ons-toolbar-button onclick="fn.open()">
-                        <ons-icon icon="md-menu"></ons-icon>
-                    </ons-toolbar-button>
-                </div>
-                <div class="center">
-                    Settings
-                </div>
-            </ons-toolbar>
-        </ons-page>
-    </ons-template>
-
-    <ons-template id="about.html">
-        <ons-page>
-            <ons-toolbar>
-                <div class="left">
-                    <ons-toolbar-button onclick="fn.open()">
-                        <ons-icon icon="md-menu"></ons-icon>
-                    </ons-toolbar-button>
-                </div>
-                <div class="center">
-                    About
-                </div>
-            </ons-toolbar>
-        </ons-page>
-    </ons-template>
-
-</body>
+            </div>  
+        </form>
+    </body>
 </html>

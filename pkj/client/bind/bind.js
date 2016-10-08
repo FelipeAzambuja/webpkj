@@ -1,6 +1,8 @@
 var bind_out = "body";
-var bind_router = "";
+var bind_router = "http://localhost:8888/webservice/pkj/server/all.php";
+
 var eventos = [];
+var session = {};
 function sisBindInterval(e, tipo) {
     if (e === undefined) {
         return;
@@ -12,6 +14,7 @@ function sisBindInterval(e, tipo) {
             pagina = "";
         }
         var sisfunHAppyyyy = formData($(e).parents("form:eq(0),tr:eq(0)"));
+        sisfunHAppyyyy.session = session;
         var funName = part(fun, "(")[0];
         var atrStr = part(part(fun, "(")[1], ")")[0];
         var atrs = part(atrStr, ",");
@@ -28,6 +31,12 @@ function sisBindInterval(e, tipo) {
         if (bind_router !== "") {
             pagina = bind_router;
         }
+        $.ajaxSetup({
+            xhrFields: {
+                withCredentials: true
+            },
+            cache: false
+        });
         $.post(pagina, sisfunHAppyyyy, function (resp) {
             if (len(trim(resp)) > 0) {
                 try {
@@ -46,7 +55,7 @@ function sisBindInterval(e, tipo) {
             console.log(erro);
             http = erro.status;
             msg = erro.responseText;
-            alert("ERRO " + http + ":" + msg);
+            alert("ERRO " + http + ":" + msg + ":" + pagina);
         })
     }
     return true
@@ -118,7 +127,7 @@ function bindRefresh() {
     }, 128);
 }
 
-function bindCall(pagina, funcao, data) {
+function bindCall(pagina, funcao, data, done) {
     if (data === undefined) {
         data = {};
         data.post0 = "";
@@ -134,6 +143,12 @@ function bindCall(pagina, funcao, data) {
     if (bind_router !== "") {
         pagina = bind_router;
     }
+    $.ajaxSetup({
+        xhrFields: {
+            withCredentials: true
+        },
+        cache: false
+    });
     $.post(pagina, data, function (resp) {
         if (len(trim(resp)) > 0) {
             try {
@@ -141,6 +156,9 @@ function bindCall(pagina, funcao, data) {
             } catch (e) {
                 console.log(e);
             }
+        }
+        if (typeof (done) !== "undefined") {
+            done(resp);
         }
     }).fail(function (erro) {
         console.log(erro);
@@ -236,3 +254,6 @@ function lock(elemento) {
         jQuery(elemento).attr('disabled', 'true');
     }
 }
+$(function () {
+    bindRefresh();
+});
