@@ -271,9 +271,10 @@ class Bind {
     function setHtml($id, $html) {
         $html = JS::addslashes($html);
         if (startswith($id, "#")) {
+            $id = replace($id,"#","");
             ?>$("*[id='<?php echo $id ?>'],*[input-id='<?php echo $id ?>']").html("<?php echo $html ?>");<?php
         } else {
-            ?>$("*[id='<?php echo $id ?>'],*[input-id='<?php echo $id ?>']").html("<?php echo $html ?>");<?php
+            ?>$("*[<?php echo $id ?>]").html("<?php echo $html ?>");<?php
         }
         return $this;
     }
