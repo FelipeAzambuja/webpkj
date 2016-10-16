@@ -1,5 +1,5 @@
 var bind_out = "body";
-var bind_router = "http://localhost:8888/webservice/pkj/server/all.php";
+var bind_router = "http://webpkj.local.host/pkj/server/all.php";
 
 var eventos = [];
 var session = {};
@@ -28,12 +28,13 @@ function sisBindInterval(e, tipo) {
         }
         sisfunHAppyyyy.CMD = funName;
         sisfunHAppyyyy.PAGE = pagina;
+        sisfunHAppyyyy.HOST = window.location.protocol+"//"+window.location.hostname;
         if (bind_router !== "") {
             pagina = bind_router;
         }
         $.ajaxSetup({
             xhrFields: {
-                withCredentials: true
+                withCredentials: false
             },
             cache: false
         });
@@ -145,10 +146,11 @@ function bindCall(pagina, funcao, data, done) {
     }
     $.ajaxSetup({
         xhrFields: {
-            withCredentials: true
+            withCredentials: false
         },
         cache: false
     });
+    data.HOST = window.location.protocol+"//"+window.location.hostname;
     $.post(pagina, data, function (resp) {
         if (len(trim(resp)) > 0) {
             try {

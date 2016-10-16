@@ -17,6 +17,8 @@ class conf {
     public static $pkj_bd_sis_conexao = null;
     public static $lastError = "";
     public static $random = "";
+    public static $pkj_uid_comp = 0;
+    public static $pkj_row = true;
 
 }
 

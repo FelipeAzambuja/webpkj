@@ -40,9 +40,6 @@ function setHtml($id, $html) {
     bind()->setHtml($id, $html);
 }
 
-function text($id, $text) {
-    bind()->setText($id, $text);
-}
 
 function setText($id, $text) {
     bind()->setText($id, $text);

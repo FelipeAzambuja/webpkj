@@ -1,5 +1,8 @@
 <?php
-
+if (isset($_POST["HOST"])) {
+    header("Access-Control-Allow-Credentials:true");
+    header("Access-Control-Allow-Origin: " . $_POST["HOST"]);
+}
 date_default_timezone_set('America/Sao_Paulo'); //or change to whatever timezone you want
 ini_set("output_buffering", "0");
 
@@ -20,6 +23,7 @@ include "pkj.php";
 include "db.php";
 include "kint/Kint.class.php";
 include 'assets.php';
+include "form.php";
 if (conf::$quick) {
     include 'quick.php';
 }

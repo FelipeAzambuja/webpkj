@@ -1,14 +1,26 @@
 function lcase(texto) {
+	 if(typeof(texto) === "undefined"){
+	 	return "";
+	 }
     return texto.toLowerCase();
 }
 function ucase(texto) {
+	 if(typeof(texto) === "undefined"){
+	 	return "";
+	 }
     return  texto.toUpperCase()
 }
 function trim(texto) {
+	 if(typeof(texto) === "undefined"){
+	 	return "";
+	 }	
     return texto.replace(/^\s+|\s+$/g, "");
 }
 
 function replace(texto, procura, valor) {
+	 if(typeof(texto) === "undefined"){
+	 	return "";
+	 }	
     while (texto.indexOf(procura) !== -1) {
         texto = texto.replace(procura, valor);
     }
@@ -24,6 +36,9 @@ function find(texto, valor) {
     return texto.indexOf(valor) + 1;
 }
 function len(texto) {
+	 if(typeof(texto) === "undefined"){
+	 	return 0;
+	 }	
     return texto.length;
 }
 function substring(texto, inicio, quantidade) {
@@ -144,6 +159,81 @@ PKJ.loadLibrary = function (name, ok) {
             console.error("Library not found");
     }
 };
+
+function tagUpdate(){
+    $("select").each(function (i, e) {
+        if ($(e).attr("value") != undefined) {
+            $(e).val($(e).attr("value"));
+        }
+    });
+    $("input[type='checkbox']").each(function (i, e) {
+        if ($(e).attr("value") != undefined) {
+            if ($(e).attr("value") == "true") {
+                $(e).attr("checked","true");
+            } else {
+                $(e).removeAttr("checked");
+            }
+        }
+    });
+    var contador = 0;
+    $('input').each(function (i, e) {
+    	  if( ucase($(e).attr("type")) === "BUTTON" ){
+    	  	$(e).addClass("btn");
+    	  	var color = lcase($(e).attr("color"));
+    	  	if(color === ""){
+				color = "primary";    	  	
+    	  	}
+    	  	$(e).addClass("btn-"+color);
+		  }
+    	  if (!$(e).hasClass("form-control")) {
+    	  	   $(e).addClass("form-control");
+    	  }
+        if ($(e).attr("data-mask") != undefined) {
+            $(e).mask($(e).data("mask")).removeAttr("data-mask");
+        }
+        if ($(e).attr("data-calendar") != undefined) {
+            try {
+                $(e).datepicker({showButtonPanel: true});
+            }catch(e){
+                console.log(e.message);
+            }
+            $(e).mask('99/99/9999').removeAttr("data-calendar");
+        }
+        if ($(e).attr("data-number") != undefined) {
+            $(e).maskMoney({'precision': '0'}).removeAttr("data-number");
+        }
+        if ($(e).attr("data-money") != undefined) {
+            $(e).maskMoney({'decimal': '.'}).removeAttr("data-money");
+        }
+        if ($(e).attr("data-autocomplete") != undefined) {
+            $(e).autocomplete({source: $(e).data("autocomplete")}).removeAttr("data-autocomplete");
+        }
+
+        if ($(e).attr("data-upload") != undefined) {
+            var gato1 = e;
+            var id = $(e).attr('id');
+            $(e).append('<input type="hidden" contador="' + contador + '" id="' + id + '" value="null" />');
+            $(e).attr('contador', contador);
+            $(e).removeAttr('id');
+            $(e).click(function () {
+                id = (id.replace("[", "\\[")).replace("]", "\\]");
+                $("#" + id + "[contador='" + contador + "']").val("null");
+            });
+            $(e).change(function () {
+                fileData($(gato1), function (d, gato2) {
+                    var gato3 = $(gato2).attr('contador');
+                    id = (id.replace("[", "\\[")).replace("]", "\\]");
+                    $('#' + id + '[contador="' + gato3 + '"]').val(d);
+                });
+            }).removeAttr("data-upload");
+        }
+        contador++;
+    });
+}
+$(function () {
+	tagUpdate();
+});
+
 var $_GET = {};
 document.location.search.replace(/\??(?:([^=]+)=([^&]*)&?)/g, function () {
     function decode(s) {
