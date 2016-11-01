@@ -230,7 +230,7 @@ class Bind {
     }
 
     function update() {
-        ?>if (typeof (PKJ) === "undefined") {$("*").removeAttr("bind");bindRefresh();}else{PKJ.refresh();}<?php
+        ?>if (typeof (PKJ) === "undefined") {$("*").removeAttr("bind");bindRefresh();}else{PKJ.refresh();}tagUpdate();<?php
     }
 
     /**
@@ -500,4 +500,13 @@ class UploadParser {
         file_put_contents($fileName, $this->getData());
     }
 
+}
+function c($v){
+    ob_start();
+    s($v);
+    console(ob_get_clean());
+}
+function cd($v){
+    c($v);
+    exit();
 }

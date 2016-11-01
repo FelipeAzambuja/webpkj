@@ -99,8 +99,13 @@ function mask($id, $mask = "999999", $plus = "", $size = 3) {
         $size = $plus;
         $plus = "";
     }
+    if (indexof($plus, "type") == -1) {
+        $html = "<input type='text' id='{$id}' data-mask='{$mask}' {$plus} />";
+    } else {
+        $html = "<input id='{$id}' data-mask='{$mask}' {$plus} />";
+    }    
     conf::$pkj_uid_comp++;
-    $html = "<input type='text' id='{$id}' data-mask='{$mask}' {$plus} />";
+    
     echo div($html, $size);
 }
 

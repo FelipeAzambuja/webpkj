@@ -28,13 +28,13 @@ function sisBindInterval(e, tipo) {
         }
         sisfunHAppyyyy.CMD = funName;
         sisfunHAppyyyy.PAGE = pagina;
-        sisfunHAppyyyy.HOST = window.location.protocol+"//"+window.location.hostname;
+        sisfunHAppyyyy.HOST = window.location.protocol + "//" + window.location.hostname;
         if (bind_router !== "") {
             pagina = bind_router;
         }
         $.ajaxSetup({
             xhrFields: {
-                withCredentials: false
+                withCredentials: true
             },
             cache: false
         });
@@ -43,6 +43,7 @@ function sisBindInterval(e, tipo) {
                 try {
                     eval(resp);
                 } catch (e) {
+                    console.log(resp);
                     console.log(e);
                 }
             }
@@ -146,16 +147,17 @@ function bindCall(pagina, funcao, data, done) {
     }
     $.ajaxSetup({
         xhrFields: {
-            withCredentials: false
+            withCredentials: true
         },
         cache: false
     });
-    data.HOST = window.location.protocol+"//"+window.location.hostname;
+    data.HOST = window.location.protocol + "//" + window.location.hostname;
     $.post(pagina, data, function (resp) {
         if (len(trim(resp)) > 0) {
             try {
                 eval(resp);
             } catch (e) {
+                console.log(resp);
                 console.log(e);
             }
         }
