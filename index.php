@@ -12,29 +12,57 @@ include './pkj/server/all.php';
         import("icheck");
         import("bootstrap");
         import("bind");
-        import("bpopup");        
-        import("mask");  
-        import("chosen");      
+        import("bpopup");
+        import("mask");
+        import("chosen");
+        import("datatables");
         ?>
     </head>
     <body>
         <form class="container">
-            	<?php
-            	row();
-            	text("chave","placeholder='Chave'",3);
-            	text("valor","placeholder='Valor'",6);
-            	check("ativo","Ativo");
-            	radio("sexo","Masculino","sexo");
-            	radio("sexo","Feminino","sexo");
-            	$cidades = array("Santos","São Vicente");
-                label("Cidades",2);
-            	combo("cidade",$cidades,$cidades,4);
-            	row();
-            	row();
-            	button("Ler","click='ler()' color='danger' page='pkj/lab.php'",6);
-            	button("Gravar","click='gravar()' page='pkj/lab.php'",6);
-            	row();
-            	?>
+            <?php
+            row();
+            text("chave", "placeholder='Chave'", 3);
+            text("valor", "placeholder='Valor'", 6);
+            check("ativo", "Ativo");
+            radio("sexo", "Masculino", "sexo");
+            radio("sexo", "Feminino", "sexo");
+            $cidades = array("Santos", "São Vicente");
+            label("Cidades", 2);
+            combo("cidade", $cidades, $cidades, 4);
+            row();
+            row();
+            button("Ler", "click='ler()' color='danger' page='pkj/lab.php'", 6);
+            button("Gravar", "click='gravar()' page='pkj/lab.php'", 6);
+            row();
+            ?>
+            <table class="datatables display">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Telefone</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Felipe</td>
+                        <td>13 3385-3390</td>
+                    </tr>
+                    <tr>
+                        <td>Felipe</td>
+                        <td>13 3385-3390</td>
+                    </tr>
+                    <tr>
+                        <td>Felipe</td>
+                        <td>13 3385-3390</td>
+                    </tr>
+                    <tr>
+                        <td>Felipe</td>
+                        <td>13 3385-3390</td>
+                    </tr>
+                </tbody>
+            </table>
         </form>
+
     </body>
 </html>

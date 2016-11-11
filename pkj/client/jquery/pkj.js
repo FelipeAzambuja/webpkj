@@ -1,26 +1,26 @@
 function lcase(texto) {
-	 if(typeof(texto) === "undefined"){
-	 	return "";
-	 }
+    if (typeof (texto) === "undefined") {
+        return "";
+    }
     return texto.toLowerCase();
 }
 function ucase(texto) {
-	 if(typeof(texto) === "undefined"){
-	 	return "";
-	 }
+    if (typeof (texto) === "undefined") {
+        return "";
+    }
     return  texto.toUpperCase()
 }
 function trim(texto) {
-	 if(typeof(texto) === "undefined"){
-	 	return "";
-	 }	
+    if (typeof (texto) === "undefined") {
+        return "";
+    }
     return texto.replace(/^\s+|\s+$/g, "");
 }
 
 function replace(texto, procura, valor) {
-	 if(typeof(texto) === "undefined"){
-	 	return "";
-	 }	
+    if (typeof (texto) === "undefined") {
+        return "";
+    }
     while (texto.indexOf(procura) !== -1) {
         texto = texto.replace(procura, valor);
     }
@@ -36,9 +36,9 @@ function find(texto, valor) {
     return texto.indexOf(valor) + 1;
 }
 function len(texto) {
-	 if(typeof(texto) === "undefined"){
-	 	return 0;
-	 }	
+    if (typeof (texto) === "undefined") {
+        return 0;
+    }
     return texto.length;
 }
 function substring(texto, inicio, quantidade) {
@@ -57,16 +57,20 @@ function in_array(texto, array) {
 }
 PKJ = {};
 PKJ.refresh = function (load) {
-    ["bootstrap","bind"].forEach(function (e) {
+    ["bootstrap", "bind"].forEach(function (e) {
         switch (e) {
             case "bootstrap":
-            	try{
-                document.querySelectorAll("input,select,textarea").forEach(function (e) {if (!in_array("form-control", e.classList)) {e.classList.add("form-control");}});
-            	}catch(e){
-            		
-            	}finally{
-            		
-            	}
+                try {
+                    document.querySelectorAll("input,select,textarea").forEach(function (e) {
+                        if (!in_array("form-control", e.classList)) {
+                            e.classList.add("form-control");
+                        }
+                    });
+                } catch (e) {
+
+                } finally {
+
+                }
                 break;
             case "bind":
                 if (typeof (bindRefresh) !== "undefined") {
@@ -160,7 +164,53 @@ PKJ.loadLibrary = function (name, ok) {
     }
 };
 
-function tagUpdate(){
+function tagUpdate() {
+
+    //datatables
+    if (typeof ($.fn.dataTableExt) !== "undefined") {
+        $(".datatables").each(function (i, e) {
+            $(document).ready(function () {
+                if (!$.fn.dataTable.isDataTable(e)) {
+                    $(e).DataTable({
+                        dom: 'Bfrtip',
+                        buttons: [
+                            'copyHtml5',
+                            'excelHtml5',
+                            'csvHtml5',
+                            'pdfHtml5'
+                        ],
+                        responsive: true,
+                        select: true,
+                        keys: true,
+                        "language": {
+                            "sEmptyTable": "Nenhum registro encontrado",
+                            "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                            "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                            "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                            "sInfoPostFix": "",
+                            "sInfoThousands": ".",
+                            "sLengthMenu": "_MENU_ resultados por página",
+                            "sLoadingRecords": "Carregando...",
+                            "sProcessing": "Processando...",
+                            "sZeroRecords": "Nenhum registro encontrado",
+                            "sSearch": "Pesquisar",
+                            "oPaginate": {
+                                "sNext": "Próximo",
+                                "sPrevious": "Anterior",
+                                "sFirst": "Primeiro",
+                                "sLast": "Último"
+                            },
+                            "oAria": {
+                                "sSortAscending": ": Ordenar colunas de forma ascendente",
+                                "sSortDescending": ": Ordenar colunas de forma descendente"
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    }
+    
     $("select").each(function (i, e) {
         if ($(e).attr("value") != undefined) {
             $(e).val($(e).attr("value"));
@@ -169,7 +219,7 @@ function tagUpdate(){
     $("input[type='checkbox']").each(function (i, e) {
         if ($(e).attr("value") != undefined) {
             if ($(e).attr("value") == "true") {
-                $(e).attr("checked","true");
+                $(e).attr("checked", "true");
             } else {
                 $(e).removeAttr("checked");
             }
@@ -177,24 +227,24 @@ function tagUpdate(){
     });
     var contador = 0;
     $('input').each(function (i, e) {
-    	  if( ucase($(e).attr("type")) === "BUTTON" ){
-    	  	$(e).addClass("btn");
-    	  	var color = lcase($(e).attr("color"));
-    	  	if(color === ""){
-				color = "primary";    	  	
-    	  	}
-    	  	$(e).addClass("btn-"+color);
-		  }
-    	  if (!$(e).hasClass("form-control")) {
-    	  	   $(e).addClass("form-control");
-    	  }
+        if (ucase($(e).attr("type")) === "BUTTON") {
+            $(e).addClass("btn");
+            var color = lcase($(e).attr("color"));
+            if (color === "") {
+                color = "primary";
+            }
+            $(e).addClass("btn-" + color);
+        }
+        if (!$(e).hasClass("form-control")) {
+            $(e).addClass("form-control");
+        }
         if ($(e).attr("data-mask") != undefined) {
             $(e).mask($(e).data("mask")).removeAttr("data-mask");
         }
         if ($(e).attr("data-calendar") != undefined) {
             try {
                 $(e).datepicker({showButtonPanel: true});
-            }catch(e){
+            } catch (e) {
                 console.log(e.message);
             }
             $(e).mask('99/99/9999').removeAttr("data-calendar");
@@ -231,7 +281,7 @@ function tagUpdate(){
     });
 }
 $(function () {
-	tagUpdate();
+    tagUpdate();
 });
 
 var $_GET = {};
