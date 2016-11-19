@@ -15,7 +15,9 @@ if (isset($_POST["CMD"])) {
     }
     if (isset($_POST["PAGE"])) {
         show_errors(false);
+        ob_start();
         include __DIR__ . "/../../" . $_POST["PAGE"];
+        ob_end_clean();
     }
     $tmp2 = $_POST;
     addslashes_array($tmp2);
@@ -151,7 +153,11 @@ class JS {
     }
 
     public static function console($mensagem) {
-        ?>console.log("<?php echo JS::addslashes($mensagem) ?>");<?php
+        if(is_array($mensagem)){
+            ?>console.log(<?php echo json_encode($mensagem) ?>);<?php
+        }else{
+            ?>console.log("<?php echo JS::addslashes($mensagem) ?>");<?php
+        }
     }
 
     public static function popup($mensagem, $id = "pkj") {
@@ -392,7 +398,30 @@ class Bind {
     function stopTimeout($function) {
         ?>clearTimeout(eventos["<?= $function ?>"])<?php
     }
-
+    
+    /**
+     * Send focus
+     * @param type $id id 
+     * @return type this
+     */
+    function setFocus($id){
+        return $this->jquery($id, "focus()");
+    }
+    
+    /**
+     * Force a jquery code
+     * @param type $id
+     * @param type $code
+     */
+    function jquery($id, $code) {
+        if (startswith($id, "#")) {
+            $id = replace($id,"#","");
+            ?>$("*[id='<?php echo $id ?>'],*[input-id='<?php echo $id ?>']").<?php echo $code ?>;<?php
+        } else {
+            ?>$("*[<?php echo $id ?>]").<?php echo $code ?>;<?php
+        }
+        return $this;
+    }
 }
 
 /**

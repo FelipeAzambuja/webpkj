@@ -166,12 +166,13 @@ PKJ.loadLibrary = function (name, ok) {
 
 function tagUpdate() {
 
+
     //datatables
     if (typeof ($.fn.dataTableExt) !== "undefined") {
         $(".datatables").each(function (i, e) {
             $(document).ready(function () {
                 if (!$.fn.dataTable.isDataTable(e)) {
-                    $(e).DataTable({
+                    var tabela = $(e).DataTable({
                         dom: 'Bfrtip',
                         buttons: [
                             'copyHtml5',
@@ -206,11 +207,15 @@ function tagUpdate() {
                             }
                         }
                     });
+                    tabela.on('responsive-display', function (e, datatable, row, showHide, update) {
+//                        console.log('Details for row ' + row.index() + ' ' + (showHide ? 'shown' : 'hidden'));
+                        tagUpdate();
+                    });
                 }
             });
         });
     }
-    
+
     $("select").each(function (i, e) {
         if ($(e).attr("value") != undefined) {
             $(e).val($(e).attr("value"));
