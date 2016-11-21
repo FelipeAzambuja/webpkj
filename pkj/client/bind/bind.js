@@ -1,5 +1,5 @@
 var bind_out = "body";
-var bind_router = "http://webpkj.local.host/pkj/server/all.php";
+var bind_router = "/pkj/server/all.php";
 
 var eventos = [];
 var session = {};

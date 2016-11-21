@@ -171,6 +171,7 @@ function tagUpdate() {
     if (typeof ($.fn.dataTableExt) !== "undefined") {
         $(".datatables").each(function (i, e) {
             $(document).ready(function () {
+                var responsive = $(e).hasClass("datatables-responsive");
                 if (!$.fn.dataTable.isDataTable(e)) {
                     var tabela = $(e).DataTable({
                         dom: 'Bfrtip',
@@ -180,7 +181,7 @@ function tagUpdate() {
                             'csvHtml5',
                             'pdfHtml5'
                         ],
-                        responsive: true,
+                        responsive: responsive,
                         select: true,
                         keys: true,
                         "language": {

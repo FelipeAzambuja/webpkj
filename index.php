@@ -36,30 +36,26 @@ include './pkj/server/all.php';
             button("Gravar", "click='gravar()' page='pkj/lab.php'", 6);
             row();
             ?>
-            <table class="datatables display">
+            <table class="datatables datatables-responsive display">
                 <thead>
                     <tr>
                         <th>Nome</th>
                         <th>Telefone</th>
+                        <th>Editar</th>
+                        <th>Editar</th>
+                        <th>Editar</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Felipe</td>
-                        <td>13 3385-3390</td>
-                    </tr>
-                    <tr>
-                        <td>Felipe</td>
-                        <td>13 3385-3390</td>
-                    </tr>
-                    <tr>
-                        <td>Felipe</td>
-                        <td>13 3385-3390</td>
-                    </tr>
-                    <tr>
-                        <td>Felipe</td>
-                        <td>13 3385-3390</td>
-                    </tr>
+                    <?php foreach (range(1, 100) as $i): ?>
+                        <tr>
+                            <td>Felipe</td>
+                            <td>13 3385-3390</td>
+                            <td>13 3385-3390</td>
+                            <td>13 3385-3390</td>
+                            <td>13 3385-3390</td>
+                        </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </form>
