@@ -1,7 +1,11 @@
 <?php
 if (isset($_POST["HOST"])) {
     header("Access-Control-Allow-Credentials:true");
-    header("Access-Control-Allow-Origin: " . $_POST["HOST"]);
+    if ($_POST["HOST"] !== "file://") {
+        header("Access-Control-Allow-Origin: " . $_POST["HOST"]);
+    }else{
+        header("Access-Control-Allow-Origin: *");
+    }
 }
 date_default_timezone_set('America/Sao_Paulo'); //or change to whatever timezone you want
 ini_set("output_buffering", "0");

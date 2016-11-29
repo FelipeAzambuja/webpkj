@@ -47,7 +47,7 @@ include './pkj/server/all.php';
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach (range(1, 100) as $i): ?>
+                    <?php foreach (range(1, 123) as $i): ?>
                         <tr>
                             <td>Felipe</td>
                             <td>13 3385-3390</td>

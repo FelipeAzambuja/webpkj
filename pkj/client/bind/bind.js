@@ -62,71 +62,56 @@ function sisBindInterval(e, tipo) {
     }
     return true
 }
+var bind_runing = false;
 function bindRefresh() {
-    /*
-     if ($.inArray("onsen", PKJ.loadedLibrarys) > 0) {
-     //console.log("Desejo um prato do dia e um suco o mais rapido possivel");
-     if (typeof (ons) !== "undefined") {
-     if (!ons.isReady()) {
-     //console.log("se acalme vamos buscar seu suco");
-     setTimeout(function () {
-     bindRefresh();
-     }, 128);
-     return;
-     }
-     } else {
-     //console.log("volte mais tarde, seu almo�o ainda n�o est� pronto");
-     setTimeout(function () {
-     bindRefresh();
-     }, 128);
-     return;
-     }
-     }
-     */
-    setTimeout(function () {
-        $.each($("ons-button ,ons-range,ons-input,ons-switch,input,select,a,button,img,textarea"), function (e, t) {
-            if ($(t).attr("bind") === undefined) {
-                var n = "";
-                if ($(t).attr("keyup") !== undefined) {
-                    n = "keyup";
-                    $(t).attr("on" + n, "sisBindInterval(this, '" + n + "')").attr("bind", true);
-                }
-                if ($(t).attr("keydown") !== undefined) {
-                    n = "keydown";
-                    $(t).attr("on" + n, "sisBindInterval(this, '" + n + "')").attr("bind", true);
-                }
-                if ($(t).attr("keypress") !== undefined) {
-                    n = "keypress";
-                    $(t).attr("on" + n, "sisBindInterval(this, '" + n + "')").attr("bind", true);
-                }
-                if ($(t).attr("blur") !== undefined) {
-                    n = "blur";
-                    $(t).attr("on" + n, "sisBindInterval(this, '" + n + "')").attr("bind", true);
-                }
-                if ($(t).attr("click") !== undefined) {
-                    n = "click";
-                    $(t).attr("on" + n, "sisBindInterval(this, '" + n + "')").attr("bind", true);
-                    //csp 
+    if(bind_runing){
+        console.log("Aguarde o processamento");
+        return;
+    }
+    bind_runing = true;
+    $.each($("ons-button ,ons-range,ons-input,ons-switch,input,select,a,button,img,textarea"), function (e, t) {
+        if ($(t).attr("bind") === undefined) {
+            var n = "";
+            if ($(t).attr("keyup") !== undefined) {
+                n = "keyup";
+                $(t).attr("on" + n, "sisBindInterval(this, '" + n + "')").attr("bind", true);
+            }
+            if ($(t).attr("keydown") !== undefined) {
+                n = "keydown";
+                $(t).attr("on" + n, "sisBindInterval(this, '" + n + "')").attr("bind", true);
+            }
+            if ($(t).attr("keypress") !== undefined) {
+                n = "keypress";
+                $(t).attr("on" + n, "sisBindInterval(this, '" + n + "')").attr("bind", true);
+            }
+            if ($(t).attr("blur") !== undefined) {
+                n = "blur";
+                $(t).attr("on" + n, "sisBindInterval(this, '" + n + "')").attr("bind", true);
+            }
+            if ($(t).attr("click") !== undefined) {
+                n = "click";
+                $(t).attr("on" + n, "sisBindInterval(this, '" + n + "')").attr("bind", true);
+                //csp 
 //                    $(t).on(n,function(){sisBindInterval(this, '" + n + "')}).attr("bind", true);
-                }
-                if ($(t).attr("change") !== undefined) {
-                    n = "change";
-                    $(t).attr("on" + n, "sisBindInterval(this, '" + n + "')").attr("bind", true);
-                }
             }
-        });
-        $('select').each(function (i, pai) {
-            var value = $(pai).attr('value');
-            if (value !== undefined) {
-                $(pai).find('option').each(function (i, e) {
-                    if ($(e).val() === value) {
-                        $(e).attr('selected', true);
-                        $(pai).trigger("chosen:updated").chosen({"width": "100%"});
-                    }
-                })
+            if ($(t).attr("change") !== undefined) {
+                n = "change";
+                $(t).attr("on" + n, "sisBindInterval(this, '" + n + "')").attr("bind", true);
             }
-        });
-    }, 128);
+        }
+    });
+    $('select').each(function (i, pai) {
+        var value = $(pai).attr('value');
+        if (value !== undefined) {
+            $(pai).find('option').each(function (i, e) {
+                if ($(e).val() === value) {
+                    $(e).attr('selected', true);
+                    $(pai).trigger("chosen:updated").chosen({"width": "100%"});
+                }
+            })
+        }
+    });
+    bind_runing = false;
 }
 
 function bindCall(pagina, funcao, data, done) {
@@ -260,4 +245,7 @@ function lock(elemento) {
 }
 $(function () {
     bindRefresh();
+    setInterval(function () {
+        bindRefresh();
+    }, 100);
 });
