@@ -160,11 +160,11 @@ class JS {
         }
     }
 
-    public static function popup($mensagem, $id = "pkj") {
+    public static function popup($mensagem, $id = "") {
         ?>popup("<?php echo JS::addslashes($mensagem) ?>");<?php
     }
 
-    public static function popup_close($id = "pkj") {
+    public static function popup_close($id = "") {
         ?>popup_close("<?= $id ?>")<?php
     }
 
@@ -247,7 +247,7 @@ class Bind {
      */
     function setValue($id, $value) {
         $value = JS::addslashes($value);
-        ?>$("*[input-id='<?php echo $id ?>'],*[id='<?php echo $id ?>']").val("<?php echo $value ?>");<?php
+        $this->jquery($id, "val(\"$value\")");
         return $this;
     }
 
@@ -276,12 +276,7 @@ class Bind {
      */
     function setHtml($id, $html) {
         $html = JS::addslashes($html);
-        if (startswith($id, "#")) {
-            $id = replace($id,"#","");
-            ?>$("*[id='<?php echo $id ?>'],*[input-id='<?php echo $id ?>']").html("<?php echo $html ?>");<?php
-        } else {
-            ?>$("*[<?php echo $id ?>]").html("<?php echo $html ?>");<?php
-        }
+        $this->jquery($id, "html(\"$html\")");
         return $this;
     }
 
@@ -302,7 +297,7 @@ class Bind {
      */
     function setText($id, $text) {
         $text = JS::addslashes($text);
-        ?>$("*[id='<?php echo $id ?>'],*[input-id='<?php echo $id ?>']").html("<?php echo $text ?>");<?php
+        $this->jquery($id, "text(\"$text\")");
         return $this;
     }
 
@@ -313,7 +308,7 @@ class Bind {
      */
     function append($id, $text) {
         $text = JS::addslashes($text);
-        ?>$("*[id='<?php echo $id ?>'],*[input-id='<?php echo $id ?>']").append("<?php echo $text ?>");<?php
+        $this->jquery($id, "append(\"$text\")");
         return $this;
     }
 
@@ -332,7 +327,7 @@ class Bind {
      * @param type $id
      */
     function setEnable($id) {
-        ?>$("*[id='<?php echo $id ?>'],*[input-id='<?php echo $id ?>']").removeAttr("disabled");<?php
+        $this->jquery($id, "removeAttr(\"disabled\")");
         return $this;
     }
 
@@ -346,7 +341,7 @@ class Bind {
      * @param type $id
      */
     function setDisable($id) {
-        ?>$("*[id='<?php echo $id ?>'],*[input-id='<?php echo $id ?>']").attr("disabled",true);<?php
+        $this->jquery($id, "attr(\"disabled\",\"true\")");
         return $this;
     }
 
@@ -356,12 +351,12 @@ class Bind {
     }
 
     function show($id) {
-        ?>$("*[id='<?php echo $id ?>'],*[input-id='<?php echo $id ?>']").show();<?php
+        $this->jquery($id,"show()");
         return $this;
     }
 
     function hide($id) {
-        ?>$("*[id='<?php echo $id ?>'],*[input-id='<?php echo $id ?>']").hide();<?php
+        $this->jquery($id,"hide()");
         return $this;
     }
 

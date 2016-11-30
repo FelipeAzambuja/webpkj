@@ -51,7 +51,7 @@ class Resource {
             $protocol = 'http';
         }
         $url = "{$protocol}://{$_SERVER['HTTP_HOST']}/client/pkj/$name/";
-        $url = conf::$pkjHome."/client/$name/";
+        $url = conf::$pkjHome . "/client/$name/";
         foreach ($this->resources[$name]->files as $value) {
             if (endswith($value, ".js")) {
                 ?>
@@ -67,7 +67,9 @@ class Resource {
         if (isset($this->resources[$name]->onload)):
             ?>
             <script nonce="<?= conf::$random ?>">
-
+            <?php if ($name === "bind"): ?>
+                bind_router = "<?=conf::$pkjHome?>/server/all.php";
+            <?php endif; ?>
             <?php if ($name === "jquery"): ?>
                     $(function () {
                         try {

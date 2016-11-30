@@ -3,7 +3,9 @@
 function import($name) {
     resource()->import($name);
 }
-
+function jquery($id,$code){
+    bind()->jquery($id, $code);
+}
 function alert($msg) {
     JS::alert($msg);
 }
@@ -16,11 +18,11 @@ function redirect($page, $data = "") {
     JS::redirect($page, $data);
 }
 
-function popup($msg, $id = "pkj") {
+function popup($msg, $id="") {
     JS::popup($msg, $id);
 }
 
-function popup_close($id = "pkj") {
+function popup_close($id="") {
     JS::popup_close($id);
 }
 
