@@ -2,7 +2,7 @@
 
 class conf {
 
-    public static $pkjHome = "/pkj";
+    public static $pkjHome = "/webpkj/pkj";
     public static $dateFormat = "d/m/Y";
 // mysql postgre mssql odbc oledb sqlite
     public static $servidor = "postgre";

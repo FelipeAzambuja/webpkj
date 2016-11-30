@@ -36,7 +36,7 @@ include './pkj/server/all.php';
             button("Gravar", "click='gravar()' page='pkj/lab.php'", 6);
             row();
             ?>
-            <table class="datatables datatables-responsive display">
+            <table class="datatables display">
                 <thead>
                     <tr>
                         <th>Nome</th>
