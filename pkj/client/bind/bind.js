@@ -1,5 +1,6 @@
 var bind_out = "body";
 var bind_router = "/pkj/server/all.php";
+var bind_default = "";
 
 var eventos = [];
 var session = {};
@@ -11,7 +12,7 @@ function sisBindInterval(e, tipo) {
     if (fun !== undefined) {
         var pagina = $(e).attr("page");
         if (pagina === undefined) {
-            pagina = "";
+            pagina = bind_default;
         }
         var sisfunHAppyyyy = formData($(e).parents("form:eq(0),tr:eq(0)"));
         sisfunHAppyyyy.session = session;
@@ -64,7 +65,7 @@ function sisBindInterval(e, tipo) {
 }
 var bind_runing = false;
 function bindRefresh() {
-    if(bind_runing){
+    if (bind_runing) {
         console.log("Aguarde o processamento");
         return;
     }
@@ -174,24 +175,38 @@ function formData(formulario) {
         var valor = "";
         if (self.attr("type") === "checkbox" || self.attr("type") === "radio") {
             valor = (self.is(":checked")) + "";
-            if (self.attr("type") === "radio") {
-                valor = $("input[type='radio'][name='" + name + "']:checked").val();
-                if (valor === undefined) {
-                    valor = "false";
+            if (typeof (name) !== "undefined") {
+                if (self.attr("type") === "radio") {
+                    valor = $("input[type='radio'][name='" + name + "']:checked").val();
+                    if (valor === undefined) {
+                        valor = "false";
+                    }
+                    var data_id = $($("input[type='radio'][name='" + name + "']:checked").get(0)).attr("data-id");
+                    if (data_id !== undefined) {
+                        valor = $("input[type='radio'][name='" + name + "']:checked").attr("data-id");
+                    }
                 }
-            }
-            //verifica se � um grupo pelo name
-            var possivelArray = $("input[name='" + name + "']").toArray();
-            //if(possivelArray.length > 1 && self.attr("type") === "checkbox"){
-            if (self.attr("type") === "checkbox") {
-                var ferramenta = $("input[type='checkbox'][name='" + name + "']:checked").get();
-                var valor = [];
-                for (var i = 0; i < ferramenta.length; i++) {
-                    valor[i] = $(ferramenta[i]).val();
+                //verifica se � um grupo pelo name
+                var possivelArray = $("input[name='" + name + "']").toArray();
+                //if(possivelArray.length > 1 && self.attr("type") === "checkbox"){
+                if (self.attr("type") === "checkbox") {
+                    var ferramenta = $("input[type='checkbox'][name='" + name + "']:checked").get();
+                    var valor = [];
+                    for (var i = 0; i < ferramenta.length; i++) {
+                        if ($(ferramenta[i]).attr("data-id") !== undefined) {
+                            valor[i] = $(ferramenta[i]).attr("data-id");
+                        } else {
+                            valor[i] = $(ferramenta[i]).val();
+                        }
+                    }
                 }
             }
         } else {
-            valor = self.val();
+            if (self.attr("data-id") !== undefined) {
+                valor = self.attr("data-id");
+            } else {
+                valor = self.val();
+            }
         }
         if (id !== undefined) {
             //n�o coisar o j� coisado

@@ -17,7 +17,7 @@ function source() {
 }
 
 class Resource {
-
+    public static $list = array();
     var $folder;
     var $resources;
 
@@ -42,6 +42,7 @@ class Resource {
     }
 
     function import($name) {
+        Resource::$list[] = $name;
         if (isset($_SERVER['HTTPS']) &&
                 ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1) ||
                 isset($_SERVER['HTTP_X_FORWARDED_PROTO']) &&
@@ -69,6 +70,7 @@ class Resource {
             <script nonce="<?= conf::$random ?>">
             <?php if ($name === "bind"): ?>
                 bind_router = "<?=conf::$pkjHome?>/server/all.php";
+                bind_default = "<?= replace($_SERVER["PHP_SELF"], replace(conf::$pkjHome,"/pkj",""), "")?>";
             <?php endif; ?>
             <?php if ($name === "jquery"): ?>
                     $(function () {

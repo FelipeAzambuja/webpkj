@@ -1,5 +1,14 @@
 <?php
 include './pkj/server/all.php';
+
+function ler($form) {
+    alert(session_get($form["chave"]));
+}
+
+function gravar($form) {
+    session_set($form["chave"], $form["valor"]);
+    alert("Valor gravado $form[valor] na chave $form[chave]");
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -20,44 +29,30 @@ include './pkj/server/all.php';
     </head>
     <body>
         <form class="container">
-            <?php
-            row();
-            text("chave", "placeholder='Chave'", 3);
-            text("valor", "placeholder='Valor'", 6);
-            check("ativo", "Ativo");
-            radio("sexo", "Masculino", "sexo");
-            radio("sexo", "Feminino", "sexo");
-            $cidades = array("Santos", "São Vicente");
-            label("Cidades", 2);
-            combo("cidade", $cidades, $cidades, 4);
-            row();
-            row();
-            button("Ler", "click='ler()' color='danger' page='pkj/lab.php'", 6);
-            button("Gravar", "click='gravar()' page='pkj/lab.php'", 6);
-            row();
-            ?>
-            <table class="datatables display">
-                <thead>
-                    <tr>
-                        <th>Nome</th>
-                        <th>Telefone</th>
-                        <th>Editar</th>
-                        <th>Editar</th>
-                        <th>Editar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach (range(1, 123) as $i): ?>
-                        <tr>
-                            <td>Felipe</td>
-                            <td>13 3385-3390</td>
-                            <td>13 3385-3390</td>
-                            <td>13 3385-3390</td>
-                            <td>13 3385-3390</td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                <?php
+                row();
+                text("chave", "placeholder='Chave' modifier='underbar' float", 6);
+                text("valor", "placeholder='Valor' modifier='underbar' float", 6);
+                row();
+
+                row();
+                check("liquidos[]", "Agua","liquidos[]","data-id='23'", 6);
+                check("liquidos[]", "Vinho","liquidos[]","data-id='43432'", 6);
+                row();
+
+                row();
+                radio("idade", "0-20", "idade","data-id='1'");
+                radio("idade", "20-30", "idade","data-id='2'");
+                radio("idade", "30-40", "idade","data-id='3'");
+                radio("idade", "40+", "idade","data-id='4'");
+                row();
+
+
+                row();
+                button("Ler", "click='ler()' color='danger'", 6);
+                button("Gravar", "click='gravar()'", 6);
+                row();
+                ?>
         </form>
 
     </body>

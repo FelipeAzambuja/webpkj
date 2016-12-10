@@ -61,11 +61,14 @@ PKJ.refresh = function (load) {
         switch (e) {
             case "bootstrap":
                 try {
-                    document.querySelectorAll("input,select,textarea").forEach(function (e) {
-                        if (!in_array("form-control", e.classList)) {
-                            e.classList.add("form-control");
-                        }
-                    });
+                    var hasOnsen = ($("script[src*='onsenui.min.js']").size() > 0);
+                    if (!hasOnsen) {
+                    document.querySelectorAll("input[type='text'],input[type='password'],select,textarea").forEach(function (e) {
+                            if (!in_array("form-control", e.classList)) {
+                                e.classList.add("form-control");
+                            }
+                        });
+                    }
                 } catch (e) {
 
                 } finally {
@@ -232,6 +235,7 @@ function tagUpdate() {
         }
     });
     var contador = 0;
+    var hasOnsen = ($("script[src*='onsenui.min.js']").size() > 0);
     $('input').each(function (i, e) {
         if (ucase($(e).attr("type")) === "BUTTON") {
             $(e).addClass("btn");
@@ -241,8 +245,10 @@ function tagUpdate() {
             }
             $(e).addClass("btn-" + color);
         }
-        if (!$(e).hasClass("form-control")) {
-            $(e).addClass("form-control");
+        if (!hasOnsen) {
+            if (!$(e).hasClass("form-control")) {
+                $(e).addClass("form-control");
+            }
         }
         if ($(e).attr("data-mask") != undefined) {
             $(e).mask($(e).data("mask")).removeAttr("data-mask");

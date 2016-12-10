@@ -14,10 +14,17 @@ if (isset($_POST["CMD"])) {
         exit();
     }
     if (isset($_POST["PAGE"])) {
-        show_errors(false);
-        ob_start();
-        include __DIR__ . "/../../" . $_POST["PAGE"];
-        ob_end_clean();
+        if (len($_POST["PAGE"]) > 0) {
+//            c($_POST["PAGE"]);
+//        c($_SERVER);
+            c($_POST);
+            $pagina = __DIR__ . "/../../" . $_POST["PAGE"];
+//            console("Foi incluida a pagina $pagina");
+            show_errors(false);
+            ob_start();
+            include $pagina;
+            ob_end_clean();
+        }
     }
     $tmp2 = $_POST;
     addslashes_array($tmp2);
@@ -25,7 +32,9 @@ if (isset($_POST["CMD"])) {
     if ($tmp2["post0"] === "") {
         unset($tmp2["post0"]);
     }
-    call_user_func($cmd, $tmp2);
+    if (function_exists($cmd)) {
+        call_user_func($cmd, $tmp2);
+    }
     exit();
 }
 
@@ -153,9 +162,9 @@ class JS {
     }
 
     public static function console($mensagem) {
-        if(is_array($mensagem)){
+        if (is_array($mensagem)) {
             ?>console.log(<?php echo json_encode($mensagem) ?>);<?php
-        }else{
+        } else {
             ?>console.log("<?php echo JS::addslashes($mensagem) ?>");<?php
         }
     }
@@ -181,22 +190,22 @@ class JS {
         for ($i = 0; $i < $l; $i++) {
             $c = $s[$i];
             switch ($c) {
-                case '<': $o.='\\x3C';
+                case '<': $o .= '\\x3C';
                     break;
-                case '>': $o.='\\x3E';
+                case '>': $o .= '\\x3E';
                     break;
-                case '\'': $o.='\\\'';
+                case '\'': $o .= '\\\'';
                     break;
-                case '\\': $o.='\\\\';
+                case '\\': $o .= '\\\\';
                     break;
-                case '"': $o.='\\"';
+                case '"': $o .= '\\"';
                     break;
-                case "\n": $o.='\\n';
+                case "\n": $o .= '\\n';
                     break;
-                case "\r": $o.='\\r';
+                case "\r": $o .= '\\r';
                     break;
                 default:
-                    $o.=$c;
+                    $o .= $c;
             }
         }
         return $o;
@@ -351,12 +360,12 @@ class Bind {
     }
 
     function show($id) {
-        $this->jquery($id,"show()");
+        $this->jquery($id, "show()");
         return $this;
     }
 
     function hide($id) {
-        $this->jquery($id,"hide()");
+        $this->jquery($id, "hide()");
         return $this;
     }
 
@@ -393,16 +402,16 @@ class Bind {
     function stopTimeout($function) {
         ?>clearTimeout(eventos["<?= $function ?>"])<?php
     }
-    
+
     /**
      * Send focus
      * @param type $id id 
      * @return type this
      */
-    function setFocus($id){
+    function setFocus($id) {
         return $this->jquery($id, "focus()");
     }
-    
+
     /**
      * Force a jquery code
      * @param type $id
@@ -410,13 +419,14 @@ class Bind {
      */
     function jquery($id, $code) {
         if (startswith($id, "#")) {
-            $id = replace($id,"#","");
+            $id = replace($id, "#", "");
             ?>$("*[id='<?php echo $id ?>'],*[input-id='<?php echo $id ?>']").<?php echo $code ?>;<?php
         } else {
             ?>$("*[<?php echo $id ?>]").<?php echo $code ?>;<?php
         }
         return $this;
     }
+
 }
 
 /**
@@ -525,12 +535,14 @@ class UploadParser {
     }
 
 }
-function c($v){
+
+function c($v) {
     ob_start();
     s($v);
     console(ob_get_clean());
 }
-function cd($v){
+
+function cd($v) {
     c($v);
     exit();
 }
