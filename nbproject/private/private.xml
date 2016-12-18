@@ -2,14 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="2"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/var/www/html/webpkj/pkj/client/bootstrap/resource.json</file>
-            <file>file:/var/www/html/webpkj/pkj/server/bind.php</file>
-            <file>file:/var/www/html/webpkj/pkj/server/all.php</file>
-            <file>file:/var/www/html/webpkj/pages/index.php</file>
-            <file>file:/var/www/html/webpkj/pkj/client/jquery/pkj.js</file>
-            <file>file:/var/www/html/webpkj/pkj/server/quick.php</file>
-            <file>file:/var/www/html/webpkj/pkj/server/form.php</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

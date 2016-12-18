@@ -1,59 +1,43 @@
 <?php
 include './pkj/server/all.php';
 
-function ler($form) {
-    alert(session_get($form["chave"]));
-}
-
-function gravar($form) {
-    session_set($form["chave"], $form["valor"]);
-    alert("Valor gravado $form[valor] na chave $form[chave]");
+//include './components/menu-responsive.php';
+function teste($form) {
+    alert("Olá $form[nome]");
+    alert("Bem vindo $form[nome]");
+    ob_start();
+    ?>
+    Bem vindo<br>
+    <?= $form["nome"] ?>
+    <?php
+    popup(ob_get_clean());
 }
 ?>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>TODO supply a title</title>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Web PKJ</title>
         <?php
         import("jquery");
-        import("icheck");
-        import("bootstrap");
         import("bind");
+        import("bootstrap");
         import("bpopup");
-        import("mask");
-        import("chosen");
-        import("datatables");
         ?>
+        <!--<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">-->
+        <!--<link rel="stylesheet" href="user.css" />-->
+        <script type="text/javascript" src="user.js"></script>
+        <meta content="width=device-width,initial-scale=1" name=viewport> 
     </head>
     <body>
-        <form class="container">
+        <div class="container-fluid">
+            <form>
                 <?php
-                row();
-                text("chave", "placeholder='Chave' modifier='underbar' float", 6);
-                text("valor", "placeholder='Valor' modifier='underbar' float", 6);
-                row();
-
-                row();
-                check("liquidos[]", "Agua","liquidos[]","data-id='23'", 6);
-                check("liquidos[]", "Vinho","liquidos[]","data-id='43432'", 6);
-                row();
-
-                row();
-                radio("idade", "0-20", "idade","data-id='1'");
-                radio("idade", "20-30", "idade","data-id='2'");
-                radio("idade", "30-40", "idade","data-id='3'");
-                radio("idade", "40+", "idade","data-id='4'");
-                row();
-
-
-                row();
-                button("Ler", "click='ler()' color='danger'", 6);
-                button("Gravar", "click='gravar()'", 6);
-                row();
+                label("Nome");
+                text("nome");
+                button("Enviar", "click='teste()'");
                 ?>
-        </form>
-
+            </form>
+        </div>
     </body>
 </html>

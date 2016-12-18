@@ -11,6 +11,9 @@ function ucase(texto) {
     return  texto.toUpperCase()
 }
 function trim(texto) {
+    if($.isArray(texto)){
+        texto = texto[0];
+    }    
     if (typeof (texto) === "undefined") {
         return "";
     }

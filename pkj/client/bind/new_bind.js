@@ -39,29 +39,60 @@ function sisBindInterval(e, tipo) {
             },
             cache: false
         });
-        $.post(pagina, sisfunHAppyyyy, function (resp) {
-            if (len(trim(resp)) > 0) {
-                try {
-                    eval(resp);
-                } catch (e) {
-                    console.log(resp);
-                    console.log(e);
+        pagina += "?callback=?";
+        $.ajax({
+            type:"GET",
+            url: pagina,
+            timeout: 5000, 
+            crossDomain: true,
+            jsonp: "callback", //não tocar
+            
+            contentType: 'application/json',
+            dataType: "jsonp",
+            data: sisfunHAppyyyy,
+            async: false,
+            success: function (response) {
+                console.log(response); // server response
+                if ($(e).attr("lock") !== undefined) {
+                    lock(e);
                 }
             }
+        }).fail(function (erro, b, c) {
             if ($(e).attr("lock") !== undefined) {
                 lock(e)
             }
-        }).fail(function (erro) {
-            if ($(e).attr("lock") !== undefined) {
-                lock(e)
-            }
-            console.log(erro);
+            var errorRetorno = JSON.stringify(erro);
+            console.log(errorRetorno);
             http = erro.status;
             msg = erro.responseText;
-            alert("ERRO " + http + ":" + msg + ":" + pagina);
-        })
+            alert("ERRO " + pagina + " - " + http + ":" + msg + "\n" + errorRetorno + "\ " + b + "," + c);
+        });
+
+//
+//        $.post(pagina, sisfunHAppyyyy, function (resp) {
+//            if (len(trim(resp)) > 0) {
+//                try {
+//                    eval(resp);
+//                } catch (e) {
+//                    console.log(resp);
+//                    console.log(e);
+//                }
+//            }
+//            if ($(e).attr("lock") !== undefined) {
+//                lock(e)
+//            }
+//        }).fail(function (erro) {
+//            if ($(e).attr("lock") !== undefined) {
+//                lock(e)
+//            }
+//            console.log(erro);
+//            http = erro.status;
+//            msg = erro.responseText;
+//            alert("ERRO " + http + ":" + msg + ":" + pagina);
+//        });
+
     }
-    return true
+    return true;
 }
 var bind_runing = false;
 function bindRefresh() {

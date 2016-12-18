@@ -1,3 +1,0 @@
-[Fri Oct 14 22:26:25.960904 2016] [:error] [pid 1090] [client ::1:58756] PHP Parse error:  syntax error, unexpected 'text' (T_STRING) in /var/www/html/webpkj/pkj/server/quick.php on line 86
-[Fri Oct 14 22:27:31.215833 2016] [:error] [pid 1107] [client ::1:58764] PHP Fatal error:  Cannot redeclare text() (previously declared in /var/www/html/webpkj/pkj/server/quick.php:43) in /var/www/html/webpkj/pkj/server/quick.php on line 88
-[Fri Oct 14 22:56:03.561200 2016] [:error] [pid 2498] [client ::1:59180] PHP Parse error:  syntax error, unexpected '++' (T_INC) in /var/www/html/webpkj/pkj/server/form.php on line 5
