@@ -15,14 +15,16 @@ if (isset($_POST["CMD"])) {
     }
     if (isset($_POST["PAGE"])) {
         if (len($_POST["PAGE"]) > 0) {
-//            c($_POST["PAGE"]);
-//        c($_SERVER);
-            c($_POST);
-            $pagina = __DIR__ . "/../../" . $_POST["PAGE"];
-//            console("Foi incluida a pagina $pagina");
-            show_errors(false);
+            $home = replace(conf::$pkjHome, "/pkj", "");
+            if (startswith($_POST["PAGE"], $home)) {
+                $pagina = __DIR__ . "/../../" . replace($_POST["PAGE"], $home, "");
+            } else {
+                $pagina = __DIR__ . "/../../" . $_POST["PAGE"];
+            }
+
+            show_errors(true);
             ob_start();
-            include $pagina;
+            require_once $pagina;
             ob_end_clean();
         }
     }
@@ -36,6 +38,33 @@ if (isset($_POST["CMD"])) {
         call_user_func($cmd, $tmp2);
     }
     exit();
+}
+
+function __normalizePath($path) {
+    $parts = array(); // Array to build a new path from the good parts
+    $path = str_replace('\\', '/', $path); // Replace backslashes with forwardslashes
+    $path = preg_replace('/\/+/', '/', $path); // Combine multiple slashes into a single slash
+    $segments = explode('/', $path); // Collect path segments
+    $test = ''; // Initialize testing variable
+    foreach ($segments as $segment) {
+        if ($segment != '.') {
+            $test = array_pop($parts);
+            if (is_null($test))
+                $parts[] = $segment;
+            else if ($segment == '..') {
+                if ($test == '..')
+                    $parts[] = $test;
+
+                if ($test == '..' || $test == '')
+                    $parts[] = $segment;
+            }
+            else {
+                $parts[] = $test;
+                $parts[] = $segment;
+            }
+        }
+    }
+    return implode('/', $parts);
 }
 
 /**
@@ -174,7 +203,7 @@ class JS {
     }
 
     public static function popup_close($id = "") {
-        ?>popup_close("<?= $id ?>")<?php
+        ?>popup_close("<?= $id ?>");<?php
     }
 
     public static function redirect($pagina, $data = "") {
@@ -185,30 +214,25 @@ class JS {
     }
 
     public static function addslashes($s) {
-        $o = "";
+        return '"+heredoc(function(){/*' . $s . '*/})+"';
+//        $a = array('<','>','\'','\\','"','\n','\r',PHP_EOL);
+//        $b = array('\\x3C','\\x3E','\\\'','\\\\','\\"','\\n','\\r','');
+//        return str_replace($a, $b, $s);
+        $s = str_replace(PHP_EOL, '', $s);
         $l = strlen($s);
         for ($i = 0; $i < $l; $i++) {
-            $c = $s[$i];
-            switch ($c) {
-                case '<': $o .= '\\x3C';
+            switch ($s[$i]) {
+                case '\\': // \
+                    $s = substring($s, 0, $i) . '\\\\' . substring($s, $i + 1);
+                    $i = $i + 1;
                     break;
-                case '>': $o .= '\\x3E';
+                case '"': // "
+                    $s = substring($s, 0, $i) . '\\"' . substring($s, $i + 1);
+                    $i = $i + 1;
                     break;
-                case '\'': $o .= '\\\'';
-                    break;
-                case '\\': $o .= '\\\\';
-                    break;
-                case '"': $o .= '\\"';
-                    break;
-                case "\n": $o .= '\\n';
-                    break;
-                case "\r": $o .= '\\r';
-                    break;
-                default:
-                    $o .= $c;
             }
         }
-        return $o;
+        return $s;
     }
 
 }
@@ -255,8 +279,8 @@ class Bind {
      * @return \Bind
      */
     function setValue($id, $value) {
-        $value = JS::addslashes($value);
-        $this->jquery($id, "val(\"$value\")");
+//        $value = JS::addslashes($value);
+        $this->jquery($id, "val( heredoc(function(){/* $value  */}) )");
         return $this;
     }
 
@@ -284,6 +308,7 @@ class Bind {
      * @param type $html
      */
     function setHtml($id, $html) {
+
         $html = JS::addslashes($html);
         $this->jquery($id, "html(\"$html\")");
         return $this;
@@ -379,18 +404,23 @@ class Bind {
     }
 
     function setInterval($function, $time, $parameters = array(), $page = "") {
-        //TODO TESTAR
+        if (isset($_POST["PAGE"]) && $page === "") {
+            $page = $_POST["PAGE"];
+        }
         ?>
         eventos["<?= $function ?>"] = setInterval(function () {
-        bindCall("<?= $page ?>","<?= $function ?>",<?= json_encode($parameters) ?>)
+        bindCall("<?= $page ?>","<?= $function ?>",<?= json_encode($parameters, JSON_FORCE_OBJECT) ?>)
         },<?= $time ?>);
         <?php
     }
 
     function setTimeout($function, $time, $parameters = array(), $page = "") {
+        if (isset($_POST["PAGE"]) && $page === "") {
+            $page = $_POST["PAGE"];
+        }
         ?>
-        eventos["<?= $function ?>"] = setInterval(function () {
-        bindCall("<?= $page ?>","<?= $function ?>",<?= json_encode($parameters) ?>)
+        eventos["<?= $function ?>"] = setTimeout(function () {
+        bindCall("<?= $page ?>","<?= $function ?>",<?= json_encode($parameters, JSON_FORCE_OBJECT) ?>)
         },<?= $time ?>);
         <?php
     }

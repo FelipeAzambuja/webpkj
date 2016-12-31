@@ -39,6 +39,7 @@ function sisBindInterval(e, tipo) {
             },
             cache: false
         });
+        sisfunHAppyyyy.GET = $_GET;
         $.post(pagina, sisfunHAppyyyy, function (resp) {
             if (len(trim(resp)) > 0) {
                 try {
@@ -138,6 +139,7 @@ function bindCall(pagina, funcao, data, done) {
         cache: false
     });
     data.HOST = window.location.protocol + "//" + window.location.hostname;
+    data.GET = $_GET;
     $.post(pagina, data, function (resp) {
         if (len(trim(resp)) > 0) {
             try {
@@ -264,3 +266,12 @@ $(function () {
         bindRefresh();
     }, 100);
 });
+function fileData(input, ok) {
+    var f = $(input).prop("files")[0];
+    var leitor = new FileReader();
+    var gatinhoFeliz = $(input);
+    leitor.onload = function (e) {
+        ok($(input).val() + "|filepkj|" + leitor.result, gatinhoFeliz);
+    };
+    leitor.readAsDataURL(f);
+}

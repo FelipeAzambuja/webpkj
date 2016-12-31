@@ -11,9 +11,9 @@ function ucase(texto) {
     return  texto.toUpperCase()
 }
 function trim(texto) {
-    if($.isArray(texto)){
+    if ($.isArray(texto)) {
         texto = texto[0];
-    }    
+    }
     if (typeof (texto) === "undefined") {
         return "";
     }
@@ -60,13 +60,23 @@ function in_array(texto, array) {
 }
 PKJ = {};
 PKJ.refresh = function (load) {
-    ["bootstrap", "bind"].forEach(function (e) {
+    ["bootstrap", "bind", "icheck"].forEach(function (e) {
         switch (e) {
+            case "icheck":
+                try {
+                    $("input").iCheck({checkboxClass: 'icheckbox_square-aero', radioClass: 'iradio_square-aero', increaseArea: '20%'})
+                } catch (e) {
+
+                } finally {
+
+                }
+
+                break;
             case "bootstrap":
                 try {
                     var hasOnsen = ($("script[src*='onsenui.min.js']").size() > 0);
                     if (!hasOnsen) {
-                    document.querySelectorAll("input[type='text'],input[type='password'],select,textarea").forEach(function (e) {
+                        document.querySelectorAll("input[type='text'],input[type='password'],select,textarea").forEach(function (e) {
                             if (!in_array("form-control", e.classList)) {
                                 e.classList.add("form-control");
                             }
@@ -236,6 +246,7 @@ function tagUpdate() {
                 $(e).removeAttr("checked");
             }
         }
+
     });
     var contador = 0;
     var hasOnsen = ($("script[src*='onsenui.min.js']").size() > 0);
@@ -298,6 +309,15 @@ function tagUpdate() {
 $(function () {
     tagUpdate();
 });
+/** heredoc(function({ /*   ... *\/})
+ * https://stackoverflow.com/questions/4376431/javascript-heredoc/21789375#21789375
+ * https://stackoverflow.com/users/1008429/nate-ferrero
+ * @param {type} f
+ * @returns {unresolved}
+ */
+function heredoc (f) {
+    return f.toString().match(/\/\*\s*([\s\S]*?)\s*\*\//m)[1].replace(/(\/\*[\s\S]*?\*) \//g, '$1/');
+};
 
 var $_GET = {};
 document.location.search.replace(/\??(?:([^=]+)=([^&]*)&?)/g, function () {
