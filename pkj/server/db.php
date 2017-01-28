@@ -438,7 +438,7 @@ function SQLupdate($tabela, $array, $where) {
                 if ($valores[$i] === null) {
                     $sql.=$chaves[$i] . '= null,';
                 } else {
-                    $sql.=$chaves[$i] . '=\'' . replace($valores[$i], '\'', '') . '\',';
+                    $sql.=$chaves[$i] . '=' . replace($valores[$i], '\'', '') . ',';
                 }
             } else {
                 if ($valores[$i] === null) {
