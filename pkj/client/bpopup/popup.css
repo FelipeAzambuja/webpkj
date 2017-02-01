@@ -4,6 +4,21 @@ div[id^="pkjpopup"]{
     color:#000;
     display:none; 
     padding:20px;
+
+}
+@media screen and (max-width:680px){
+    div[id^="pkjpopup"]{ 
+        background-color:#fff;
+        border-radius:0;
+        color:#000;
+        display:none; 
+        padding:20px;
+        left:0 !important;
+        top:0 !important;
+        height: 100% !important;
+        width:  100% !important;
+        overflow: auto;
+    }    
 }
 .b-close{ 
     cursor:pointer;

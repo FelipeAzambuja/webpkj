@@ -14,7 +14,7 @@ function session_exists($campo) {
 function session_get($campo) {
     if (conf::$session === "default") {
         error_reporting(0);
-        ob_start();
+//        ob_start();
         @session_start();
         $retorno = $_SESSION[$campo];
         error_reporting(-1);
@@ -25,7 +25,10 @@ function session_get($campo) {
             $retorno = $_POST["session"][$campo];
         }
     } elseif (conf::$session === "database") {
-        @session_start();
+        $id = session_id();
+        if(empty($id)){
+            session_start();
+        }
         $id = session_id();
         session_create_table();
         $ip = $_SERVER["REMOTE_ADDR"];
@@ -37,7 +40,6 @@ function session_get($campo) {
 function session_set($campo, $valor) {
     if (conf::$session === "default") {
         error_reporting(0);
-        ob_start();
         session_start();
         $_SESSION[$campo] = $valor;
         error_reporting(-1);
@@ -46,7 +48,10 @@ function session_set($campo, $valor) {
     } elseif (conf::$session === "database") {
         session_create_table();
         $ip = $_SERVER["REMOTE_ADDR"];
-        session_start();
+        $id = session_id();
+        if(empty($id)){
+            session_start();
+        }
         $id = session_id();
         $sql = array();
         $sql["id"] = $id;

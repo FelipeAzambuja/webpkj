@@ -1,4 +1,8 @@
 <?php
+//opcache
+if(in_array("kint", get_declared_classes())){
+    return;
+}
 abstract class kintParser extends kintVariableData
 {
 	private static $_level = 0;
