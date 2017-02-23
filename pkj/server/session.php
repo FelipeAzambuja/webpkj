@@ -81,5 +81,4 @@ function session_info() {
     error_reporting(-1);
     return $retorno;
 }
-
 ?>

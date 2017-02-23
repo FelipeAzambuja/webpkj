@@ -228,6 +228,9 @@ function tagUpdate() {
 //                        console.log('Details for row ' + row.index() + ' ' + (showHide ? 'shown' : 'hidden'));
                         tagUpdate();
                     });
+                    tabela.on('draw.dt', function () {
+                        tagUpdate();
+                    });
                 }
             });
         });
@@ -315,9 +318,10 @@ $(function () {
  * @param {type} f
  * @returns {unresolved}
  */
-function heredoc (f) {
+function heredoc(f) {
     return f.toString().match(/\/\*\s*([\s\S]*?)\s*\*\//m)[1].replace(/(\/\*[\s\S]*?\*) \//g, '$1/');
-};
+}
+;
 
 var $_GET = {};
 document.location.search.replace(/\??(?:([^=]+)=([^&]*)&?)/g, function () {

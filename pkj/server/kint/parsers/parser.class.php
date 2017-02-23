@@ -1,6 +1,6 @@
 <?php
 //opcache
-if(in_array("kint", get_declared_classes())){
+if(in_array("kintParser", get_declared_classes())){
     return;
 }
 abstract class kintParser extends kintVariableData
