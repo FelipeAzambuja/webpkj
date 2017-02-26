@@ -8,9 +8,9 @@ class conf {
     public static $servidor = "postgre";
 //    public static $endereco = "../../banco.sqlite";
     public static $endereco = "localhost";
-    public static $usuario = "webpkj";
-    public static $senha = "webpkj";
-    public static $base = "webpkj";
+    public static $usuario = "postgres";
+    public static $senha = "123";
+    public static $base = "apinfe";
     public static $quick = true;
     //session default,database,javascript
     public static $session = "database";

@@ -53,7 +53,12 @@ function substring($texto, $inicio, $quantidade = -1) {
     }
     return substr($texto, $inicio, $quantidade);
 }
-
+/**
+ * 
+ * @param type $haystack long text
+ * @param type $needle 
+ * @return type
+ */
 function startswith($haystack, $needle) {
     return $needle === "" || strrpos($haystack, $needle, -strlen($haystack)) !== FALSE;
 }

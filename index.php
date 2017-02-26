@@ -1,43 +1,110 @@
 <?php
-include './pkj/server/all.php';
+require_once __DIR__ . '/pkj/server/all.php';
 
-//include './components/menu-responsive.php';
-function teste($form) {
-    alert("Olá $form[nome]");
-    alert("Bem vindo $form[nome]");
-    ob_start();
-    ?>
-    Bem vindo<br>
-    <?= $form["nome"] ?>
-    <?php
-    popup(ob_get_clean());
+/**
+ * 
+ * @return \Usuario
+ */
+function orm_usuario () {
+    return new Usuario();
+}
+
+class Usuario extends DBTable {
+
+    public $id;
+    public $nome;
+    public $imagem;
+    public $nivel;
+    public $frase;
+    public $senha;
+    public $email;
+    public $lembrar;
+
+    function setId ( $id ) {
+	$this->id = $id;
+	return $this;
+    }
+
+    function setNome ( $nome ) {
+	$this->nome = $nome;
+	return $this;
+    }
+
+    /**
+     * 
+     * @param type $imagem
+     * @return $this
+     */
+    function setImagem ( $imagem ) {
+//	$this->imagem = $imagem;
+	return parent::setImagem ( $imagem );
+    }
+
+    function setNivel ( $nivel ) {
+	$this->nivel = $nivel;
+	return $this;
+    }
+
+    function setFrase ( $frase ) {
+	$this->frase = $frase;
+	return $this;
+    }
+
+    function setSenha ( $senha ) {
+	$this->senha = $senha;
+	return $this;
+    }
+
+    function setEmail ( $email ) {
+	$this->email = $email;
+	return $this;
+    }
+
+    function setLembrar ( $lembrar ) {
+	$this->lembrar = $lembrar;
+	return $this;
+    }
+
+    function getFields () {
+	$campos = array ();
+	$campos[] = array ( "name" => "id" , "type" => "integer" );
+	$campos[] = array ( "name" => "nome" , "type" => "text" );
+	$campos[] = array ( "name" => "imagem" , "type" => "image" );
+	$campos[] = array ( "name" => "nivel" , "type" => "text" );
+	$campos[] = array ( "name" => "frase" , "type" => "text" );
+	$campos[] = array ( "name" => "senha" , "type" => "text" );
+	$campos[] = array ( "name" => "email" , "type" => "text" );
+	$campos[] = array ( "name" => "lembrar" , "type" => "text" );
+	return $campos;
+    }
+
+    public function getName () {
+	return "usuarios";
+    }
+
 }
 ?>
-<!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8">
-        <title>Web PKJ</title>
-        <?php
-        import("jquery");
-        import("bind");
-        import("bootstrap");
-        import("bpopup");
-        ?>
-        <!--<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">-->
-        <!--<link rel="stylesheet" href="user.css" />-->
-        <script type="text/javascript" src="user.js"></script>
-        <meta content="width=device-width,initial-scale=1" name=viewport> 
+        <meta charset="utf-8" />
+        <title></title>
+	<?php
+	import ( "jquery" );
+	import ( "bootstrap" );
+	import ( "bind" );
+	import ( "ui" );
+	import ( "mask" );
+	?>
     </head>
     <body>
         <div class="container-fluid">
-            <form>
-                <?php
-                label("Nome");
-                text("nome");
-                button("Enviar", "click='teste()'");
-                ?>
-            </form>
+	    <?php // s ( query ( "select * from usuarios" ) );  ?>
+	    <?php file_put_contents ( "antiga.txt" , one ( orm_usuario ()->query ( "id=1" ) )->imagem ) ?>
+	    <?php
+	    orm_usuario ()->setImagem ( null )->update ( "id=1");
+	    
+	    ?>
+	    <img src="<?= orm_usuario ()->one ("id=1")->imagem ?>">
         </div>
     </body>
 </html>

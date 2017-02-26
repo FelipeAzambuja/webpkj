@@ -36,9 +36,11 @@
 //    nunca esqueça que deve declarar as variaveis  e definir os campos
 //    NUNCA DECLARE GET sem colocar o parent::
 class DBTable {
+
     public function __toString () {
 	return $this->{$this->getPK ()};
     }
+
     //autocomplete
     public function getPK () {
 	return "id";
@@ -47,6 +49,14 @@ class DBTable {
     //autocomplete
     public function getName () {
 	
+    }
+
+    public function getDeclaredType ( $name ) {
+	if ( in_array ( $name , col ( $this->getFields () , "name" ) ) ) {
+	    $i = array_search ( $name , col ( $this->getFields () , "name" ) );
+	    return $this->getFields ()[$i]["type"];
+	}
+	return $this->getType ( $name );
     }
 
     //autocomplete
@@ -123,6 +133,12 @@ class DBTable {
 		    $type = "serial";
 		}
 	    }
+	    if ( ($type === "blob" || $type === "image") && $servidor === "mysql" ) {
+		$type = "mediumblob";
+	    }
+	    if ( ($type === "blob" || $type === "image") && $servidor === "postgre" ) {
+		$type = "bytea";
+	    }
 	    if ( $i == count ( $fields ) - 1 ) {
 		$sql .= "$name $type $pk";
 	    } else {
@@ -164,7 +180,7 @@ class DBTable {
 	if ( query ( SQLupdate ( $this->getName () , $sql , $where ) ) ) {
 	    return true;
 	} else {
-	    throw new Exception ( bd_get_error () );
+	    throw new Exception ( db_get_error () );
 	}
     }
 
@@ -182,7 +198,7 @@ class DBTable {
 	if ( query ( SQLreplace ( $this->getName () , $sql , $where ) ) ) {
 	    return true;
 	} else {
-	    throw new Exception ( bd_get_error () );
+	    throw new Exception ( db_get_error () );
 	}
     }
 
@@ -204,6 +220,27 @@ class DBTable {
     }
 
     public function __call ( $name , $arguments ) {
+	if ( startswith ( $name , "set" ) ) {
+	    $servidor = conf::$servidor;
+	    $name = replace_first ( lcase ( $name ) , "set" , "" );
+	    $type = $this->getDeclaredType ( $name );
+	    switch ( $type ) {
+		case "image":
+		case "blob":
+		    if ( $servidor === "postgre" ) {
+			if ( $arguments[0] !== null ) {
+			    $this->{$name} = pg_escape_bytea ( $arguments[0] );
+			} else {
+			    $this->{$name} = 'null';
+			}
+		    }
+		    break;
+
+		default:
+		    break;
+	    }
+	    return $this;
+	}
 	$name = replace ( $name , "get" , "" );
 	$rels = $this->getRelations ();
 	foreach ( $this->getRelations () as $rel ) {
@@ -257,7 +294,9 @@ class DBTable {
 		$plus = "where 1=1 and " . $plus;
 	    }
 	}
-	foreach ( query ( "select * from $tableName $plus" ) as $r ) {
+	$sql = "select * from $tableName $plus";
+	$servidor = conf::$servidor;
+	foreach ( query ( $sql ) as $r ) {
 	    $ok = true;
 	    if ( $filter != "" ) {
 		foreach ( array_keys ( get_object_vars ( $r ) ) as $key ) {
@@ -275,8 +314,27 @@ class DBTable {
 	    $tmp = clone $this;
 	    foreach ( $this->getFields () as $field ) {
 		$chave = $field["name"];
+		$type = $field["type"];
 		if ( isset ( $r->$chave ) ) {
 		    $tmp->$chave = $r->$chave;
+		    //conversão de tipos do get
+		    switch ( $type ) {
+			case "blob":
+			    if ( $servidor === "postgre" ) {
+				$tmp->$chave = pg_unescape_bytea ( $tmp->$chave );
+			    }
+			    break;
+			case "image":
+			    if ( $servidor === "postgre" ) {
+				$tmp->$chave = pg_unescape_bytea ( $tmp->$chave );
+				$tmp->$chave = "data:image;base64," . base64_encode ( $tmp->$chave );
+			    } elseif ( $servidor === "mysql" ) {
+				$tmp->$chave = "data:image;base64," . base64_encode ( $tmp->$chave );
+			    } else {
+				$tmp->$chave = "data:image;base64," . base64_encode ( $tmp->$chave );
+			    }
+			    break;
+		    }
 		}
 	    }
 	    $retorno[] = $tmp;
