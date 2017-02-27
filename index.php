@@ -37,7 +37,7 @@ class Usuario extends DBTable {
      */
     function setImagem ( $imagem ) {
 //	$this->imagem = $imagem;
-	return parent::setImagem ( $imagem );
+	return parent::setImagem ( $imagem );//chamar o fantasma
     }
 
     function setNivel ( $nivel ) {

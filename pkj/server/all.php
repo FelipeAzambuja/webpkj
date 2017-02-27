@@ -21,6 +21,7 @@ function show_errors($v = true) {
 }
 show_errors();
 include 'session.php';
+include 'smarty/Smarty.class.php';
 include "string.php";
 include "conf.php";
 include "pkj.php";
