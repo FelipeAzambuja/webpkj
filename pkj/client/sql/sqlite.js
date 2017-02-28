@@ -1,4 +1,5 @@
 function SqliteConnection(fileName, size, version) {
+    this.mode;
     this.file = fileName;
     this.isOpen = false;
     this.base = null;
@@ -13,8 +14,77 @@ function SqliteConnection(fileName, size, version) {
         this.version = version;
     }
 
+    this.createTable = function (name, fields) {
+        var field = "";
+        var sql = "create table if not exists " + name + "( id integer primary key autoincrement,";
+        for (var i = 0; i < fields.length; i++) {
+            field = fields[i];
+            if (i === (fields.length - 1)) {
+                sql += field + ")";
+            } else {
+                sql += field + ",";
+            }
+        }
+        this.execute(sql);
+    };
+
+    this.replace = function (table, fields, where) {
+        var self = this;
+        this.query("select id from " + table + " where " + where, function (linhas) {
+            if (linhas.length > 0) {
+                self.update(table,fields,where);
+            } else {
+                self.insert(table, fields);
+            }
+        });
+    }
+
+    this.delete = function (table, where) {
+        var sql = "delete from " + table + " where" + where;
+        this.execute(sql);
+    }
+
+    this.insert = function (table, fields) {
+        var fieldsName = Object.keys(fields);
+        var sql = "insert into " + table + " (";
+        var p = " (";
+        for (var i = 0; i < fieldsName.length; i++) {
+            field = fieldsName[i];
+            if (i === (fieldsName.length - 1)) {
+                sql += field + ")";
+                p += "?)";
+            } else {
+                sql += field + ",";
+                p += "?,";
+            }
+        }
+        sql += " values " + p;
+        this.execute(sql, Object.values(fields));
+    }
+
+    this.update = function (table, fields, where) {
+        var fieldsName = Object.keys(fields);
+        var sql = "update " + table + " set ";
+        for (var i = 0; i < fieldsName.length; i++) {
+            field = fieldsName[i];
+            if (i === (fieldsName.length - 1)) {
+                sql += field + " = ? ";
+            } else {
+                sql += field + " = ? , ";
+            }
+        }
+        sql += "where " + where;
+        this.execute(sql, Object.values(fields));
+    }
+
     this.open = function () {
-        this.base = openDatabase(this.file, this.version, 'pkj' + this.fileName, this.size * 1024 * 1014);
+        if (typeof (window.sqlitePlugin) !== "undefined") {
+            this.base = window.sqlitePlugin.openDatabase({name: this.file, location: 'default'});
+            this.mode = "cordova plugin";
+        } else {
+            this.base = openDatabase(this.file, this.version, 'pkj' + this.fileName, this.size * 1024 * 1014);
+            this.mode = "chrome native";
+        }
         this.isOpen = true;
     }
     this.close = function () {
