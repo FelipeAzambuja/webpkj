@@ -111,7 +111,7 @@ function SqliteConnection(fileName, size, version) {
             parameters = [];
         }
         this.base.transaction(function (tx) {
-            tx.executeSql(sql, [], function (tx, resultados) {
+            tx.executeSql(sql, parameters, function (tx, resultados) {
                 var retorno = [];
                 for (var i = 0; i < resultados.rows.length; i++) {
                     var row = resultados.rows.item(i);
