@@ -1,87 +1,113 @@
 <?php
 require_once __DIR__ . '/pkj/server/all.php';
 
-/**
- * 
- * @return \Usuario
- */
-function orm_usuario () {
-    return new Usuario();
+//orm_usuario()->create();
+//$id = orm_usuario ()->setNome ( "Felipe" )->setSenha ( "123" )->setNivel ( "Administrador" )->save ();
+function init () {
+  tabela ();
 }
 
-class Usuario extends DBTable {
+function form_adicionar ( $form ) {
+  ob_start ();
+  ?>
+  <form>
+      <?php
+      label ( "Nome" , 4 );
+      text ( "nome" , 8 );
+      label ( "Senha" , 4 );
+      password ( "senha" , 8 );
+      label ( "Nivel" , 4 );
+      text ( "nivel" , 8 );
+      button ( "Adicionar" , "click='adicionar()'" , 12 );
+      ?>
+  </form>
+  <?php
+  $html = ob_get_clean ();
+  popup ( $html );
+  bindUpdate ();
+}
 
-    public $id;
-    public $nome;
-    public $imagem;
-    public $nivel;
-    public $frase;
-    public $senha;
-    public $email;
-    public $lembrar;
+function form_editar ( $form ) {
+  $usuario = orm_usuario ()->one ( "id=$form[id]" );
+  ob_start ();
+  ?>
+  <form>
+      <?php
+      hidden ( "id" , $usuario->id );
+      label ( "Nome" , 4 );
+      text ( "nome" , "value='$usuario->nome'" , 8 );
+      label ( "Senha" , 4 );
+      password ( "senha" , 8 );
+      label ( "Nivel" , 4 );
+      text ( "nivel" , "value='$usuario->nivel'" , 8 );
+      button ( "Editar" , "click='editar()'" , 6 );
+      button ( "Remover" , "click='remover()' color='danger'" , 6 );
+      ?>
+  </form>
+  <?php
+  $html = ob_get_clean ();
+  popup ( $html );
+  bindUpdate ();
+}
 
-    function setId ( $id ) {
-	$this->id = $id;
-	return $this;
-    }
+function adicionar ( $form ) {
+  $usuario = orm_usuario ();
+  $usuario->setNome ( $form["nome"] );
+  $usuario->setNivel ( $form["nivel"] );
+  $usuario->setSenha ( $form["senha"] );
+  $usuario->save ();
+  tabela ();
+  popup_close ();
+}
 
-    function setNome ( $nome ) {
-	$this->nome = $nome;
-	return $this;
-    }
+function editar ( $form ) {
+  $usuario = orm_usuario ();
+  $usuario->setNome ( $form["nome"] );
+  $usuario->setNivel ( $form["nivel"] );
+  $usuario->setSenha ( $form["senha"] );
+  $usuario->update ( "id=$form[id]" );
+  tabela ();
+  popup_close ();
+}
 
-    /**
-     * 
-     * @param type $imagem
-     * @return $this
-     */
-    function setImagem ( $imagem ) {
-//	$this->imagem = $imagem;
-	return parent::setImagem ( $imagem );//chamar o fantasma
-    }
+function remover ( $form ) {
+  orm_usuario ()->delete ( "id=$form[id]" );
+  tabela ();
+  popup_close ();
+}
 
-    function setNivel ( $nivel ) {
-	$this->nivel = $nivel;
-	return $this;
-    }
-
-    function setFrase ( $frase ) {
-	$this->frase = $frase;
-	return $this;
-    }
-
-    function setSenha ( $senha ) {
-	$this->senha = $senha;
-	return $this;
-    }
-
-    function setEmail ( $email ) {
-	$this->email = $email;
-	return $this;
-    }
-
-    function setLembrar ( $lembrar ) {
-	$this->lembrar = $lembrar;
-	return $this;
-    }
-
-    function getFields () {
-	$campos = array ();
-	$campos[] = array ( "name" => "id" , "type" => "integer" );
-	$campos[] = array ( "name" => "nome" , "type" => "text" );
-	$campos[] = array ( "name" => "imagem" , "type" => "image" );
-	$campos[] = array ( "name" => "nivel" , "type" => "text" );
-	$campos[] = array ( "name" => "frase" , "type" => "text" );
-	$campos[] = array ( "name" => "senha" , "type" => "text" );
-	$campos[] = array ( "name" => "email" , "type" => "text" );
-	$campos[] = array ( "name" => "lembrar" , "type" => "text" );
-	return $campos;
-    }
-
-    public function getName () {
-	return "usuarios";
-    }
-
+function tabela () {
+  ob_start ();
+  ?>
+  <form>
+      <input type="button" color="success" value="Adicionar" click="form_adicionar()" />
+  </form>
+  <table class="datatables">
+      <thead>
+  	<tr>
+  	    <th>ID</th>
+  	    <th>Nome</th>
+  	    <th>Senha</th>
+  	    <th>Nivel</th>
+  	    <th>Opções</th>
+  	</tr>
+      </thead>
+      <tbody>
+	  <?php foreach ( orm_usuario ()->query () as $linha ): ?>
+    	<tr>
+    	    <td><?php hidden ( "id" , $linha->id , true ) ?></td>
+    	    <td><?= $linha->nome ?></td>
+    	    <td><?= str_repeat ( "*" , len ( $linha->senha ) ) ?></td>
+    	    <td><?= $linha->nivel ?></td>
+    	    <td><?php button ( "Editar" , "click='form_editar()'" , 12 ) ?></td>
+    	</tr>
+	  <?php endforeach; ?>
+      </tbody>
+  </table>
+  <?php
+  $html = ob_get_clean ();
+  html ( "#tabela" , $html );
+  bindUpdate ();
 }
 ?>
 <html>
@@ -92,19 +118,16 @@ class Usuario extends DBTable {
 	import ( "jquery" );
 	import ( "bootstrap" );
 	import ( "bind" );
-	import ( "ui" );
 	import ( "mask" );
+	import ( "datatables" );
+	import ( "bpopup" );
 	?>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
-        <div class="container-fluid">
-	    <?php // s ( query ( "select * from usuarios" ) );  ?>
-	    <?php file_put_contents ( "antiga.txt" , one ( orm_usuario ()->query ( "id=1" ) )->imagem ) ?>
-	    <?php
-	    orm_usuario ()->setImagem ( null )->update ( "id=1");
-	    
-	    ?>
-	    <img src="<?= orm_usuario ()->one ("id=1")->imagem ?>">
-        </div>
+	<div class="container">
+	    <div class="col-sm-12" style="overflow: auto;margin-top: 15px" id="tabela">;;
+	    </div>
+	</div>
     </body>
 </html>
