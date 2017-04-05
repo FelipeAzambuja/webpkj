@@ -8,10 +8,10 @@ class conf {
 //    public static $servidor = "sqlite";
     public static $servidor = "mysql";
 //    public static $endereco = "../../banco.sqlite";
-    public static $endereco = "newbgp.com.br";
-    public static $usuario = "c2felipe";
-    public static $senha = "newbgpSucesso";
-    public static $base = "c2sistema";
+    public static $endereco = "localhost";
+    public static $usuario = "root";
+    public static $senha = "123";
+    public static $base = "sistema";
     public static $quick = true;
     //session default,database,javascript
     public static $session = "database";
