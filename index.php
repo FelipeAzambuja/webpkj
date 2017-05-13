@@ -5,8 +5,9 @@ function init () {
 }
 
 function click ( $form ) {
-//  setDisable($id)
+  cd ( $form );
 }
+
 ?>
 <!doctype html>
 <html >
@@ -17,15 +18,38 @@ function click ( $form ) {
 	import ( "jquery" );
 	import ( "bootstrap" );
 	import ( "bind" );
+	import ( "vuejs" );
 	?>
     </head>
     <body>
-	<div class="container">
-	    <form>
-		<?php
-		button ( "Adicionar" , "click='click()' lock" , 12 );
-		?>
-	    </form>
+	
+	<div class="container" id="home">
+	    <?php
+	    text ( "nome" , "v-model='nome' placeholder='Seu nome'" , 6 );
+	    button ( "Adicionar" , "v-on:click='adicionar' " , 6 );
+	    ?>
 	</div>
+	<script>
+	  Vue.use(Bind);
+	  Vue.bind.router = "http://localhost/webpkj/pkj/server/all.php";
+          var home = new Vue({
+              el: '#home',
+              data: {
+                  nome: '',
+                  lista_nomes: []
+              },
+              methods: {
+                  adicionar: function (e) {
+                      this.lista_nomes.push(this.nome);
+                      $(this.$el).find("#nome").focus();
+		      this.$bind.call("index.php","click",{
+			a:"b",
+			lista:this.lista_nomes
+		      });
+		      this.nome = '';
+                  }
+              }
+          });
+	</script>
     </body>
 </html>

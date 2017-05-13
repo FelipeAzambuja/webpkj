@@ -117,6 +117,12 @@ function bindRefresh() {
 }
 
 function bindCall(pagina, funcao, data, done) {
+    if(pagina == null){
+        pagina = bind_default;
+    }
+    if(pagina == ""){
+        pagina == bind_default;
+    }
     if (data === undefined) {
         data = {};
         data.post0 = "";

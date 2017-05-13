@@ -1,0 +1,5 @@
+{
+    "name": "vuejs",
+    "files": ["vue.js","bind_plugin.js"],
+    "author": "vuejs team"
+}
