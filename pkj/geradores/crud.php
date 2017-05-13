@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../server/all.php';
+require_once 'all.php';
 //orm_usuario ()->drop ();
 //orm_usuario ()->create ();
 ?>

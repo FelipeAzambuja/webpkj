@@ -1,0 +1,9 @@
+php_value auto_prepend_file  "/var/www/html/webpkj/pkj/server/all.php"
+setenv pkj_dateformat "d/m/Y"
+setenv pkj_servidor "sqlite" 
+setenv pkj_endereco "vish.db" 
+setenv pkj_usuario  ""
+setenv pkj_senha  ""
+setenv pkj_base  ""
+
+setenv pkj_sessao  "database"
