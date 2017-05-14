@@ -1,8 +1,3 @@
-<?php
-require_once 'all.php';
-//orm_usuario ()->drop ();
-//orm_usuario ()->create ();
-?>
 <html>
     <head>
         <meta charset="utf-8" />
@@ -21,7 +16,6 @@ require_once 'all.php';
 		<?php
 		label ( "Tabela" , 2 );
 		text ( "tabela" , 4 );
-//		check ( "orm" , "Usar ORM" , "" , 3 );
 		button ( "Gerar" , "click='gerar()' lock" , 6 );
 
 		function gerar ( $form ) {
@@ -29,10 +23,8 @@ require_once 'all.php';
 		  $tabela = $form["tabela"];
 		  $s = '' . PHP_EOL;
 		  $s .= '<?php' . PHP_EOL;
-		  $s .= 'require_once __DIR__ . \'/pkj/server/all.php\';' . PHP_EOL;
+//		  $s .= 'require_once __DIR__ . \'/pkj/server/all.php\';' . PHP_EOL;
 		  $s .= '' . PHP_EOL;
-//		  $s .= '//orm_usuario()->create();' . PHP_EOL;
-//		  $s .= '//$id = orm_usuario ()->setNome ( "Felipe" )->setSenha ( "123" )->setNivel ( "Administrador" )->save ();' . PHP_EOL;
 		  $s .= 'function init () {' . PHP_EOL;
 		  $s .= '  tabela ();' . PHP_EOL;
 		  $s .= '}' . PHP_EOL;

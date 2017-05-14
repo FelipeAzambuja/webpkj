@@ -69,7 +69,7 @@ class Resource {
             ?>
             <script nonce="<?= conf::$random ?>">
             <?php if ($name === "bind"): ?>
-                bind_router = "<?=conf::$pkjHome?>/server/all.php";
+                bind_router = "<?=conf::$pkjHome?>/server/pkjall.php";
                 bind_default = "<?= replace($_SERVER["PHP_SELF"], replace(conf::$pkjHome,"/pkj",""), "")?>";
             <?php endif; ?>
             <?php if ($name === "jquery"): ?>

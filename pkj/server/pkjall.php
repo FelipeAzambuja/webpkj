@@ -1,5 +1,9 @@
 <?php
 
+$notpkj = array ( "phpliteadmin.php" );
+if ( in_array ( basename ( $_SERVER["SCRIPT_NAME"] ) , $notpkj ) ) {
+  return false;
+}
 if ( isset ( $_POST["HOST"] ) ) {
   header ( "Access-Control-Allow-Credentials:true" );
   if ( $_POST["HOST"] !== "file://" ) {
@@ -22,20 +26,20 @@ function show_errors ( $v = true ) {
 }
 
 show_errors ();
-include 'session.php';
+include 'pkjsession.php';
 include 'smarty/Smarty.class.php';
-include "string.php";
-include "conf.php";
+include "pkjstring.php";
+include "pkjconf.php";
 
 include "pkj.php";
 if ( conf::$endereco != "" ) {
-  include "db.php";
+  include "pkjdb.php";
 }
 include "kint/Kint.class.php";
-include 'assets.php';
-include "form.php";
+include 'pkjassets.php';
+include "pkjform.php";
 if ( conf::$quick ) {
-  include 'quick.php';
+  include 'pkjquick.php';
 }
 $resource = resource ();
 if ( conf::$servidor == "mysql" && conf::$endereco != "" ) {
@@ -44,8 +48,8 @@ if ( conf::$servidor == "mysql" && conf::$endereco != "" ) {
   query ( 'SET character_set_client=utf8' );
   query ( 'SET character_set_results=utf8' );
 }
-include "orm.php";
+include "pkjorm.php";
 foreach ( glob ( __DIR__ . "/../db/*.php" ) as $db ):
   include $db;
 endforeach;
-include "bind.php";
+include "pkjbind.php";
