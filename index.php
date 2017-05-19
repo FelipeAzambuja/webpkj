@@ -1,13 +1,12 @@
 <?php
-
 s ( DBTable::tableInfo ( "usuarios" ) );
 
 function init () {
-  c ( "iniciando" );
+//  c ( "iniciando" );
 }
 
 function click ( $form ) {
-  cd ( $form );
+  bunda();
 }
 ?>
 <!doctype html>
@@ -23,9 +22,11 @@ function click ( $form ) {
     </head>
     <body>
 	<div class="container" id="home">
-<?php
-s ( query ( "select datetime()" ) )
-?>
+	    <form>
+		<?php
+			button ( "Teste" , "click='click()'",12);
+		?>
+	    </form>
 	</div>
     </body>
 </html>

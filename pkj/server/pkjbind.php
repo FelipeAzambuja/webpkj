@@ -24,7 +24,7 @@ if ( isset ( $_POST["CMD"] ) ) {
 
       show_errors ( true );
       ob_start ();
-      require_once $pagina;
+	require_once $pagina;
       ob_end_clean ();
     }
   }
@@ -34,8 +34,22 @@ if ( isset ( $_POST["CMD"] ) ) {
   if ( $tmp2["post0"] === "" ) {
     unset ( $tmp2["post0"] );
   }
-  if ( function_exists ( $cmd ) ) {
-    call_user_func ( $cmd , $tmp2 );
+  try {
+    if ( function_exists ( $cmd ) ) {
+      call_user_func ( $cmd , $tmp2 );
+    }
+  } catch ( Throwable $t ) {
+    ?>
+    console.error("<?php echo JS::addslashes ( $t->getFile ().":".$t->getLine ()."\n".$t->getMessage () ) ?>");
+    console.error("<?php echo JS::addslashes ( $t->getTraceAsString () ) ?>");
+    <?php
+    exit ();
+  } catch ( Exception $exc ) {
+    ?>
+    console.log("<?php echo JS::addslashes ( $exc->getTraceAsString () ) ?>");
+    <?php
+  } finally {
+    
   }
   exit ();
 }
@@ -220,7 +234,7 @@ class JS {
 //        return str_replace($a, $b, $s);
     $s = str_replace ( PHP_EOL , '' , $s );
     $l = strlen ( $s );
-    for ( $i = 0; $i < $l; $i ++  ) {
+    for ( $i = 0; $i < $l; $i ++ ) {
       switch ( $s[$i] ) {
 	case '\\': // \
 	  $s = substring ( $s , 0 , $i ) . '\\\\' . substring ( $s , $i + 1 );
