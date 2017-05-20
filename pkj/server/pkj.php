@@ -1,4 +1,5 @@
 <?php
+
 function download($arquivo, $mine = "") {
     $ext = explode(".", $arquivo);
     $ext = ((empty($ext[count($ext) - 1]) || count($ext) == 1) ? "" : $ext[count($ext) - 1]);
@@ -276,5 +277,22 @@ function date_filter($value) {
         }
     } else {
         return $value;
+    }
+}
+
+function copyr($source, $dest) {
+
+//    $source = "dir/dir/dir";
+//     = "dest/dir";
+
+    mkdir($dest, 0755);
+    foreach (
+    $iterator = new RecursiveIteratorIterator(
+    new RecursiveDirectoryIterator($source, RecursiveDirectoryIterator::SKIP_DOTS), RecursiveIteratorIterator::SELF_FIRST) as $item) {
+        if ($item->isDir()) {
+            mkdir($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+        } else {
+            copy($item, $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+        }
     }
 }

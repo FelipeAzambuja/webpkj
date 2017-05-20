@@ -312,14 +312,19 @@ function tagUpdate() {
 $(function () {
     tagUpdate();
 });
-/** heredoc(function({ /*   ... *\/})
+/** heredoc(function({/*   ... *\/})
  * https://stackoverflow.com/questions/4376431/javascript-heredoc/21789375#21789375
  * https://stackoverflow.com/users/1008429/nate-ferrero
+ * Não usar
  * @param {type} f
  * @returns {unresolved}
  */
-function heredoc(f) {
-    return f.toString().match(/\/\*\s*([\s\S]*?)\s*\*\//m)[1].replace(/(\/\*[\s\S]*?\*) \//g, '$1/');
+function _heredoc(f) {
+    var s = f.toString();
+    s = s.substring(14);// ou 13 conforme o espaço
+    s = s.substring(0,s.length - 3);
+    return s;
+//    return f.toString().match(/\/\*\s*([\s\S]*?)\s*\*\//m)[1].replace(/(\/\*[\s\S]*?\*) \//g, '$1/');
 }
 ;
 
