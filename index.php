@@ -48,14 +48,14 @@ function init() {
             </form>
         </div>
 
-        <div class="container well well-lg " style="display: none;margin-top: 15px;background-color: #0083c4" page="cadastrando">
+            <div class="container well well-lg " style="display: none;margin-top: 15px;background-color: #0083c4" page="cadastrando">
 
             <form class="row">
                 <h1>Cadastro {{projeto}}</h1>
                 <?php
                 text("nome", "value='{{nome}}' placeholder='Seu Nome'", 12);
-                text("senha", "value='{{senha}}' placeholder='Sua senha'", 12);
-                text("confirme", "placeholder='Sua senha'", 12);
+                text(           "senha", "value='{{senha}}' placeholder='Sua senha'", 12);
+                              text("confirme", "placeholder='Sua senha'", 12);
 
                 button("Confirmar", "color='default' click='confirmar()' lock", 6);
 
@@ -87,7 +87,7 @@ function init() {
         </div>
 
         <div class="container" style="display: none" page="tela_inicial">
-            Bem vindo {{nome}}
+                         Bem vindo {{nome}}
         </div>
 
     </body>
