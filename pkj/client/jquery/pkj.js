@@ -321,8 +321,8 @@ $(function () {
  */
 function _heredoc(f) {
     var s = f.toString();
-    s = s.substring(14);// ou 13 conforme o espaço
-    s = s.substring(0,s.length - 3);
+    s = s.substring(15);// ou 13 conforme o espaço
+    s = s.substring(0,s.length - 4);
     return s;
 //    return f.toString().match(/\/\*\s*([\s\S]*?)\s*\*\//m)[1].replace(/(\/\*[\s\S]*?\*) \//g, '$1/');
 }

@@ -1,19 +1,48 @@
 <?php
 
-class Usuarios extends DBTable {
+/**
+ * 
+ * @return \Usuarios
+ */
+function db_usuario() {
+    return new Usuario();
+}
 
-  var $id,$nome,$telefone;
-  public function getName () { return ""; }
-  //    function getFields() {
-//        $campos = array();
-//        $campos[] = array("name" => "id", "type" => "integer");
-//        $campos[] = array("name" => "tipo", "type" => "text");
-//        $campos[] = array("name" => "valor", "type" => "text");
-//        $campos[] = array("name" => "pessoa", "type" => "integer");
-//        $campos[] = array("name" => "usuario", "type" => "integer");
-//        return $campos;
-//    }
- public function getFields () {
-   parent::getFields ();
- }
+class Usuario extends DBTable {
+
+    var $id, $nome, $senha;
+
+    public function setNome($nome) {
+        $this->nome = $nome;
+        return $this;
+    }
+    
+    /**
+     * verifica o nome e senha 
+     * @param string $nome
+     * @param string $senha
+     * @return bool 
+     */
+    public function login($nome,$senha) {
+        $senha = md5($senha);
+        return $this->one("nome='$nome' and senha='$senha'") == null;
+    }
+    public function setSenha($senha) {
+        $this->senha = md5($senha);
+        return $this;
+    }
+
+    public function getName() {
+        return "usuarios";
+    }
+
+    public function getFields() {
+
+        $campos = array();
+        $campos[] = array("name" => "id", "type" => "integer");
+        $campos[] = array("name" => "nome", "type" => "text");
+        $campos[] = array("name" => "senha", "type" => "text");
+        return $campos;
+    }
+
 }

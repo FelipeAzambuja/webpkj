@@ -57,13 +57,17 @@ function conectar() {
             conf::$pkj_bd_sis_conexao = odbc_connect(conf::$endereco, conf::$usuario, conf::$senha);
             break;
         case "mysql":
-            conf::$pkj_bd_sis_conexao = mysqli_connect(conf::$endereco, conf::$usuario, conf::$senha, conf::$base);
+            conf::$pkj_bd_sis_conexao = mysqli_connect(conf::$endereco, conf::$usuario, conf::$senha);
+            if(!mysqli_select_db(conf::$pkj_bd_sis_conexao, conf::$base)){
+                mysqli_query(conf::$pkj_bd_sis_conexao, "CREATE DATABASE ".conf::$base);
+            }
             break;
         case "postgre":
             conf::$pkj_bd_sis_conexao = pg_connect("host=" . conf::$endereco . " user=" . conf::$usuario . " password=" . conf::$senha . " dbname=" . conf::$base);
             break;
         case "mssql":
             conf::$pkj_bd_sis_conexao = mssql_connect(conf::$endereco, conf::$usuario, conf::$senha);
+            //até tem suporte, mas não tenho como testar
             break;
         case "sqlite":
             try {

@@ -51,6 +51,7 @@ if (isset($_POST["CMD"])) {
     } finally {
         
     }
+    bindUpdate();
     exit();
 }
 
@@ -295,7 +296,7 @@ class Bind {
      */
     function setValue($id, $value) {
 //        $value = JS::addslashes($value);
-        $value = str_replace('*/', '* /', $value);//buaaa
+        $value = str_replace('*/', '* /', $value); //buaaa
         $this->jquery($id, "val( _heredoc(function(){/*{$value}*/}) )");
         return $this;
     }
@@ -596,4 +597,168 @@ function c($v) {
 function cd($v) {
     c($v);
     exit();
+}
+
+/**
+ * 
+ * @param string $name
+ * @return \Page
+ */
+function page($name = "") {
+    return new Page($name);
+}
+
+class Page {
+
+    private $name;
+
+    public function __construct($name = "") {
+        $this->name = $name;
+    }
+
+    function back($data = array()) {
+        ?> page.back(<?= json_encode($data) ?> ); <?php
+    }
+
+    function go($data = array()) {
+        ?> page.go('<?= $this->name ?>',<?= json_encode($data) ?> ); <?php
+    }
+
+    //implementar todos os metodos do bind
+
+    /**
+     * Set value to html input
+     * @param type $id
+     * @param type $value
+     * @return \Bind
+     */
+    function setValue($id, $value) {
+//        $value = JS::addslashes($value);
+        $value = str_replace('*/', '* /', $value); //buaaa
+        $this->jquery($id, "val( _heredoc(function(){/*{$value}*/}) )");
+        return $this;
+    }
+
+    /**
+     * Force a inner html values
+     * @param type $id
+     * @param type $html
+     */
+    function setHtml($id, $html) {
+
+        $html = JS::addslashes($html);
+        $this->jquery($id, "html(\"$html\")");
+        return $this;
+    }
+
+    /**
+     * Force a inner html values
+     * @param type $id
+     * @param type $html
+     */
+    function html($id, $html) {
+        $this->setHtml($id, $html);
+        return $this;
+    }
+
+    /**
+     * Set text to html element
+     * @param type $id
+     * @param type $text
+     */
+    function setText($id, $text) {
+        $text = JS::addslashes($text);
+        $this->jquery($id, "text(\"$text\")");
+        return $this;
+    }
+
+    /**
+     * Set text to html element
+     * @param type $id
+     * @param type $text
+     */
+    function append($id, $text) {
+        $text = JS::addslashes($text);
+        $this->jquery($id, "append(\"$text\")");
+        return $this;
+    }
+
+    /**
+     * Set text to html element
+     * @param type $id
+     * @param type $text
+     */
+    function text($id, $text) {
+        $this->setText($id, $text);
+        return $this;
+    }
+
+    /**
+     * Enable a html element
+     * @param type $id
+     */
+    function setEnable($id) {
+        $this->jquery($id, "removeAttr(\"disabled\")");
+        return $this;
+    }
+
+    function enable($id) {
+        $this->setEnable($id);
+        return $this;
+    }
+
+    function focus($id) {
+        $this->jquery($id, "focus()");
+        return $this;
+    }
+
+    /**
+     * Disable a html element
+     * @param type $id
+     */
+    function setDisable($id) {
+        $this->jquery($id, "attr(\"disabled\",\"true\")");
+        return $this;
+    }
+
+    function disable($id) {
+        $this->setDisable($id);
+        return $this;
+    }
+
+    function show($id) {
+        $this->jquery($id, "show()");
+        return $this;
+    }
+
+    function hide($id) {
+        $this->jquery($id, "hide()");
+        return $this;
+    }
+
+    /**
+     * Send focus
+     * @param type $id id 
+     * @return type this
+     */
+    function setFocus($id) {
+        return $this->jquery($id, "focus()");
+    }
+
+    /**
+     * Force a jquery code
+     * @param type $id
+     * @param type $code
+     */
+    function jquery($id, $code) {
+        $page = "div[page='{$this->name}']";
+        if (startswith($id, "#")) {
+            $id = replace($id, "#", "");
+            ?>$("<?= $page ?>").find("*[id='<?= $id ?>'],*[input-id='<?= $id ?>']").<?= $code ?>;<?php
+        } else {
+            ?>$("<?= $page ?>").find("*[<?php echo $id ?>]").<?php echo $code ?>;<?php
+        }
+        return $this;
+    }
+
 }
