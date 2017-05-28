@@ -4,7 +4,7 @@ var bind_default = "";
 
 var eventos = [];
 var session = {};
-function sisBindInterval(e, tipo, c) {
+function sisBindInterval(e, tipo) {
     if (e === undefined) {
         return;
     }
@@ -55,15 +55,6 @@ function sisBindInterval(e, tipo, c) {
         }).fail(function (erro) {
             if ($(e).attr("lock") !== undefined) {
                 lock(e)
-            }
-            if (typeof c == "undefined") {
-                c = 0;
-            }
-            c++;
-            if (error.status == "403" && c < 10) {
-                setTimeout(function () {
-                    sisBindInterval(e, tipo, c);
-                }, 1000);
             }
             console.log(erro);
             http = erro.status;
@@ -125,11 +116,11 @@ function bindRefresh() {
     bind_runing = false;
 }
 
-function bindCall(pagina, funcao, data, done, c) {
-    if (pagina == null) {
+function bindCall(pagina, funcao, data, done) {
+    if(pagina == null){
         pagina = bind_default;
     }
-    if (pagina == "") {
+    if(pagina == ""){
         pagina == bind_default;
     }
     if (data === undefined) {
@@ -168,15 +159,6 @@ function bindCall(pagina, funcao, data, done, c) {
             done(resp);
         }
     }).fail(function (erro) {
-        if (typeof c == "undefined") {
-            c = 0;
-        }
-        c++;
-        if (erro.status == "403" && c < 10) {
-            setTimeout(function () {
-                bindCall(pagina, funcao, data, done, c);
-            }, 1000);
-        }
         console.log(erro);
         http = erro.status;
         msg = erro.responseText;

@@ -3,6 +3,15 @@ page.historico = [];
 page._get = function (name) {
     return $('div[page="' + name + '"]');
 }
+
+page._partials = function () {
+    var p = {};
+    $("div[template]").toArray().forEach(function (e) {
+        p[$(e).attr("template")] = $(e).html();
+    });
+    return p;
+}
+
 page.hide = function (name) {
     page._get(name).hide();
 }
@@ -18,8 +27,7 @@ page.back = function (data) {
         page._get(atual).hide();
         if (data.length > 0) {
             var template = page._get(anterior).html();
-            Mustache.parse(template);
-            var rendered = Mustache.render(template, data);
+            var rendered = Mustache.render(template, data, page._partials());
             page._get(anterior).html(rendered).show();
         } else {
             page._get(anterior).show();
@@ -31,8 +39,7 @@ page.show = function (name, data) {
         data = [];
     }
     var template = page._get(name).html();
-    Mustache.parse(template);
-    var rendered = Mustache.render(template, data);
+    var rendered = Mustache.render(template, data, page._partials());
     page._get(name).html(rendered).show();
 }
 page.go = function (name, data) {
@@ -40,11 +47,11 @@ page.go = function (name, data) {
         data = [];
     }
     var template = page._get(name).html();
-    Mustache.parse(template);
-    var rendered = Mustache.render(template, data);
+    var partials = page._partials();
+    var rendered = Mustache.render(template, data, partials);
     page._get(name).html(rendered).show();
     if (page.historico.length > 0) {
-        var ultimo = page.historico[ page.historico.length - 1 ];
+        var ultimo = page.historico[page.historico.length - 1];
         page._get(ultimo).hide();
     }
     page.historico.push(name);
