@@ -25,6 +25,11 @@ function sisBindInterval(e, tipo) {
             eval("sisfunHAppyyyy.post" + i + ' = "' + v + '";');
         }
         if ($(e).attr("lock") !== undefined) {
+            var loading_text = $(e).attr("load-text");
+            var orig_text = $(e).val();
+            if (typeof loading_text != "undefined") {
+                $(e).val(loading_text);
+            }
             lock(e);
         }
         sisfunHAppyyyy.CMD = funName;
@@ -50,11 +55,19 @@ function sisBindInterval(e, tipo) {
                 }
             }
             if ($(e).attr("lock") !== undefined) {
-                lock(e)
+                lock(e);
+                var loading_text = $(e).attr("load-text");
+                if (typeof loading_text != "undefined") {
+                    $(e).val(orig_text);
+                }
             }
         }).fail(function (erro) {
             if ($(e).attr("lock") !== undefined) {
-                lock(e)
+                lock(e);
+                var loading_text = $(e).attr("load-text");
+                if (typeof loading_text != "undefined") {
+                    $(e).val(orig_text);
+                }
             }
             console.log(erro);
             http = erro.status;
@@ -117,10 +130,10 @@ function bindRefresh() {
 }
 
 function bindCall(pagina, funcao, data, done) {
-    if(pagina == null){
+    if (pagina == null) {
         pagina = bind_default;
     }
-    if(pagina == ""){
+    if (pagina == "") {
         pagina == bind_default;
     }
     if (data === undefined) {

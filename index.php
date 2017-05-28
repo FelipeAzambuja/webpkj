@@ -43,9 +43,10 @@ function init() {
                     
                 }
 
-                button("Cadastrar", "color='primary' click='cadastrar()' lock", 6);
+                button("Cadastrar", "color='primary' load-text='Carregando' click='cadastrar()' lock", 6);
 
                 function cadastrar($form) {
+                    sleep(5);
                     $form["projeto"] = "Webpkj";
                     unset($form["nome"]);
                     page("cadastrando")->go($form);
