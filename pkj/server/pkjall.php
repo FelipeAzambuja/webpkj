@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 $notpkj = array ( "phpliteadmin.php" );
 if ( in_array ( basename ( $_SERVER["SCRIPT_NAME"] ) , $notpkj ) ) {
@@ -12,8 +12,6 @@ if ( isset ( $_POST["HOST"] ) ) {
     header ( "Access-Control-Allow-Origin: *" );
   }
 }
-date_default_timezone_set ( 'America/Sao_Paulo' ); //or change to whatever timezone you want
-ini_set ( "output_buffering" , "0" );
 
 function show_errors ( $v = true ) {
   if ( $v ) {
@@ -41,7 +39,7 @@ include "pkjform.php";
 if ( conf::$quick ) {
   include 'pkjquick.php';
 }
-$resource = resource ();
+//$resource = resource ();
 if ( conf::$servidor == "mysql" && conf::$endereco != "" ) {
   query ( "SET NAMES 'utf8'" );
   query ( 'SET character_set_connection=utf8' );

@@ -11,13 +11,6 @@
         </file>
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/xampp/htdocs/webpkj/pkj/client/mustache/pkj.js</file>
-            <file>file:/C:/xampp/htdocs/webpkj/pkj/client/mustache/resource.json</file>
-            <file>file:/C:/xampp/htdocs/webpkj/pkj/client/mustache/pkj.css</file>
-            <file>file:/C:/xampp/htdocs/webpkj/index.php</file>
-            <file>file:/C:/xampp/htdocs/webpkj/pkj/server/pkjbind.php</file>
-            <file>file:/C:/xampp/htdocs/webpkj/pkj/client/mustache/mustache.js</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

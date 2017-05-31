@@ -27,10 +27,13 @@ function init() {
         </form>
     </div>
     <div template="footer"></div>
-        
+
     <div class="container-fluid"  page="home">
+        
         <div class="well" style="margin-top: 15px">
             {{>header}}
+            
+            {{php}}
             <form >
                 <?php
                 row();
@@ -39,24 +42,30 @@ function init() {
 
                 button("Entrar", "color='default' click='entrar()' lock", 6);
 
-                function entrar($form) {
-                    
+                function entrar($form,$page) {
+                    if (db_usuario()->login($form["nome"], $form["senha"])) {
+                        page("tela_inicial")->go($form);
+                    } else {
+                        $page["home"]["projeto"] = "Webpkj Feliz";
+                        page("home")->update($page["home"]);
+                        alert("Login e Senha invalidos");
+                    }
                 }
 
                 button("Cadastrar", "color='primary' load-text='Carregando' click='cadastrar()' lock", 6);
 
                 function cadastrar($form) {
-                    sleep(5);
                     $form["projeto"] = "Webpkj";
                     unset($form["nome"]);
                     page("cadastrando")->go($form);
+                    
                 }
 
-                row();
+                row()
                 ?>
             </form>    
         </div>
-        
+
     </div>
 
     <div class="container well well-lg "  page="cadastrando">
@@ -98,7 +107,7 @@ function init() {
     </div>
 
     <div class="container" style="display: none" page="tela_inicial">
-        Bem vindo {{nome}}
+        Bem vindo {{nome}} <br> <a href="#" onclick="page.go('home')">Sair</a>
     </div>
 
 </body>

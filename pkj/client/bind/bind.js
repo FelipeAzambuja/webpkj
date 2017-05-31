@@ -34,6 +34,10 @@ function sisBindInterval(e, tipo) {
         }
         sisfunHAppyyyy.CMD = funName;
         sisfunHAppyyyy.PAGE = pagina;
+        if (typeof page.go != "undefined") {
+//            sisfunHAppyyyy.MUSTACHE = page.data["home"];
+            sisfunHAppyyyy.MUSTACHE = $.extend({}, page.data);
+        }
         sisfunHAppyyyy.HOST = window.location.protocol + "//" + window.location.hostname;
         if (bind_router !== "") {
             pagina = bind_router;
@@ -158,6 +162,11 @@ function bindCall(pagina, funcao, data, done) {
         cache: false
     });
     data.HOST = window.location.protocol + "//" + window.location.hostname;
+
+    if (typeof page.go != "undefined") {
+        data.MUSTACHE = page.data;
+    }
+
     data.GET = $_GET;
     $.post(pagina, data, function (resp) {
         if (len(trim(resp)) > 0) {

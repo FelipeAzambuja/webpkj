@@ -14,7 +14,7 @@
             <form>
                 <?php
                 text("arquivo", "placeholder='glob'", 10);
-                button("Adicionar", "click='adicionar()' lock", 2);
+                button("Adicionar", "click='adicionar()' load-text='Carregando' lock", 2);
 
                 function adicionar($param) {
                     $arquivo = glob("../../" . $param["arquivo"]);
@@ -36,7 +36,6 @@
                     append("#lista", $html);
                     setValue("#arquivo", "");
                     focus("#arquivo");
-                    bindUpdate();
                 }
                 ?>
                 <div id="lista" class="row">
@@ -44,7 +43,7 @@
                 </div>
                 <?php
                 text("saida", "placeholder='Pasta de saida'", 9);
-                button("Gerar", "click='gerar()' lock", 3);
+                button("Gerar", "click='gerar()' load-text='Gerando' lock", 3);
 
                 function gerar($param) {
                     if ($param["saida"] == "") {

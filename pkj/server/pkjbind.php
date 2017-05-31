@@ -36,7 +36,11 @@ if (isset($_POST["CMD"])) {
     }
     try {
         if (function_exists($cmd)) {
-            call_user_func($cmd, $tmp2);
+            if (isset($_POST["MUSTACHE"])) {
+                call_user_func($cmd, $tmp2, $_POST["MUSTACHE"]);
+            } else {
+                call_user_func($cmd, $tmp2);
+            }
         }
     } catch (Throwable $t) {
         ?>
@@ -230,7 +234,7 @@ class JS {
 
     public static function addslashes($s) {
 //        $s = str_replace('*/', '* /', $s);//buaaa
-        return '"+_heredoc(function(){/*' . $s . '*/})+"';
+        return '"+_heredoc(function(){/* ' . $s . ' */})+"';
 //        $a = array('<','>','\'','\\','"','\n','\r',PHP_EOL);
 //        $b = array('\\x3C','\\x3E','\\\'','\\\\','\\"','\\n','\\r','');
 //        return str_replace($a, $b, $s);
@@ -297,7 +301,7 @@ class Bind {
     function setValue($id, $value) {
 //        $value = JS::addslashes($value);
         $value = str_replace('*/', '* /', $value); //buaaa
-        $this->jquery($id, "val( _heredoc(function(){/*{$value}*/}) )");
+        $this->jquery($id, "val( _heredoc(function(){/* {$value} */}) )");
         return $this;
     }
 
@@ -624,6 +628,10 @@ class Page {
         ?> page.go('<?= $this->name ?>',<?= json_encode($data) ?> ); <?php
     }
 
+    function update($data) {
+        ?> page.update('<?= $this->name ?>',<?= json_encode($data) ?> ); <?php
+    }
+
     //implementar todos os metodos do bind
 
     /**
@@ -635,7 +643,7 @@ class Page {
     function setValue($id, $value) {
 //        $value = JS::addslashes($value);
         $value = str_replace('*/', '* /', $value); //buaaa
-        $this->jquery($id, "val( _heredoc(function(){/*{$value}*/}) )");
+        $this->jquery($id, "val( _heredoc(function(){/* {$value} */}) )");
         return $this;
     }
 

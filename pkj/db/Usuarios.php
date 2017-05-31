@@ -25,7 +25,7 @@ class Usuario extends DBTable {
      */
     public function login($nome,$senha) {
         $senha = md5($senha);
-        return $this->one("nome='$nome' and senha='$senha'") == null;
+        return $this->one("nome='$nome' and senha='$senha'") != null;
     }
     public function setSenha($senha) {
         $this->senha = md5($senha);
