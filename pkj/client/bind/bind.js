@@ -34,7 +34,7 @@ function sisBindInterval(e, tipo) {
         }
         sisfunHAppyyyy.CMD = funName;
         sisfunHAppyyyy.PAGE = pagina;
-        if (typeof page.go != "undefined") {
+        if (typeof page != "undefined") {
 //            sisfunHAppyyyy.MUSTACHE = page.data["home"];
             sisfunHAppyyyy.MUSTACHE = $.extend({}, page.data);
         }
@@ -163,7 +163,7 @@ function bindCall(pagina, funcao, data, done) {
     });
     data.HOST = window.location.protocol + "//" + window.location.hostname;
 
-    if (typeof page.go != "undefined") {
+    if (typeof page != "undefined") {
         data.MUSTACHE = page.data;
     }
 

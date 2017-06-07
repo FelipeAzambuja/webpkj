@@ -33,7 +33,6 @@ function init() {
         <div class="well" style="margin-top: 15px">
             {{>header}}
             
-            {{php}}
             <form >
                 <?php
                 row();
@@ -84,6 +83,7 @@ function init() {
                     alert(" Confirme a senha ");
                     exit();
                 }
+                
                 $id = db_usuario()->
                         setNome($form["nome"])->
                         setSenha($form["senha"])->

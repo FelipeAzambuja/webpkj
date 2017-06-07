@@ -1,6 +1,4 @@
 <?php
-
-include "all.php";
 $user = "felipe";
 $pass = "123";
 if (!(post("user") === $user && post("pass") === $pass)) {
