@@ -1,7 +1,0 @@
-{
-    "name": "bootstrap",
-    "files": ["css/bootstrap.min.css","css/bootstrap-theme.min.css","js/bootstrap.min.js","css/pkj.css"],
-    "onload": "",
-    "update": "",
-    "author": "Bootstrap Team"
-}
