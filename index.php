@@ -1,4 +1,5 @@
 <?php
+//db_usuario()->create();
 
 function init() {
     $data = array();
@@ -45,9 +46,9 @@ function init() {
                     if (db_usuario()->login($form["nome"], $form["senha"])) {
                         page("tela_inicial")->go($form);
                     } else {
-                        $page["home"]["projeto"] = "Webpkj Feliz";
+                        $page["home"]["erros"][] = "Errou com <b>$form[nome]</b>";
                         page("home")->update($page["home"]);
-                        alert("Login e Senha invalidos");
+//                        alert("Login e Senha invalidos");
                     }
                 }
 
@@ -56,13 +57,15 @@ function init() {
                 function cadastrar($form) {
                     $form["projeto"] = "Webpkj";
                     unset($form["nome"]);
-                    page("cadastrando")->go($form);
-                    
+                    page("cadastrando")->go($form);   
                 }
 
                 row()
                 ?>
             </form>    
+            {{#erros}}
+                {{.}}<br>
+            {{/erros}}
         </div>
 
     </div>
