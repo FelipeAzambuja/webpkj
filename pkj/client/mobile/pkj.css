@@ -1,0 +1,58 @@
+.ui-focus,
+.ui-btn:focus {
+    box-shadow: rgba(0, 0, 0, 0.298039) 0px 1px 4px 0px !important;
+}
+div[class^="col_"]{
+    float:left;
+    padding:5px;
+    box-sizing: border-box;
+}
+div[class^="col_"] > div[data-label="true"]{
+    padding-top: 10px;
+    line-height: 32px;
+}
+.col_1{
+    width: 25%;
+}
+.col_2{
+    width: 50%;
+}
+.col_3{
+    width: 75%;
+}
+.col_4{
+    width: 100%;
+}
+@media all and (max-width:300px){
+    div[class^="col_"]{
+        float:left;
+        width: 100%;
+    }             
+}
+form{
+    padding:5px;
+}
+.ui-input-btn{
+    padding:0px;
+}
+form .row{
+    margin-top:4px;
+    margin-bottom: 4px;
+}
+form .ui-input-text{
+    border-top:0px;
+    border-bottom: 0px;
+}
+form .ui-btn {
+    height:34px;
+    line-height: 34px;
+    margin-top:8px;
+}
+form .ui-select *{
+    height: 100%;
+    padding: 0;
+}
+form .ui-select > div:first-child{
+    height: 100%;
+    line-height: 32px;
+}

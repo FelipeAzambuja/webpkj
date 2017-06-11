@@ -1,0 +1,6 @@
+{
+    "name": "jquery",
+    "files": ["jquery.js","pkj.js","pkj.css"],
+    "onload":"$(\"body\").show()",
+    "author": "The jQuery Team"
+}

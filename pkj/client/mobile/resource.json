@@ -1,0 +1,5 @@
+{
+    "name": "mobile",
+    "files": ["pkj.css","jquery.mobile-1.4.5.min.css","jquery.mobile.theme-1.4.5.min.css","jquery.mobile-1.4.5.min.js"],
+    "author": "jquery mobile team"
+}

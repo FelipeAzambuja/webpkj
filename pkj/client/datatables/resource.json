@@ -1,0 +1,6 @@
+{
+    "name": "datatables",
+    "files": ["datatables.min.js","datatables.min.css","pkj.css"],
+    "onload":"$(document).ready(function(){ tagUpdate(); });",
+    "author": "DataTables"
+}

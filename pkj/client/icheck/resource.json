@@ -1,0 +1,6 @@
+{
+    "name": "icheck",
+    "files": ["icheck.min.js","skins/all.css"],
+    "onload":"$(\"input\").iCheck({ checkboxClass: 'icheckbox_square-aero',radioClass: 'iradio_square-aero',increaseArea: '20%' })",
+    "author": "fronteed"
+}

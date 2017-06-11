@@ -1,0 +1,6 @@
+{
+    "name": "price",
+    "files": ["jquery.price_format.2.0.min.js","pricepkj.js"],
+    "onload":"price_upload();",
+    "author": "Created By Eduardo Cuducos and now maintened by Flávio Silveira"
+}
