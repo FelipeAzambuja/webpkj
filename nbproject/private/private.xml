@@ -14,6 +14,7 @@
         <group>
             <file>file:/opt/lampp/htdocs/webpkj/index.php</file>
             <file>file:/opt/lampp/htdocs/webpkj/pkj/client/mustache/pkj.js</file>
+            <file>file:/opt/lampp/htdocs/webpkj/pkj/server/pkjconf.php</file>
         </group>
     </open-files>
 </project-private>

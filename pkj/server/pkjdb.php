@@ -58,8 +58,8 @@ function conectar() {
             break;
         case "mysql":
             conf::$pkj_bd_sis_conexao = mysqli_connect(conf::$endereco, conf::$usuario, conf::$senha);
-            if(!mysqli_select_db(conf::$pkj_bd_sis_conexao, conf::$base)){
-                mysqli_query(conf::$pkj_bd_sis_conexao, "CREATE DATABASE ".conf::$base);
+            if (!mysqli_select_db(conf::$pkj_bd_sis_conexao, conf::$base)) {
+                mysqli_query(conf::$pkj_bd_sis_conexao, "CREATE DATABASE " . conf::$base);
             }
             break;
         case "postgre":
@@ -366,9 +366,9 @@ function SQLinsert($tabela, $array) {
     $sql .= ' ( ';
     for ($i = 0; $i < $CountChaves; $i++) {
         if ($i == $CountChaves - 1) {
-            $sql.=$chaves[$i];
+            $sql .= $chaves[$i];
         } else {
-            $sql.=$chaves[$i] . ',';
+            $sql .= $chaves[$i] . ',';
         }
     }
     $sql .= ' ) values( ';
@@ -377,15 +377,15 @@ function SQLinsert($tabela, $array) {
     for ($i = 0; $i < $CountValores; $i++) {
         if ($i == $CountValores - 1) {
             if (ctype_xdigit(replace($valores[$i], '0x', '')) && ucase(left($valores[$i], 2)) == "0X") {
-                $sql.= replace($valores[$i], '\'', '');
+                $sql .= replace($valores[$i], '\'', '');
             } else {
-                $sql.= '\'' . replace($valores[$i], '\'', '') . '\'';
+                $sql .= '\'' . replace($valores[$i], '\'', '') . '\'';
             }
         } else {
             if (ctype_xdigit(replace($valores[$i], '0x', '')) && ucase(left($valores[$i], 2)) == "0X") {
-                $sql.= replace($valores[$i], '\'', '') . ',';
+                $sql .= replace($valores[$i], '\'', '') . ',';
             } else {
-                $sql.= '\'' . replace($valores[$i], '\'', '') . '\',';
+                $sql .= '\'' . replace($valores[$i], '\'', '') . '\',';
             }
         }
     }
@@ -429,26 +429,26 @@ function SQLupdate($tabela, $array, $where) {
     for ($i = 0; $i < $CountChaves; $i++) {
         if ($i == $CountChaves - 1) {
             if (ctype_xdigit(replace($valores[$i], '0x', '')) && ucase(left($valores[$i], 2)) == "0X") {
-                $sql.=$chaves[$i] . '= ' . replace($valores[$i], '\'', '');
+                $sql .= $chaves[$i] . '= ' . replace($valores[$i], '\'', '');
             } else {
                 if ($valores[$i] === null) {
-                    $sql.=$chaves[$i] . '= null';
+                    $sql .= $chaves[$i] . '= null';
                 } else {
-                    $sql.=$chaves[$i] . '=\'' . replace($valores[$i], '\'', '') . '\'';
+                    $sql .= $chaves[$i] . '=\'' . replace($valores[$i], '\'', '') . '\'';
                 }
             }
         } else {
             if (ctype_xdigit(replace($valores[$i], '0x', '')) && ucase(left($valores[$i], 2)) == "0X") {
                 if ($valores[$i] === null) {
-                    $sql.=$chaves[$i] . '= null,';
+                    $sql .= $chaves[$i] . '= null,';
                 } else {
-                    $sql.=$chaves[$i] . '=' . replace($valores[$i], '\'', '') . ',';
+                    $sql .= $chaves[$i] . '=' . replace($valores[$i], '\'', '') . ',';
                 }
             } else {
                 if ($valores[$i] === null) {
-                    $sql.=$chaves[$i] . '= null,';
+                    $sql .= $chaves[$i] . '= null,';
                 } else {
-                    $sql.=$chaves[$i] . '=\'' . replace($valores[$i], '\'', '') . '\',';
+                    $sql .= $chaves[$i] . '=\'' . replace($valores[$i], '\'', '') . '\',';
                 }
             }
         }
@@ -470,34 +470,50 @@ function SQLselect($tabela, $campos, $where) {
     $CountCampos = count($campos);
     for ($i = 0; $i < $CountCampos; $i++) {
         if ($i == $CountCampos - 1) {
-            $sql.=$campos[$i];
+            $sql .= $campos[$i];
         } else {
-            $sql.=$campos[$i] . ',';
+            $sql .= $campos[$i] . ',';
         }
     }
     $CountCampos = null;
     $campos = null;
-    $sql.=' from ' . $tabela . ' where ' . $where;
+    $sql .= ' from ' . $tabela . ' where ' . $where;
     return $sql;
 }
 
-function SQLExists($table, $where=null) {
-    if($where == null){
-    	$sql = "select id from $table limit 1";
-    }else {
-    	$sql = "select id from $table where $where";
+function SQLExists($table, $where = null) {
+    if ($where == null) {
+        $sql = "select id from $table limit 1";
+    } else {
+        $sql = "select id from $table where $where";
     }
     $r = query($sql);
     return (count($r) > 0);
 }
 
-function table_exists($name){
-	$sql = "select * from $name limit 1";
-	$r = query($sql);
-	return is_array($r);
+function table_exists($name) {
+    $base = conf::$base;
+    switch (conf::$servidor) {
+        case "postgre":
+            $sql = "SELECT * FROM information_schema.tables  where table_catalog='$base' and table_name='$name'";
+            break;
+        case "mysql":
+            $sql = "SELECT * FROM `COLUMNS` WHERE TABLE_NAME='$name' AND TABLE_SCHEMA='$base'";
+            break;
+        case "sqlite":
+            $sql = "SELECT name FROM sqlite_master WHERE type='table' AND name='$name'";
+            break;
+        default:
+            $sql = "select * from $name limit 1";
+            break;
+    }
+
+    $r = query($sql);
+    return count($r) > 0;
 }
+
 function table_fields($name) {
-    
+
     switch (conf::$servidor) {
         case "postgre":
             $sql = <<<SQL
@@ -518,16 +534,16 @@ SQL;
             break;
         case "sqlite":
             $retorno = array();
-            foreach(query("pragma table_info($name)") as $tmp){
+            foreach (query("pragma table_info($name)") as $tmp) {
                 $tmp2 = new stdClass();
                 $tmp2->NAME = $tmp->name;
-                $tmp2->IS_NULL = ($tmp->notnull == "0")?"NO":"YES";
+                $tmp2->IS_NULL = ($tmp->notnull == "0") ? "NO" : "YES";
                 $tmp2->TYPE = $tmp->type;
                 $tmp2->SIZE = 0;
-                $tmp2->COLUMN_KEY = ($tmp->pk == "1")?"YES":"NO";
+                $tmp2->COLUMN_KEY = ($tmp->pk == "1") ? "YES" : "NO";
                 $tmp2->EXTRA = "";
                 $tmp2->COLUMN_COMMENT = "UNDEFINED";
-                $retorno[]=$tmp2;
+                $retorno[] = $tmp2;
             }
             return $retorno;
             break;

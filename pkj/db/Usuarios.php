@@ -10,7 +10,7 @@ function db_usuario() {
 
 class Usuario extends DBTable {
 
-    var $id, $nome, $senha;
+    var $id, $nome, $senha,$nascimento;
 
     public function setNome($nome) {
         $this->nome = $nome;
@@ -42,6 +42,7 @@ class Usuario extends DBTable {
         $campos[] = array("name" => "id", "type" => "integer");
         $campos[] = array("name" => "nome", "type" => "text");
         $campos[] = array("name" => "senha", "type" => "text");
+        $campos[] = array("name" => "nascimento", "type" => "datetime");
         return $campos;
     }
 

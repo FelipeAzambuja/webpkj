@@ -1,6 +1,4 @@
 <?php
-//db_usuario()->create();
-
 function init() {
     $data = array();
     $data["projeto"] = "Webpkj";
