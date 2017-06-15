@@ -207,7 +207,7 @@ class DBTable {
 
     public function create() {
         if (table_exists($this->getName())) {
-            c("A tabela " . $this->getName() . " existe");
+//            c("A tabela " . $this->getName() . " existe");
             $dbFields = $this->tableInfo();
             $tableName = $this->getName();
             $fields = $this->getFields();
@@ -238,7 +238,7 @@ class DBTable {
                             $sql = "ALTER TABLE $tableName ADD $name $type";
                             break;
                     }
-                    c(" sql  = $sql");
+//                    c(" sql  = $sql");
                     query($sql);
                 }
             }
@@ -344,6 +344,28 @@ class DBTable {
         }
     }
 
+    function _getDefault($field) {
+        $campos = $this->getFields();
+        for ($index = 0; $index < count($campos); $index++) {
+            if($campos[$index]["name"] == $field){
+                if(isset($campos[$index]["default"])){
+                    $d = $campos[$index]["default"];
+                    switch (gettype($d)) {
+                        case "string":
+                            return $d;
+                            break;
+                        case "object":
+                            return $d();
+                            break;
+                        default:
+                            return $d;
+                            break;
+                    }
+                }
+            }
+        }
+        return null;
+    }
     public function save() {
         $campos = $this->getFields();
         $sql = array();
@@ -351,6 +373,9 @@ class DBTable {
             $campo = $campos[$index];
             $v = null;
             eval('$v = $this->' . $campo["name"] . ';');
+            if($v == null){
+                $v = $this->_getDefault($campo["name"]);
+            }
             $sql[$campo["name"]] = $v;
         }
 //        alert(SQLinsert($this->getName(), $sql));
