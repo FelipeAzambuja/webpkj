@@ -310,7 +310,9 @@ function tagUpdate() {
     });
 }
 $(function () {
-    tagUpdate();
+    if(typeof page.go == "undefined"){
+        tagUpdate();
+    }
 });
 /** heredoc(function({/*   ... *\/})
  * https://stackoverflow.com/questions/4376431/javascript-heredoc/21789375#21789375
