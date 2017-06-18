@@ -608,16 +608,18 @@ function cd($v) {
  * @param string $name
  * @return \Page
  */
-function page($name = "") {
-    return new Page($name);
+function page($name = "",$outputElement) {
+    return new Page($name,$outputElement);
 }
 
 class Page {
 
     private $name;
+    private $outputElement;
 
-    public function __construct($name = "") {
+    public function __construct($name = "", $outputElement) {
         $this->name = $name;
+        $this->outputElement = $outputElement;
     }
 
     function back($data = array()) {
@@ -625,11 +627,11 @@ class Page {
     }
 
     function go($data = array()) {
-        ?> page.go('<?= $this->name ?>',<?= json_encode($data) ?> ); <?php
+        ?> page.go('<?= $this->name ?>','<?= $this->outputElement ?>',<?= json_encode($data) ?> ); <?php
     }
 
     function update($data) {
-        ?> page.update('<?= $this->name ?>',<?= json_encode($data) ?> ); <?php
+        ?> page.update('<?= $this->name ?>','<?= $this->outputElement ?>',<?= json_encode($data) ?> ); <?php
     }
 
     //implementar todos os metodos do bind

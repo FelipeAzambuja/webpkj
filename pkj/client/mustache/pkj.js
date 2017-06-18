@@ -1,17 +1,29 @@
 var page = {};
 page.historico = [];
 //Verificar uso de ram
-page.data = []; 
+page.data = [];
 page.html = [];
 page._getE = function (name) {
-    return $('div[page="' + name + '"]');
+    return $(name);
 }
 page._get = function (name) {
-    if(typeof page.html[name] != "undefined"){
-        return page.html[name];
-    }else{
-        page.html[name] = $('div[page="' + name + '"]').html();
-        return page.html[name];
+    if (name.indexOf(".") > 0) {
+        var retorno = "";
+        $.ajax({
+            url: name,
+            success: function (data, textStatus, jqXHR) {
+                retorno = data;
+            },
+            async: false
+        });
+        return retorno;
+    } else {
+        if (typeof page.html[name] != "undefined") {
+            return page.html[name];
+        } else {
+            page.html[name] = $('div[page="' + name + '"]').html();
+            return page.html[name];
+        }
     }
 }
 
@@ -46,30 +58,35 @@ page.back = function (data) {
         page.data[anterior] = data;
     }
 }
-page.show = function (name, data) {
+page.show = function (name, outputElement, data) {
     if (typeof data == "undefined") {
         data = [];
     }
     var template = page._get(name);
     var rendered = Mustache.render(template, data, page._partials());
-    page._getE(name).html(rendered).show();
+    page._getE(outputElement).html(rendered).show();
     page.data[name] = data;
 }
-page.go = function (name, data) {
+
+page.go = function (name, outputElement, data) {
     if (typeof data == "undefined") {
         data = [];
     }
     var template = page._get(name);
     var partials = page._partials();
     var rendered = Mustache.render(template, data, partials);
-    page._getE(name).html(rendered).show();
+    page._getE(outputElement).html(rendered).show();
+    if (typeof bindCall != "undefined") {
+        bindCall(name, "init");
+    }
     if (page.historico.length > 0) {
         var ultimo = page.historico[page.historico.length - 1];
         page._getE(ultimo).hide();
     }
     page.historico.push(name);
     page.data[name] = data;
-}
-page.update = function (name,data) {
-    return page.show(name,data);
+};
+
+page.update = function (name, outputElement, data) {
+    return page.show(name, outputElement, data);
 }
