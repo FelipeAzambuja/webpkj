@@ -76,7 +76,7 @@ page.go = function (name, outputElement, data) {
     var partials = page._partials();
     var rendered = Mustache.render(template, data, partials);
     page._getE(outputElement).html(rendered).show();
-    if (typeof bindCall != "undefined") {
+    if (typeof bindCall != "undefined" && name.indexOf(".") > 0) {
         bindCall(name, "init");
     }
     if (page.historico.length > 0) {
