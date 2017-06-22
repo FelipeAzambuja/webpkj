@@ -6,7 +6,7 @@ function init() {
     page("home","#pkjpage")->go($data);
 }
 ?>
-<!doctype html>
+<!DOCTYPE HTML>
 <html>
 
     <head>
@@ -20,13 +20,16 @@ function init() {
         ?>
     </head>
     <body>
+		
         <div class="container-fluid" style="margin-top: 15px">
+			
             <div class="row">
                 <div class="col-sm-12">
-                    <a href="#" onclick="page.go('outra_pagina.php','#pkjpage',{'nome':'felipe'})"> Outra Pagina</a>
+                    <a href="#" onclick="page.go('outra_pagina.php:root','#pkjpage',{'nome':'felipe'})"> Outra Pagina</a>
                     <a href="#" onclick="page.go('template','#pkjpage',{'nome':'felipe'})"> Nesta pagina</a>
                 </div>
             </div>
+            
             <div class="row">
                 <div class="col-sm-12">
                     <div class="well" id="pkjpage">
@@ -34,6 +37,7 @@ function init() {
                     </div>            
                 </div>
             </div>
+            
         </div>
         
         <div page="home">
