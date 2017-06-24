@@ -17,6 +17,7 @@ function source() {
 }
 
 class Resource {
+
     public static $list = array();
     var $folder;
     var $resources;
@@ -52,6 +53,9 @@ class Resource {
             $protocol = 'http';
         }
         $url = "{$protocol}://{$_SERVER['HTTP_HOST']}/client/pkj/$name/";
+        if (conf::$pkjHome{0} != "/") {
+            conf::$pkjHome = "/" . conf::$pkjHome;
+        }
         $url = conf::$pkjHome . "/client/$name/";
         foreach ($this->resources[$name]->files as $value) {
             if (endswith($value, ".js")) {
@@ -69,43 +73,43 @@ class Resource {
             ?>
             <script nonce="<?= conf::$random ?>">
             <?php if ($name === "bind"): ?>
-                bind_router = "<?=conf::$pkjHome?>/server/pkjall.php";
-                bind_default = "<?= replace($_SERVER["PHP_SELF"], replace(conf::$pkjHome,"/pkj",""), "")?>";
+                bind_router = "<?= conf::$pkjHome ?>/server/pkjall.php";
+                bind_default = "<?= replace($_SERVER["PHP_SELF"], replace(conf::$pkjHome, "/pkj", ""), "") ?>";
             <?php endif; ?>
             <?php if ($name === "jquery"): ?>
-                    $(function () {
-                        try {
+                $(function () {
+                    try {
                 <?= $this->resources[$name]->onload ?>;
-                        } catch (e) {
-                            alert(e.message);
-                        }
-                    });
-            <?php elseif ($name === "onsen"): ?>
-                    ons.ready(function () {
-                        try {
-                <?= $this->resources[$name]->onload ?>;
-                        } catch (e) {
-                            alert(e.message);
-                        }
-                    });
-            <?php else: ?>
-                    if (!!window.cordova) {
-                        document.addEventListener("deviceready", function () {
-                            try {
-                <?= $this->resources[$name]->onload ?>;
-                            } catch (e) {
-                                alert(e.message);
-                            }
-                        }, false);
-                    } else {
-                        document.addEventListener("DOMContentLoaded", function () {
-                            try {
-                <?= $this->resources[$name]->onload ?>;
-                            } catch (e) {
-                                alert(e.message);
-                            }
-                        }, false);
+                    } catch (e) {
+                        alert(e.message);
                     }
+                });
+            <?php elseif ($name === "onsen"): ?>
+                ons.ready(function () {
+                    try {
+                <?= $this->resources[$name]->onload ?>;
+                    } catch (e) {
+                        alert(e.message);
+                    }
+                });
+            <?php else: ?>
+                if (!!window.cordova) {
+                    document.addEventListener("deviceready", function () {
+                        try {
+                <?= $this->resources[$name]->onload ?>;
+                        } catch (e) {
+                            alert(e.message);
+                        }
+                    }, false);
+                } else {
+                    document.addEventListener("DOMContentLoaded", function () {
+                        try {
+                <?= $this->resources[$name]->onload ?>;
+                        } catch (e) {
+                            alert(e.message);
+                        }
+                    }, false);
+                }
             <?php endif; ?>
             </script>
             <?php

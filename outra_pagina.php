@@ -7,5 +7,6 @@ function init() {
     Bem vindo a outra pagina
 </div>
 <div page="root">
-O {{nome}} veio de outra pagina entre agora na outra page feliz <br><a href="#" onclick="page.go('outra_pagina.php:outra_page_feliz','#pkjpage')"> Outra Pagina feliz</a>
+O {{nome}} veio de outra pagina entre agora na outra page feliz <br>
+<a href="#" onclick="page.go('outra_pagina.php:outra_page_feliz','#pkjpage')"> Outra Pagina feliz</a>
 </div>

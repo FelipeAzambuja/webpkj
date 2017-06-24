@@ -1,5 +1,5 @@
-#php_value auto_prepend_file  "C:/xampp/htdocs/webpkj/pkj/server/pkjall.php"
-php_value auto_prepend_file  "/opt/lampp/htdocs/webpkj/pkj/server/pkjall.php"
+php_value auto_prepend_file  "C:/UwAmp/www/webpkj/pkj/server/pkjall.php"
+#php_value auto_prepend_file  "/opt/lampp/htdocs/webpkj/pkj/server/pkjall.php"
 php_value output_buffering 0
 php_value date.timezone 'America/Sao_Paulo'
 setenv pkj_dateformat "d/m/Y"
