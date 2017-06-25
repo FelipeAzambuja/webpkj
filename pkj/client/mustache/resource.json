@@ -1,5 +1,5 @@
 {
     "name": "mustache",
-    "files": ["mustache.js","pkj.js","pkj.css"],
+    "files": ["mustache.js"],
     "author": "Mustache JS"
 }

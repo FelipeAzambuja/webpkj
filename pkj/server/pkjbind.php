@@ -624,14 +624,17 @@ class Page {
 
     function back($data = array()) {
         ?> page.back(<?= json_encode($data) ?> ); <?php
+        return $this;
     }
 
     function go($data = array()) {
-        ?> page.go('<?= $this->name ?>','<?= $this->outputElement ?>',<?= json_encode($data) ?> ); <?php
+        ?> page.go('<?= $this->name ?>','<?= $this->outputElement ?>',<?= json_encode($data) ?> ); <?php 
+        return $this;
     }
 
     function update($data) {
         ?> page.update('<?= $this->name ?>','<?= $this->outputElement ?>',<?= json_encode($data) ?> ); <?php
+        return $this;
     }
 
     //implementar todos os metodos do bind

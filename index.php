@@ -19,7 +19,7 @@ function init() {
         import("jquery");
         import("bootstrap");
         import("bind");
-        import("mustache");
+        import("page");
         ?>
     </head>
     <body>
