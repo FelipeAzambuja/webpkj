@@ -1,12 +1,10 @@
 <?php
 set_time_limit ( 0 );
-//Remover o pkj antigo
-//criar index se não existir
-
 if (!file_exists(".htaccess")) {
+    $pkj = DIRECTORY_SEPARATOR."pkj".DIRECTORY_SEPARATOR."server".DIRECTORY_SEPARATOR."pkjall.php";
     ob_start();
     ?>
-    php_value auto_prepend_file  "<?php echo __DIR__ ?>"
+    php_value auto_prepend_file  "<?php echo __DIR__.$pkj ?>"
     #php_value auto_prepend_file  "/opt/lampp/htdocs/webpkj/pkj/server/pkjall.php"
     php_value output_buffering 0
     php_value date.timezone 'America/Sao_Paulo'
@@ -42,6 +40,7 @@ if(true){
     file_put_contents("master.zip",$data);
     $data = null;
 }
+
 if(true){
     $zip = new ZipArchive;
     $res = $zip->open("master.zip");
@@ -91,4 +90,3 @@ if(true){
 unlink("master.zip");
 rrmdir("webpkj-master");
 echo "update done";
-
