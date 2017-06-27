@@ -1,4 +1,5 @@
 <?php
+set_time_limit ( 0 );
 if (!file_exists(".htaccess")) {
     ob_start();
     ?>
@@ -32,4 +33,59 @@ if (!file_exists(".htaccess")) {
     $ht = ob_get_clean();
     file_put_contents(".htaccess", $ht);
 }
-system("git clone https://github.com/FelipeAzambuja/webpkj.git");
+if(true){
+    $url = "https://github.com/FelipeAzambuja/webpkj/archive/master.zip";
+    $data = file_get_contents($url);
+    file_put_contents("master.zip",$data);
+    $data = null;
+}
+if(true){
+    $zip = new ZipArchive;
+    $res = $zip->open("master.zip");
+    $zip->extractTo(".");
+    $zip->close();
+}
+
+	
+
+function xcopy( $source, $target ) {
+    if ( is_dir( $source ) ) {
+        @mkdir( $target );
+        $d = dir( $source );
+        while ( FALSE !== ( $entry = $d->read() ) ) {
+            if ( $entry == '.' || $entry == '..' ) {
+                continue;
+            }
+            $Entry = $source . '/' . $entry; 
+            if ( is_dir( $Entry ) ) {
+                xcopy( $Entry, $target . '/' . $entry );
+                continue;
+            }
+            copy( $Entry, $target . '/' . $entry );
+        }
+
+        $d->close();
+    }else {
+        copy( $source, $target );
+    }
+}
+function rrmdir($dir) {
+   if (is_dir($dir)) {
+     $objects = scandir($dir);
+     foreach ($objects as $object) {
+       if ($object != "." && $object != "..") {
+         if (filetype($dir."/".$object) == "dir") rrmdir($dir."/".$object); else unlink($dir."/".$object);
+       }
+     }
+     reset($objects);
+     rmdir($dir);
+   }
+} 
+if(true){
+    xcopy("webpkj-master/pkj","pkj");
+}
+
+unlink("master.zip");
+rrmdir("webpkj-master");
+echo "update done";
+
