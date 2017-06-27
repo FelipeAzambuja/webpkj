@@ -1,5 +1,8 @@
 <?php
 set_time_limit ( 0 );
+//Remover o pkj antigo
+//criar index se não existir
+
 if (!file_exists(".htaccess")) {
     ob_start();
     ?>
