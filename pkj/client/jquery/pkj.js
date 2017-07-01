@@ -186,7 +186,7 @@ function tagUpdate() {
     //datatables
     if (typeof ($.fn.dataTableExt) !== "undefined") {
         $(".datatables").each(function (i, e) {
-            $(document).ready(function () {
+//            $(function () {
                 var responsive = $(e).hasClass("datatables-responsive");
                 if (!$.fn.dataTable.isDataTable(e)) {
                     var tabela = $(e).DataTable({
@@ -232,7 +232,7 @@ function tagUpdate() {
                         tagUpdate();
                     });
                 }
-            });
+//            });
         });
     }
 
