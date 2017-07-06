@@ -1,135 +1,104 @@
 var page = {};
-page.historico = [];
-//Verificar uso de ram
-page.data = [];
-page.html = [];
-page._getE = function (name) {
-    return $(name);
-}
-page._get = function (name) {
-    if (name.indexOf(".") > 0) {
-        var page_name = null;
-        if (name.indexOf(":") > 0) {
-            page_name = name.split(/:/g)[1];
-            name = name.split(/:/g)[0];
+page.enableCache = true;
+
+page.cache = [];
+page.inits = [];
+page.history = [];
+page._getHTML = function (name, done) {
+    var e = $("div[page='" + name + "']");
+    if (e.size() === 0) {
+        var slit = name.split(/:/);
+        var _page = slit[0];
+        var element = slit[1];
+        if (page._inCache(element)) {
+            done(page.cache[element]);
+        } else {
+            $.get(_page, function (html) {
+                html = page._parser(html, element);
+                done(html);
+            });
         }
-        var retorno = "";
-        $.ajax({
-            url: name,
-            dataType: "html",
-            success: function (data, textStatus, jqXHR) {
-                retorno = data;
-            },
-            async: false//retirar o async para melhorar o desempenho
-        });
-        if (page_name != null) {
-            //jquery tem dessas
-            var retorno = $.parseHTML(retorno);
-            retorno = retorno[retorno.map(function (e) {
-                return $(e).attr("page");
-            }).indexOf(page_name)];
-        }
-        return retorno.innerHTML;
     } else {
-        if (typeof page.html[name] != "undefined") {
-            return page.html[name];
-        } else {
-            page.html[name] = $('div[page="' + name + '"]').html();
-            return page.html[name];
+        var element = name;
+        var html = e.html();
+        page.inits[element] = e.attr("init");
+        done(html);
+    }
+};
+page._inCache = function (element) {
+    return typeof page.cache[element] !== "undefined";
+};
+page._parser = function (html, element) {
+    if (page.enableCache) {
+        if (page._inCache(element)) {
+            return page.cache[element];
         }
     }
-}
-
-page._partials = function () {
-    var p = {};
-    $("div[template]").toArray().forEach(function (e) {
-        p[$(e).attr("template")] = $(e).html();
+    var retorno = $.parseHTML(html);
+    retorno = retorno[retorno.map(function (e) {
+        return $(e).attr("page");
+    }).indexOf(element)];
+    if (typeof retorno.attributes.init !== "undefined") {
+        page.inits[element] = retorno.attributes.init.nodeValue;
+    } else {
+        page.inits[element] = undefined;
+    }
+    retorno = retorno.innerHTML;
+    if (page.enableCache) {
+        page.cache[element] = retorno;
+    }
+    return retorno;
+};
+page._get = function (name, done) {
+    return page._getHTML(name, done);
+};
+page.render = function (name, outputElement, data) {
+    page._get(name, function (html) {
+        var _name = "";
+        var s = name.split(/:/);
+        if (s.length > 0) {
+            _name = s[1];
+        } else {
+            _name = name;
+        }
+        if (typeof page.inits[_name] !== "undefined") {
+            var _page = "";
+            if (s.length > 0) {
+                _page = s[0];
+                _name = s[1];
+            } else {
+                _name = name;
+            }
+            var fun = page.inits[_name];
+            if (typeof data === "undefined") {
+                bindCall(_page, fun);
+            } else {
+                bindCall(_page, fun, data);
+            }
+            $(outputElement).attr("load-page",name);
+        }
+        $(outputElement).html(html);
     });
-    return p;
-}
-
-page.hide = function (name) {
-    page._getE(name).hide();
-}
-
-page.back = function (data) {
-    if (typeof data == "undefined") {
-        data = [];
-    }
-    if (page.historico.length > 1) {
-        atual = page.historico[page.historico.length - 1];
-        anterior = page.historico[page.historico.length - 2];
-        page.historico = page.historico.slice(0, -1);
-        page._getE(atual).hide();
-        if (data.length > 0) {
-            var template = page._get(anterior);
-
-            var rendered = Handlebars.compile(template);
-            rendered = rendered(data);
-
-            page._getE(anterior).html(rendered).show();
-        } else {
-            page._getE(anterior).show();
-        }
-        page.data[anterior] = data;
-    }
-}
-page.show = function (name, outputElement, data) {
-    if (typeof data == "undefined") {
-        data = [];
-    }
-    var template = page._get(name);
-    //A primeiro momento ainda não trabalhei no partials
-    var rendered = Handlebars.compile(template);
-    rendered = rendered(data);
-
-//    var rendered = Mustache.render(template, data, page._partials());
-
-    page._getE(outputElement).html(rendered).show();
-    page.data[name] = data;
-}
-
-page.go = function (name, outputElement, data) {
-    name_orig = name;
-    if (typeof data == "undefined") {
-        data = [];
-    }
-    var template = page._get(name);
-//    var partials = page._partials();
-//    var rendered = Mustache.render(template, data, partials);
-    var rendered = Handlebars.compile(template);
-    rendered = rendered(data);
-    page._getE(outputElement).html(rendered).show();
-    if (typeof bindCall != "undefined" && name.indexOf(".") > 0) {
-        if (name.indexOf(":") > 0) {
-            name = name.split(/:/g)[0];
-        }
-        if ($(outputElement).attr("load-page") != name_orig) {
-            bindCall(name, "init");
-        }
-
-    }
-    page._getE(outputElement).attr('load-page', name_orig);
-    if (page.historico.length > 0) {
-        var ultimo = page.historico[page.historico.length - 1];
-        page._getE(ultimo).hide();
-    }
-    page.historico.push(name_orig);
-    page.data[name_orig] = data;
 };
 
+page.go = function (name, outputElement, data) {
+    page.render(name, outputElement, data);
+    page.history.push({
+        name:name,
+        outputElement:outputElement,
+        data:data
+    });
+};
 page.update = function (name, outputElement, data) {
-    if (typeof data == "undefined") {
-        data = [];
+    page.render(name, outputElement, data);
+};
+page.back = function (data) {
+    if(page.history.length > 0){
+        var _page = page.history[page.history - 1];
+        //verificar
+        if(typeof _page.data === "undefined"){
+            _page.data = data;
+        }
+        page.update(_page.name,_page.outputElement,_page.data);
     }
-//    console.log("Você está atualizando a pagina " + name + " e a atual é " + page.historico[page.historico.length - 1]);
-    if (name != page.historico[page.historico.length - 1]) {
-        return;
-    }
-    var template = page._get(name);
-//    var rendered = Mustache.render(template, data, page._partials());
-    var rendered = Handlebars.compile(template);
-    rendered = rendered(data);
-    page._getE(outputElement).html(rendered);
-    page.data[name] = data;
-}
+};

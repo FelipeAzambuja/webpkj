@@ -163,9 +163,9 @@ function bindCall(pagina, funcao, data, done) {
     });
     data.HOST = window.location.protocol + "//" + window.location.hostname;
 
-    if (typeof page != "undefined") {
-        data.MUSTACHE = page.data;
-    }
+//    if (typeof page != "undefined") {
+//        data.MUSTACHE = page.data;
+//    }
 
     data.GET = $_GET;
     $.post(pagina, data, function (resp) {
@@ -175,6 +175,7 @@ function bindCall(pagina, funcao, data, done) {
             } catch (e) {
                 console.log(resp);
                 console.log(e);
+                console.log(resp.stack);
             }
         }
         if (typeof (done) !== "undefined") {

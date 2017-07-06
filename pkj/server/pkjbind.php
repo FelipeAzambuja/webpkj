@@ -648,7 +648,7 @@ class Page {
     function setValue($id, $value) {
 //        $value = JS::addslashes($value);
         $value = str_replace('*/', '* /', $value); //buaaa
-        $this->jquery($id, "val( _heredoc(function(){/* {$value} */}) )");
+        $this->jquery($id, "val( _heredoc(function(){/*  {$value}  */}) )");
         return $this;
     }
 
@@ -658,7 +658,6 @@ class Page {
      * @param type $html
      */
     function setHtml($id, $html) {
-
         $html = JS::addslashes($html);
         $this->jquery($id, "html(\"$html\")");
         return $this;
@@ -782,7 +781,7 @@ class Page {
      * @param type $code
      */
     function jquery($id, $code) {
-        $page = "div[page='{$this->name}']";
+        $page = "div[load-page='{$this->name}']";
         if (startswith($id, "#")) {
             $id = replace($id, "#", "");
             ?>$("<?= $page ?>").find("*[id='<?= $id ?>'],*[input-id='<?= $id ?>']").<?= $code ?>;<?php

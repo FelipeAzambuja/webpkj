@@ -1,5 +1,5 @@
 {
     "name": "page",
-    "files": ["handlebars-v4.0.10.js","pkj.js","pkj.css"],
+    "files": ["pkj.js","pkj.css"],
     "author": "Page JS"
 }
