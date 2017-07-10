@@ -608,7 +608,7 @@ function cd($v) {
  * @param string $name
  * @return \Page
  */
-function page($name = "",$outputElement) {
+function page($name = "",$outputElement="") {
     return new Page($name,$outputElement);
 }
 

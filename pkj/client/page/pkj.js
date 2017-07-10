@@ -70,12 +70,14 @@ page.render = function (name, outputElement, data) {
                 _name = name;
             }
             var fun = page.inits[_name];
-            if (typeof data === "undefined") {
+            if (typeof data === "undefined" || data.length === 0) {
                 bindCall(_page, fun);
             } else {
                 bindCall(_page, fun, data);
             }
-            $(outputElement).attr("load-page",name);
+            $(outputElement).attr("load-page", name);
+        } else {
+            $(outputElement).attr("load-page", name);
         }
         $(outputElement).html(html);
     });
@@ -84,21 +86,21 @@ page.render = function (name, outputElement, data) {
 page.go = function (name, outputElement, data) {
     page.render(name, outputElement, data);
     page.history.push({
-        name:name,
-        outputElement:outputElement,
-        data:data
+        name: name,
+        outputElement: outputElement,
+        data: data
     });
 };
 page.update = function (name, outputElement, data) {
     page.render(name, outputElement, data);
 };
 page.back = function (data) {
-    if(page.history.length > 0){
+    if (page.history.length > 0) {
         var _page = page.history[page.history - 1];
         //verificar
-        if(typeof _page.data === "undefined"){
+        if (typeof _page.data === "undefined") {
             _page.data = data;
         }
-        page.update(_page.name,_page.outputElement,_page.data);
+        page.update(_page.name, _page.outputElement, _page.data);
     }
 };
