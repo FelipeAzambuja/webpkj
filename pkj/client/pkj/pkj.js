@@ -181,57 +181,65 @@ PKJ.loadLibrary = function (name, ok) {
 };
 
 function tagUpdate() {
-
-
+    $("a[pref],span[pref],button[pref]").off("click").on("click", function () {
+        var _page = $(this).attr("pref");
+        var data = $(this).attr("pdata");
+        var s = _page.split(/:/);
+        if(typeof data === "undefined"){
+            page.go(s[0],s[1]);
+        }else{
+            page.go(s[0],s[1],data);
+        }
+    });
     //datatables
     if (typeof ($.fn.dataTableExt) !== "undefined") {
         $(".datatables").each(function (i, e) {
 //            $(function () {
-                var responsive = $(e).hasClass("datatables-responsive");
-                if (!$.fn.dataTable.isDataTable(e)) {
-                    var tabela = $(e).DataTable({
-                        dom: 'Bfrtip',
-                        buttons: [
-                            'copyHtml5',
-                            'excelHtml5',
-                            'csvHtml5',
-                            'pdfHtml5'
-                        ],
-                        responsive: responsive,
-                        select: true,
-                        keys: true,
-                        "language": {
-                            "sEmptyTable": "Nenhum registro encontrado",
-                            "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
-                            "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
-                            "sInfoFiltered": "(Filtrados de _MAX_ registros)",
-                            "sInfoPostFix": "",
-                            "sInfoThousands": ".",
-                            "sLengthMenu": "_MENU_ resultados por página",
-                            "sLoadingRecords": "Carregando...",
-                            "sProcessing": "Processando...",
-                            "sZeroRecords": "Nenhum registro encontrado",
-                            "sSearch": "Pesquisar",
-                            "oPaginate": {
-                                "sNext": "Próximo",
-                                "sPrevious": "Anterior",
-                                "sFirst": "Primeiro",
-                                "sLast": "Último"
-                            },
-                            "oAria": {
-                                "sSortAscending": ": Ordenar colunas de forma ascendente",
-                                "sSortDescending": ": Ordenar colunas de forma descendente"
-                            }
+            var responsive = $(e).hasClass("datatables-responsive");
+            if (!$.fn.dataTable.isDataTable(e)) {
+                var tabela = $(e).DataTable({
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'copyHtml5',
+                        'excelHtml5',
+                        'csvHtml5',
+                        'pdfHtml5'
+                    ],
+                    responsive: responsive,
+                    select: true,
+                    keys: true,
+                    "language": {
+                        "sEmptyTable": "Nenhum registro encontrado",
+                        "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+                        "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+                        "sInfoPostFix": "",
+                        "sInfoThousands": ".",
+                        "sLengthMenu": "_MENU_ resultados por página",
+                        "sLoadingRecords": "Carregando...",
+                        "sProcessing": "Processando...",
+                        "sZeroRecords": "Nenhum registro encontrado",
+                        "sSearch": "Pesquisar",
+                        "oPaginate": {
+                            "sNext": "Próximo",
+                            "sPrevious": "Anterior",
+                            "sFirst": "Primeiro",
+                            "sLast": "Último"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Ordenar colunas de forma ascendente",
+                            "sSortDescending": ": Ordenar colunas de forma descendente"
                         }
-                    });
-                    tabela.on('responsive-display', function (e, datatable, row, showHide, update) {
+                    }
+                });
+                tabela.on('responsive-display', function (e, datatable, row, showHide, update) {
 //                        console.log('Details for row ' + row.index() + ' ' + (showHide ? 'shown' : 'hidden'));
-                        tagUpdate();
-                    });
-                    tabela.on('draw.dt', function () {
-                        tagUpdate();
-                    });
-                }
+                    tagUpdate();
+                });
+                tabela.on('draw.dt', function () {
+                    tagUpdate();
+                });
+            }
 //            });
         });
     }
@@ -264,10 +272,10 @@ function tagUpdate() {
         }
         if (!hasOnsen) {
             if (!$(e).hasClass("form-control")) {
-                if ( in_array(ucase($(e).attr("type")),["TEXT","BUTTON","FILE"]) ) {
+                if (in_array(ucase($(e).attr("type")), ["TEXT", "BUTTON", "FILE"])) {
                     $(e).addClass("form-control");
                 }
-                
+
             }
         }
         if ($(e).attr("data-mask") != undefined) {
@@ -313,9 +321,9 @@ function tagUpdate() {
     });
 }
 $(function () {
-    if(typeof page.go == "undefined"){
-        tagUpdate();
-    }
+//    if(typeof page.go == "undefined"){
+    tagUpdate();
+//    }
 });
 /** heredoc(function({/*   ... *\/})
  * https://stackoverflow.com/questions/4376431/javascript-heredoc/21789375#21789375
@@ -327,7 +335,7 @@ $(function () {
 function _heredoc(f) {
     var s = f.toString();
     s = s.substring(14);// ou 13 conforme o espaço
-    s = s.substring(0,s.length - 4);
+    s = s.substring(0, s.length - 4);
     return s.trim();
 //    return f.toString().match(/\/\*\s*([\s\S]*?)\s*\*\//m)[1].replace(/(\/\*[\s\S]*?\*) \//g, '$1/');
 }
