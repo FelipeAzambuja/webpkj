@@ -181,15 +181,19 @@ PKJ.loadLibrary = function (name, ok) {
 };
 
 function tagUpdate() {
-    $("a[pref],span[pref],button[pref]").off("click").on("click", function () {
+    
+    $("a[pref],span[pref],button[pref]").off("click").on("click", function (e) {
+        e.preventDefault();
         var _page = $(this).attr("pref");
         var data = $(this).attr("pdata");
-        var s = _page.split(/:/);
+        var s = _page.split(/,/);
+        $('.navbar-toggle').click();
         if(typeof data === "undefined"){
             page.go(s[0],s[1]);
         }else{
             page.go(s[0],s[1],data);
         }
+        tagUpdate();
     });
     //datatables
     if (typeof ($.fn.dataTableExt) !== "undefined") {

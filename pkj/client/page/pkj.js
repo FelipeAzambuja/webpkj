@@ -10,11 +10,11 @@ page._getHTML = function (name, done) {
         var slit = name.split(/:/);
         var _page = slit[0];
         var element = slit[1];
-        if (page._inCache(element)) {
-            done(page.cache[element]);
+        if (page._inCache(element,_page)) {
+            done(page.cache[element+""+_page]);
         } else {
             $.get(_page, function (html) {
-                html = page._parser(html, element);
+                html = page._parser(html, element,_page);
                 done(html);
             });
         }
@@ -25,16 +25,16 @@ page._getHTML = function (name, done) {
         done(html);
     }
 };
-page._inCache = function (element) {
-    return typeof page.cache[element] !== "undefined";
+page._inCache = function (element,_page) {
+    return typeof page.cache[element+""+_page] !== "undefined";
 };
-page._parser = function (html, element) {
+page._parser = function (html, element,_page) {
     if (page.enableCache) {
-        if (page._inCache(element)) {
-            return page.cache[element];
+        if (page._inCache(element,_page)) {
+            return page.cache[element+""+_page];
         }
     }
-    var retorno = $.parseHTML(html);
+    var retorno = $.parseHTML(html,document,true);
     retorno = retorno[retorno.map(function (e) {
         return $(e).attr("page");
     }).indexOf(element)];
@@ -45,7 +45,7 @@ page._parser = function (html, element) {
     }
     retorno = retorno.innerHTML;
     if (page.enableCache) {
-        page.cache[element] = retorno;
+        page.cache[element+""+_page] = retorno;
     }
     return retorno;
 };
@@ -79,7 +79,10 @@ page.render = function (name, outputElement, data) {
         } else {
             $(outputElement).attr("load-page", name);
         }
+
+        $(outputElement).html('');
         $(outputElement).html(html);
+
     });
 };
 
