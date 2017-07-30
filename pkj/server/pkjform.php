@@ -149,7 +149,8 @@ function combo($id, $itens, $valoresItens = array(), $plus = "", $size = 3) {
 
         $contador++;
     }
-    $retorno .= "</select><script>try{ $('select').chosen();$( '.chosen-container-single' ).css( 'width' , '100%' ); }catch(e){  }</script>";
+    $retorno .= "</select>";
+//    $retorno .= "</select><script>try{ $('select').chosen();$( '.chosen-container-single' ).css( 'width' , '100%' ); }catch(e){  }</script>";
     echo div($retorno, $size, 4);
 }
 

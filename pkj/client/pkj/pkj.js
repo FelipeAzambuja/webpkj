@@ -51,12 +51,12 @@ function part(texto, separador) {
     return texto.split(separador);
 }
 function in_array(texto, array) {
-    for (i = 0; i < array.length; i++) {
+    for (var i = 0; i < array.length; i++) {
         if (texto === array[i]) {
             return true;
         }
-        return false;
     }
+    return false;
 }
 PKJ = {};
 PKJ.refresh = function (load) {
@@ -181,17 +181,26 @@ PKJ.loadLibrary = function (name, ok) {
 };
 
 function tagUpdate() {
-    
+
+    try {
+        $('select').chosen();
+        $('.chosen-container-single').css('width', '100%');
+    } catch (e) {
+
+    } finally {
+
+    }
+
     $("a[pref],span[pref],button[pref]").off("click").on("click", function (e) {
         e.preventDefault();
         var _page = $(this).attr("pref");
         var data = $(this).attr("pdata");
         var s = _page.split(/,/);
         $('.navbar-toggle').click();
-        if(typeof data === "undefined"){
-            page.go(s[0],s[1]);
-        }else{
-            page.go(s[0],s[1],data);
+        if (typeof data === "undefined") {
+            page.go(s[0], s[1], []);
+        } else {
+            page.go(s[0], s[1], data);
         }
         tagUpdate();
     });
@@ -276,10 +285,12 @@ function tagUpdate() {
         }
         if (!hasOnsen) {
             if (!$(e).hasClass("form-control")) {
-                if (in_array(ucase($(e).attr("type")), ["TEXT", "BUTTON", "FILE"])) {
+                if (
+                        in_array(ucase($(e).attr("type")), ["TEXT", "BUTTON", "FILE","TEL","NUMBER"])
+                        
+                        ) {
                     $(e).addClass("form-control");
                 }
-
             }
         }
         if ($(e).attr("data-mask") != undefined) {

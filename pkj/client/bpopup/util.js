@@ -6,7 +6,11 @@ function popup(mensagem, id) {
     $('body').append("<div id='pkjpopup" + id + "'><a class='b-close'>x<a/> " + mensagem + " </div>");
     $("#pkjpopup" + id).bPopup({
         speed: 0,
-        positionStyle: "absolute"
+        positionStyle: "absolute",
+        onClose: function () {
+            $(".b-modal").remove();
+            $("#pkjpopup" + id).remove();
+        }
     });
 }
 function popup_close(id){
