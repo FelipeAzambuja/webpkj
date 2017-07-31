@@ -30,6 +30,7 @@ include "pkjstring.php";
 include "pkjconf.php";
 
 include "pkj.php";
+
 if ( conf::$endereco != "" ) {
   include "pkjdb.php";
 }
