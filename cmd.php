@@ -1,4 +1,5 @@
 <?php
+include './vendor/autoload.php';
 
 function isCLI() {
     return (PHP_SAPI == 'cli');
@@ -35,9 +36,7 @@ function loadht($file) {
                 break;
         }
     }
-    foreach ($requires as $r) {
-        @require $r;
-    }
+//    var_dump($_SERVER);
     if (!function_exists("query")) {
         require './pkj/server/pkjall.php';
     }
@@ -47,14 +46,22 @@ if (isCLI()) {
     loadht(dirname(__FILE__) . '/.htaccess');
 }
 
-//var_dump($argv);
 switch ($argv[1]) {
+    case "tables":
+        $pdo = conf::$pkj_bd_sis_conexao;
+        $climate = new League\CLImate\CLImate();
+        $table = [];
+        foreach ($pdo->database_tables() as $t ) {
+            $table[]=["name"=>$t];
+        }
+        $climate->table($table);
+        break;
     case "config":
     case "configurar":
         $pkj = dirname(__FILE__) . DIRECTORY_SEPARATOR . "pkj" . DIRECTORY_SEPARATOR . "server" . DIRECTORY_SEPARATOR . "pkjall.php";
         $pkj = str_replace("\\", "/", $pkj);
 
-        echo "Qual a banco de dados (sqlite,postgre,mysql)?" . PHP_EOL;
+        echo "Qual a banco de dados (sqlite,pgsql,mysql)?" . PHP_EOL;
         $servidor = trim(fgets(STDIN));
 
         //sem acento :(
@@ -87,8 +94,51 @@ switch ($argv[1]) {
         $s .= '' . PHP_EOL;
         file_put_contents(".htaccess", $s);
         break;
+    case "top":
+        $climate = new League\CLImate\CLImate();
+        $table = $argv[2];
+        if(count($argv) > 3){
+            $top = $argv[3];
+        }else{
+            $top = 10;
+        }
+        $r = query("select * from {$table} order by id desc limit {$top} ");        
+        if(!$r){
+            $climate->error("Vazio");
+            exit();
+        }
+        $climate->table($r);
+        break;
+    case "insert":
+         $climate = new League\CLImate\CLImate();
+         $c = conf::$pkj_bd_sis_conexao;
+         $f = col($c->table_fields($argv[2]),"name");
+         $a = [];
+         foreach ($f as $c) {
+             if($c === "id"){
+                 continue;
+             }
+             $climate->out("Valor do campo {$c}");
+             $v = trim(fgets(STDIN));
+             $a[$c] = $v;
+         }
+         $sql = SQLinsert($argv[2], $a);
+         $query = query($sql);
+         if(!$query){
+             $climate->error(db_get_error());
+             exit();
+         }else{
+             echo "OK";
+         }
+        break;
     case "sql":
-        var_dump(query($argv[2]));
+        $climate = new League\CLImate\CLImate();
+        $r = query($argv[2]);
+        if (!$r) {
+            $climate->dump(db_get_error());
+            exit();
+        }
+        $climate->table($r);
         break;
     case "table_info":
     case "table":
@@ -97,7 +147,15 @@ switch ($argv[1]) {
             echo "Qual a tabela ?" . PHP_EOL;
             $argv[2] = fgets(STDIN);
         }
-        var_dump(table_fields($argv[2]));
+        conectar();
+        $info = conf::$pkj_bd_sis_conexao->table_fields($argv[2]);
+        $climate = new League\CLImate\CLImate();
+        $table = [];
+        foreach ($info as $v) {
+            $v["flags"] = implode(",",$v["flags"]);
+            $table[]=$v;
+        }
+        $climate->table($table);
         break;
     case "orm":
         if (!isset($argv[2])) {
@@ -126,7 +184,9 @@ function orm($tabela, $pasta = "pkj/db") {
     echo color("ORM", Colors::$yellow) . PHP_EOL;
     echo color("Tabela $tabela", Colors::$white) . PHP_EOL;
     echo color("Pasta $pasta", Colors::$white) . PHP_EOL;
-    $classe = ucfirst($tabela);
+//    $classe = ucfirst($tabela);
+    $classe = ucwords(str_replace("_", " ", $tabela));
+    $classe = str_replace(" ", "", $classe);
     $campos = table_fields($tabela);
 
     $fields = col($campos, "NAME");
@@ -149,9 +209,9 @@ function orm($tabela, $pasta = "pkj/db") {
     $s .= '	' . PHP_EOL;
     $s .= '	function getFields(){' . PHP_EOL;
     $s .= '		$campos = [];' . PHP_EOL;
-
+    sd($campos);
     foreach ($campos as $i) {
-        $s .= '		$campos[] = array("name"=>"' . $i->NAME . '","type"=>"' . $i->TYPE . '");' . PHP_EOL;
+        $s .= '		$campos[] = array("name"=>"' . lcase($i->NAME) . '","type"=>"' . lcase($i->TYPE) . '");' . PHP_EOL;
     }
 
     $s .= '		return $campos;' . PHP_EOL;
@@ -163,7 +223,7 @@ function orm($tabela, $pasta = "pkj/db") {
     $s .= '}' . PHP_EOL;
     $s .= '' . PHP_EOL;
     $s .= '' . PHP_EOL;
-    
+
     file_put_contents($pasta . "/{$classe}.php", $s);
 }
 

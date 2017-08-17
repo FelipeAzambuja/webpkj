@@ -30,9 +30,10 @@ include "pkjstring.php";
 include "pkjconf.php";
 
 include "pkj.php";
-
-if ( conf::$endereco != "" ) {
-  include "pkjdb.php";
+if ( conf::$endereco !== "" ) {
+//  include "pkjdb.php";
+  include "pkjdb_2.php";
+  conectar();
 }
 include "kint/Kint.class.php";
 include 'pkjassets.php';
@@ -41,12 +42,13 @@ if ( conf::$quick ) {
   include 'pkjquick.php';
 }
 //$resource = resource ();
-if ( conf::$servidor == "mysql" && conf::$endereco != "" ) {
-  query ( "SET NAMES 'utf8'" );
-  query ( 'SET character_set_connection=utf8' );
-  query ( 'SET character_set_client=utf8' );
-  query ( 'SET character_set_results=utf8' );
-}
+//if ( conf::$servidor == "mysql" && conf::$endereco != "" ) {
+//  query ( "SET NAMES 'utf8'" );
+//  query ( 'SET character_set_connection=utf8' );
+//  query ( 'SET character_set_client=utf8' );
+//  query ( 'SET character_set_results=utf8' );
+//}
+
 include "pkjorm.php";
 foreach ( glob ( __DIR__ . "/../db/*.php" ) as $db ):
   include $db;

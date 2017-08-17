@@ -4,7 +4,7 @@ class conf {
 
     public static $pkjHome = "/webpkj/pkj";
     public static $dateFormat = "d/m/Y";
-// mysql postgre mssql odbc oledb sqlite
+// mysql pgsql mssql odbc oledb sqlite
     public static $servidor = "sqlite";
 //    public static $servidor = "mysql";
     public static $endereco = "../../banco.sqlite";
@@ -15,6 +15,10 @@ class conf {
     public static $quick = true;
     //session default,database,javascript
     public static $session = "database";
+    /**
+     *
+     * @var Db 
+     */
     public static $pkj_bd_sis_conexao = null;
     public static $lastError = "";
     public static $random = "";
