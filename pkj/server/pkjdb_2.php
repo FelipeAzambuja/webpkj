@@ -126,9 +126,14 @@ class Db {
         }
         return col($r, "name");
     }
+    
+    //hora de passar raiva
+    function detranslate_field($type, $driver) {
+        
+    }
 
-    function translate_field($name) {
-        switch (lcase($name)) {
+    function translate_field($type) {
+        switch (lcase($type)) {
             case "integer":
             case "serial":
             case "int":
@@ -152,6 +157,16 @@ class Db {
             case "longblob":
             case "image":
                 return "blob";
+                break;
+            case "date":
+                return "date";
+                break;
+            case "time":
+                return "time";
+                break;
+            case "timestamp":
+            case "datetime":
+                return "time";
                 break;
             default:
                 //varchar
