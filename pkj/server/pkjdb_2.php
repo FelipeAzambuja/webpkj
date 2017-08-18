@@ -12,12 +12,15 @@ class Db {
     public $last_parameters;
     public $fetch;
     private $db;
+    private $driver;
 
     function __construct($servidor, $endereco = null, $base = null, $usuario = null, $senha = null) {
+        
         $this->db = $base;
         if ($servidor === "postgre") {
             $servidor = "pgsql";
         }
+        $this->driver = $servidor;
         if (!in_array($servidor, array("mysql", "firebird", "odbc", "pgsql", "sqlite", "sqlsrv"))) {
             echo "servidor invalido";
             exit();
@@ -266,6 +269,7 @@ class Db {
         for ($index = 0; $index < count($s); $index++) {
             $s[$index]->dbtype = $s[$index]->type;
             $s[$index]->type = $this->translate_field($s[$index]->type);
+            $s[$index]->detype = $this->detranslate_field($s[$index]->type,$this->driver);
         }
         return $s;
     }

@@ -24,7 +24,7 @@ class Pessoas extends DBTable {
 		$campos[] = array("name"=>"email","type"=>"text");
 		$campos[] = array("name"=>"senha","type"=>"text");
 		$campos[] = array("name"=>"idade","type"=>"integer");
-		$campos[] = array("name"=>"saldo","type"=>"double precision");
+		$campos[] = array("name"=>"saldo","type"=>"float");
 		return $campos;
 	}
 	

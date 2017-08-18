@@ -203,7 +203,7 @@ function orm($tabela, $pasta = "pkj/db") {
     $s .= '	function getFields(){' . PHP_EOL;
     $s .= '		$campos = [];' . PHP_EOL;
     foreach ($campos as $i) {
-        $s .= '		$campos[] = array("name"=>"' . lcase($i->name) . '","type"=>"' . lcase($i->dbtype) . '");' . PHP_EOL;
+        $s .= '		$campos[] = array("name"=>"' . lcase($i->name) . '","type"=>"' . lcase($i->detype) . '");' . PHP_EOL;
     }
     $s .= '		return $campos;' . PHP_EOL;
     $s .= '	}' . PHP_EOL;
