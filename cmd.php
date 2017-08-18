@@ -1,4 +1,5 @@
 <?php
+
 include './vendor/autoload.php';
 
 function isCLI() {
@@ -51,8 +52,8 @@ switch ($argv[1]) {
         $pdo = conf::$pkj_bd_sis_conexao;
         $climate = new League\CLImate\CLImate();
         $table = [];
-        foreach ($pdo->database_tables() as $t ) {
-            $table[]=["name"=>$t];
+        foreach ($pdo->database_tables() as $t) {
+            $table[] = ["name" => $t];
         }
         $climate->table($table);
         break;
@@ -97,39 +98,39 @@ switch ($argv[1]) {
     case "top":
         $climate = new League\CLImate\CLImate();
         $table = $argv[2];
-        if(count($argv) > 3){
+        if (count($argv) > 3) {
             $top = $argv[3];
-        }else{
+        } else {
             $top = 10;
         }
-        $r = query("select * from {$table} order by id desc limit {$top} ");        
-        if(!$r){
+        $r = query("select * from {$table} order by id desc limit {$top} ");
+        if (!$r) {
             $climate->error("Vazio");
             exit();
         }
         $climate->table($r);
         break;
     case "insert":
-         $climate = new League\CLImate\CLImate();
-         $c = conf::$pkj_bd_sis_conexao;
-         $f = col($c->table_fields($argv[2]),"name");
-         $a = [];
-         foreach ($f as $c) {
-             if($c === "id"){
-                 continue;
-             }
-             $climate->out("Valor do campo {$c}");
-             $v = trim(fgets(STDIN));
-             $a[$c] = $v;
-         }
-         $sql = SQLinsert($argv[2], $a);
-         $query = query($sql);
-         if(!$query){
-             $climate->error(db_get_error());
-             exit();
-         }else{
-             echo "OK";
-         }
+        $climate = new League\CLImate\CLImate();
+        $c = conf::$pkj_bd_sis_conexao;
+        $f = col($c->table_fields($argv[2]), "name");
+        $a = [];
+        foreach ($f as $c) {
+            if ($c === "id") {
+                continue;
+            }
+            $climate->out("Valor do campo {$c}");
+            $v = trim(fgets(STDIN));
+            $a[$c] = $v;
+        }
+        $sql = SQLinsert($argv[2], $a);
+        $query = query($sql);
+        if (!$query) {
+            $climate->error(db_get_error());
+            exit();
+        } else {
+            echo "OK";
+        }
         break;
     case "sql":
         $climate = new League\CLImate\CLImate();
@@ -179,13 +180,10 @@ function orm($tabela, $pasta = "pkj/db") {
     echo color("ORM", Colors::$yellow) . PHP_EOL;
     echo color("Tabela $tabela", Colors::$white) . PHP_EOL;
     echo color("Pasta $pasta", Colors::$white) . PHP_EOL;
-//    $classe = ucfirst($tabela);
     $classe = ucwords(str_replace("_", " ", $tabela));
     $classe = str_replace(" ", "", $classe);
     $con = conf::$pkj_bd_sis_conexao;
-
     $campos = $con->table_fields($tabela);
-
     $fields = col($campos, "name");
     $s = '';
     $s .= '<?php' . PHP_EOL;
@@ -198,19 +196,15 @@ function orm($tabela, $pasta = "pkj/db") {
     $s .= '}' . PHP_EOL;
     $s .= 'class ' . $classe . ' extends DBTable {' . PHP_EOL;
     $s .= '	' . PHP_EOL;
-
     foreach ($fields as $f) {
         $s .= '	var $' . $f . ';' . PHP_EOL;
     }
-
     $s .= '	' . PHP_EOL;
     $s .= '	function getFields(){' . PHP_EOL;
     $s .= '		$campos = [];' . PHP_EOL;
-    sd($campos);
     foreach ($campos as $i) {
-        $s .= '		$campos[] = array("name"=>"' . lcase($i->name) . '","type"=>"' . lcase($i->type) . '");' . PHP_EOL;
+        $s .= '		$campos[] = array("name"=>"' . lcase($i->name) . '","type"=>"' . lcase($i->dbtype) . '");' . PHP_EOL;
     }
-
     $s .= '		return $campos;' . PHP_EOL;
     $s .= '	}' . PHP_EOL;
     $s .= '	' . PHP_EOL;

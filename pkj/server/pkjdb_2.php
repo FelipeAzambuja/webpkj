@@ -126,12 +126,70 @@ class Db {
         }
         return col($r, "name");
     }
-    
-    //hora de passar raiva
+
+    /**
+     * Essa função pode aumentar o tamanho do banco de dados para o mysql
+     * @param string $type
+     * @param string $driver
+     * @return string
+     */
     function detranslate_field($type, $driver) {
-        
+        switch ($type) {
+            case "integer":
+            case "serial":
+            case "int":
+                return "integer";
+                break;
+            case "float"://outros
+            case "double"://nunca usado ??? 
+            case "double precision"://pg
+            case "number"://sqlite
+            case "numberic"://sqlite 
+                if ($driver === "sqlite") {
+                    return "numeric";
+                } else {
+                    return "float";
+                }
+                break;
+            case "string":
+            case "text":
+                return "text";
+                break;
+            case "file":
+            case "blob":
+            case "bytea":
+            case "mediumblob":
+            case "smallblob":
+            case "longblob":
+            case "image":
+                if ($driver === "pgsql") {
+                    return "bytea";
+                } else {
+                    return "longblob";
+                }
+                break;
+            case "date":
+                return "datetime";
+                break;
+            case "time":
+                return "datetime";
+                break;
+            case "timestamp":
+            case "datetime":
+                return "datetime";
+                break;
+            default:
+                //varchar
+                return "text";
+                break;
+        }
     }
 
+    /**
+     * 
+     * @param string $type
+     * @return string
+     */
     function translate_field($type) {
         switch (lcase($type)) {
             case "integer":
@@ -139,11 +197,11 @@ class Db {
             case "int":
                 return "integer";
                 break;
-            case "float":
-            case "double":
-            case "double precision":
-            case "number":
-            case "numberic":
+            case "float"://outros
+            case "double"://nunca usado ??? 
+            case "double precision"://pg
+            case "number"://sqlite
+            case "numberic"://sqlite 
                 return "float";
                 break;
             case "string":
@@ -152,6 +210,7 @@ class Db {
                 break;
             case "file":
             case "blob":
+            case "bytea":
             case "mediumblob":
             case "smallblob":
             case "longblob":
@@ -205,6 +264,7 @@ class Db {
         }
         $s = $this->query($sql);
         for ($index = 0; $index < count($s); $index++) {
+            $s[$index]->dbtype = $s[$index]->type;
             $s[$index]->type = $this->translate_field($s[$index]->type);
         }
         return $s;
