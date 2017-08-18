@@ -1,5 +1,4 @@
 <?php 
-
 $notpkj = array ( "phpliteadmin.php" );
 if ( in_array ( basename ( $_SERVER["SCRIPT_NAME"] ) , $notpkj ) ) {
   return false;

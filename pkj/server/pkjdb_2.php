@@ -104,7 +104,7 @@ class Db {
             case "mysql":
                 $sql = "SELECT information_schema.TABLES.TABLE_NAME AS NAME FROM information_schema.TABLES WHERE information_schema.TABLES.TABLE_SCHEMA='{$db}'";
                 break;
-//            case "firebird": vtnc
+//            case "firebird":
 //                $sql = "SELECT 'not work' as 'NAME'";
 //                break;
             case "pgsql":
@@ -120,7 +120,44 @@ class Db {
                 $sql = "select TABLE_NAME AS NAME from information_schema.TABLES where TABLE_CATALOG='{$db}' and TABLE_TYPE='BASE TABLE'";
                 break;
         }
-        return col($this->query($sql),"NAME");
+        $r = $this->query($sql);
+        for ($index = 0; $index < count($r); $index++) {
+            $r[$index]->name = (isset($r[$index]->name)) ? $r[$index]->name : $r[$index]->NAME;
+        }
+        return col($r, "name");
+    }
+
+    function translate_field($name) {
+        switch (lcase($name)) {
+            case "integer":
+            case "serial":
+            case "int":
+                return "integer";
+                break;
+            case "float":
+            case "double":
+            case "double precision":
+            case "number":
+            case "numberic":
+                return "float";
+                break;
+            case "string":
+            case "text":
+                return "string";
+                break;
+            case "file":
+            case "blob":
+            case "mediumblob":
+            case "smallblob":
+            case "longblob":
+            case "image":
+                return "blob";
+                break;
+            default:
+                //varchar
+                return "string";
+                break;
+        }
     }
 
     /**
@@ -130,50 +167,32 @@ class Db {
      */
     function table_fields($table) {
         $sql = "";
+        $db = $this->db;
         switch (conf::$servidor) {
             case "mysql":
-                $sql = "select * from {$table} limit 1";
+                $sql = "select COLUMN_NAME as 'name', DATA_TYPE as 'type' from information_schema.COLUMNS WHERE TABLE_schema='{$db}' and TABLE_NAME='{$table}'";
                 break;
-            case "firebird":
-                $sql = "SELECT FIRST 1 * FROM {$table}";
-                break;
+//            case "firebird":
+//                $sql = "SELECT FIRST 1 * FROM {$table}";
+//                break;
             case "pgsql":
-                $sql = "select * from {$table} limit 1";
+                $sql = "select COLUMN_NAME as name, DATA_TYPE as type from information_schema.COLUMNS WHERE TABLE_CATALOG='{$db}' and TABLE_NAME='{$table}'";
                 break;
             case "sqlite":
-                $sql = "select * from {$table} limit 1";
+                $sql = "pragma table_info({$table})";
                 break;
             case "sqlsrv":
-                $sql = "select top * from {$table}";
+                $sql = "select COLUMN_NAME AS name, DATA_TYPE AS type from INFORMATION_SCHEMA.COLUMNS WHERE TABLE_CATALOG='{$db}' AND TABLE_NAME='{$table}'";
                 break;
             default:
-                $sql = "select * from {$table} limit 1";
+                $sql = "select COLUMN_NAME as 'name', DATA_TYPE as 'type' from information_schema.COLUMNS WHERE TABLE_schema='{$db}' and TABLE_NAME='{$table}'";
                 break;
         }
-        $s = $this->statement($sql);
-        $r = array();
-        for ($index = 0; $index < $s->columnCount(); $index++) {
-            $types = array(
-                PDO::PARAM_BOOL => 'bool',
-                PDO::PARAM_NULL => 'null',
-                PDO::PARAM_INT => 'int',
-                PDO::PARAM_STR => 'string',
-                PDO::PARAM_LOB => 'blob',
-                PDO::PARAM_STMT => 'statement'  //Not used right now
-            );
-
-            $column = $s->getColumnMeta($index);
-
-            $column['len'] = isset($column['len']) ? $column['len'] : 0;
-
-            if ($column['len'] > 255) {
-                $column['type'] = 'string';
-            } else {
-                $column['type'] = $types[$column['pdo_type']];
-            }
-            $r[] = $column;
+        $s = $this->query($sql);
+        for ($index = 0; $index < count($s); $index++) {
+            $s[$index]->type = $this->translate_field($s[$index]->type);
         }
-        return $r;
+        return $s;
     }
 
 }

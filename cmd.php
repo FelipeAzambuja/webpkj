@@ -61,7 +61,7 @@ switch ($argv[1]) {
         $pkj = dirname(__FILE__) . DIRECTORY_SEPARATOR . "pkj" . DIRECTORY_SEPARATOR . "server" . DIRECTORY_SEPARATOR . "pkjall.php";
         $pkj = str_replace("\\", "/", $pkj);
 
-        echo "Qual a banco de dados (sqlite,pgsql,mysql)?" . PHP_EOL;
+        echo "Qual a banco de dados (sqlite,pgsql,mysql,sqlsrv)?" . PHP_EOL;
         $servidor = trim(fgets(STDIN));
 
         //sem acento :(
@@ -87,10 +87,10 @@ switch ($argv[1]) {
         $s .= 'setenv pkj_dateformat "d/m/Y"' . PHP_EOL;
         $s .= 'setenv pkj_servidor "' . $servidor . '"' . PHP_EOL;
         $s .= 'setenv pkj_endereco "' . $endereco . '"' . PHP_EOL;
-        $s .= 'setenv pkj_usuario  "' . $usuario . '"' . PHP_EOL;
-        $s .= 'setenv pkj_senha  "' . $senha . '"' . PHP_EOL;
-        $s .= 'setenv pkj_base  "' . $base . '"' . PHP_EOL;
-        $s .= 'setenv pkj_sessao  "database"' . PHP_EOL;
+        $s .= 'setenv pkj_usuario "' . $usuario . '"' . PHP_EOL;
+        $s .= 'setenv pkj_senha "' . $senha . '"' . PHP_EOL;
+        $s .= 'setenv pkj_base "' . $base . '"' . PHP_EOL;
+        $s .= 'setenv pkj_sessao "database"' . PHP_EOL;
         $s .= '' . PHP_EOL;
         file_put_contents(".htaccess", $s);
         break;
@@ -150,12 +150,7 @@ switch ($argv[1]) {
         conectar();
         $info = conf::$pkj_bd_sis_conexao->table_fields($argv[2]);
         $climate = new League\CLImate\CLImate();
-        $table = [];
-        foreach ($info as $v) {
-            $v["flags"] = implode(",",$v["flags"]);
-            $table[]=$v;
-        }
-        $climate->table($table);
+        $climate->table($info);
         break;
     case "orm":
         if (!isset($argv[2])) {
@@ -187,9 +182,11 @@ function orm($tabela, $pasta = "pkj/db") {
 //    $classe = ucfirst($tabela);
     $classe = ucwords(str_replace("_", " ", $tabela));
     $classe = str_replace(" ", "", $classe);
-    $campos = table_fields($tabela);
+    $con = conf::$pkj_bd_sis_conexao;
 
-    $fields = col($campos, "NAME");
+    $campos = $con->table_fields($tabela);
+
+    $fields = col($campos, "name");
     $s = '';
     $s .= '<?php' . PHP_EOL;
     $s .= '/**' . PHP_EOL;
@@ -211,7 +208,7 @@ function orm($tabela, $pasta = "pkj/db") {
     $s .= '		$campos = [];' . PHP_EOL;
     sd($campos);
     foreach ($campos as $i) {
-        $s .= '		$campos[] = array("name"=>"' . lcase($i->NAME) . '","type"=>"' . lcase($i->TYPE) . '");' . PHP_EOL;
+        $s .= '		$campos[] = array("name"=>"' . lcase($i->name) . '","type"=>"' . lcase($i->type) . '");' . PHP_EOL;
     }
 
     $s .= '		return $campos;' . PHP_EOL;
