@@ -21,7 +21,7 @@ function loadht($file) {
             $arg[$index] = str_replace("\"", "", trim($arg[$index]));
         }
         $cmd = $arg[0];
-        switch ($cmd) {
+        switch ($cmd) { 
             case "php_value":
                 if ($arg[1] === "auto_prepend_file") {
                     $requires[] = $arg[2];
@@ -48,6 +48,17 @@ if (isCLI()) {
 }
 
 switch ($argv[1]) {
+    case "teste":
+        $pessoa = new Pessoas();
+        $pessoa->saldo = 20.0;
+        $pessoa->contatos[] = new Contatos("telefone", "13 33853390");
+        $pessoa->contatos[] = new Contatos("internet", "felipe.nunes.azambuja");
+        sd($pessoa->insert());
+//        $pessoas->insert();
+//        $pessoas->teste();
+//        s($pessoas);
+//        $pessoas->teste();
+        break;
     case "tables":
         $pdo = conf::$pkj_bd_sis_conexao;
         $climate = new League\CLImate\CLImate();
@@ -121,6 +132,9 @@ switch ($argv[1]) {
             }
             $climate->out("Valor do campo {$c}");
             $v = trim(fgets(STDIN));
+            if ($v === "null") {
+                continue;
+            }
             $a[$c] = $v;
         }
         $sql = SQLinsert($argv[2], $a);
@@ -151,7 +165,11 @@ switch ($argv[1]) {
         conectar();
         $info = conf::$pkj_bd_sis_conexao->table_fields($argv[2]);
         $climate = new League\CLImate\CLImate();
-        $climate->table($info);
+        if (count($info) === 0) {
+            $climate->out("Sem info");
+        } else {
+            $climate->table($info);
+        }
         break;
     case "orm":
         if (!isset($argv[2])) {
@@ -201,9 +219,9 @@ function orm($tabela, $pasta = "pkj/db") {
     }
     $s .= '	' . PHP_EOL;
     $s .= '	function getFields(){' . PHP_EOL;
-    $s .= '		$campos = [];' . PHP_EOL;
+    $s .= '        $campos = [];' . PHP_EOL;
     foreach ($campos as $i) {
-        $s .= '		$campos[] = array("name"=>"' . lcase($i->name) . '","type"=>"' . lcase($i->detype) . '");' . PHP_EOL;
+        $s .= '        $campos[] = array("name"=>"' . lcase($i->name) . '","type"=>"' . lcase($i->detype) . '");' . PHP_EOL;
     }
     $s .= '		return $campos;' . PHP_EOL;
     $s .= '	}' . PHP_EOL;

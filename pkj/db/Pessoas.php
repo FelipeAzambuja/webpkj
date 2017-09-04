@@ -1,36 +1,44 @@
 <?php
-/**
- * 
- * @return	Pessoas
- */
-function orm_pessoas(){
-	return new Pessoas();
-}
+
 class Pessoas extends DBTable {
-	
-	var $id;
-	var $nome;
-	var $telefone;
-	var $email;
-	var $senha;
-	var $idade;
-	var $saldo;
-	
-	function getFields(){
-		$campos = [];
-		$campos[] = array("name"=>"id","type"=>"integer");
-		$campos[] = array("name"=>"nome","type"=>"text");
-		$campos[] = array("name"=>"telefone","type"=>"text");
-		$campos[] = array("name"=>"email","type"=>"text");
-		$campos[] = array("name"=>"senha","type"=>"text");
-		$campos[] = array("name"=>"idade","type"=>"integer");
-		$campos[] = array("name"=>"saldo","type"=>"float");
-		return $campos;
-	}
-	
-	function getName(){
-		return "pessoas";
-	}
+
+    public $id;
+
+    /**
+     * @var string 
+     */
+    public $nome;
+    public $telefone;
+    public $senha;
+
+    /**
+     * @var datetime
+     */
+    public $momento;
+
+    /**
+     * @access public
+     * @var float
+     * @lenght 20
+     * @pk false
+     * @comment Saldo do usuário
+     */
+    public $saldo;
+
+    /**
+     * @var string
+     */
+    public $skype;
+
+    /**
+     * @autoload
+     * @relation id = Contatos.pessoa
+     * @var Contatos|array
+     */
+    public $contatos;
+
+    public function get_table_name() {
+        return "pessoas";
+    }
+
 }
-
-

@@ -48,7 +48,8 @@ if ( conf::$quick ) {
 //  query ( 'SET character_set_results=utf8' );
 //}
 
-include "pkjorm.php";
+//include "pkjorm.php";
+include 'DBTable.php';
 foreach ( glob ( __DIR__ . "/../db/*.php" ) as $db ):
   include $db;
 endforeach;

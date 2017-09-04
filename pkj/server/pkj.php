@@ -1,5 +1,14 @@
 <?php
 
+function is_array_numeric($a) {
+    foreach (array_keys($a) as $key) {
+        if (is_int($key)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 function download($arquivo, $mine = "") {
     $ext = explode(".", $arquivo);
     $ext = ((empty($ext[count($ext) - 1]) || count($ext) == 1) ? "" : $ext[count($ext) - 1]);

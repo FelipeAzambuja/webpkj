@@ -11,11 +11,11 @@ class Db {
     public $last_sql;
     public $last_parameters;
     public $fetch;
-    private $db;
-    private $driver;
+    public $db;
+    public $driver;
 
     function __construct($servidor, $endereco = null, $base = null, $usuario = null, $senha = null) {
-        
+
         $this->db = $base;
         if ($servidor === "postgre") {
             $servidor = "pgsql";
@@ -25,15 +25,21 @@ class Db {
             echo "servidor invalido";
             exit();
         }
-        if ($servidor === "sqlite") {
-            $endereco = __DIR__ . '/' . $endereco;
-            $this->pdo = new PDO("sqlite:{$endereco}", null, null, array(
-                PDO::ATTR_PERSISTENT => true
-            ));
-        } else {
-            $this->pdo = new PDO("{$servidor}:host={$endereco};dbname={$base}" . (($servidor === "mysql") ? ";charset=UTF8" : ""), $usuario, $senha, array(
-                PDO::ATTR_PERSISTENT => true
-            ));
+        try {
+            if ($servidor === "sqlite") {
+                $endereco = __DIR__ . '/' . $endereco;
+                $this->pdo = new PDO("sqlite:{$endereco}", null, null, array(
+                    PDO::ATTR_PERSISTENT => true
+                ));
+            } else {
+                $this->pdo = new PDO("{$servidor}:host={$endereco};dbname={$base}" . (($servidor === "mysql") ? ";charset=UTF8" : ""), $usuario, $senha, array(
+                    PDO::ATTR_PERSISTENT => true
+                ));
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        } finally {
+            
         }
     }
 
@@ -59,11 +65,20 @@ class Db {
 
     /**
      * 
+     * @param string $table
+     * @return boolean
+     */
+    function table_exists($table) {
+        return (count($this->table_fields($table)) > 0);
+    }
+
+    /**
+     * 
      * @param string $sql
      * @param array $parameters
      * @return array
      */
-    function query($sql, $parameters = null) {
+    function query($sql, $parameters = array()) {
         $p = $this->statement($sql, $parameters);
         if (!$p) {
             return false;
@@ -74,13 +89,125 @@ class Db {
         return $p->fetchAll($this->fetch);
     }
 
+    function is_multibyte($s) {
+        return mb_strlen($s, 'utf-8') < strlen($s);
+    }
+
+    function one($sql, $parameters) {
+        return one($this->query($sql, $parameters));
+    }
+
+    function insert($table, $values) {
+        $sql = "insert into {$table} ";
+        $sql .= "(" . implode(",", array_keys($values)) . ") values";
+        $p = [];
+        for ($index = 0; $index < count($values); $index++) {
+            $p[] = "?";
+        }
+        $sql .= "(" . implode(",", $p) . ") ";
+        return $this->query($sql, array_values($values));
+    }
+
+    function update($table, $values, $where) {
+        $sql = "update {$table} set ";
+        $p = [];
+        foreach ($values as $key => $value) {
+            $p[] = " {$key} = ? ";
+        }
+        $sql .= implode(",", $p);
+        $sql.= " where " . $this->where($where);
+        return $this->query($sql, array_values($values));
+    }
+
+    function insert_or_update($table, $values, $where) {
+        if ($this->exists($table, $where)) {
+            return $this->update($table, $values, $where);
+        } else {
+            return $this->insert($table, $values);
+        }
+    }
+
+    function exists($table, $where) {
+        return $this->query("select id from {$table} where " . $this->where($where) . " limit 1") > 0;
+    }
+
+    function delete($table, $where) {
+        return $this->query("delete from {$table} where " . $this->where($where));
+    }
+
+    function select($table, $where, $plus = "") {
+        $sql = "select * from {$table} where " . $this->where($where) . " {$plus}";
+        return $this->query($sql);
+    }
+
+    function where($where) {
+        if (is_string($where)) {
+            if (trim($where) === "") {
+                return "1=1";
+            } else {
+                return $where;
+            }
+        }
+        if (is_array($where)) {
+            //remover nulls
+            if (is_array_numeric($where)) {
+                for ($index1 = 0; $index1 < count($where); $index1++) {
+                    if ($where[$index1] === null) {
+                        array_slice($where, $index1);
+                    }
+                }
+            } else {
+                foreach ($where as $key => $value) {
+                    if ($value === null) {
+                        unset($where[$key]);
+                    }
+                }
+            }
+
+            if (count($where) > 0) {
+                if (is_array(array_keys($where))) {
+                    //["nome"=>"a"],["senha"=>"123"]
+                    $list = [];
+                    foreach ($where as $key => $value) {
+                        if ($this->is_multibyte($value)) {
+                            $value = $this->pdo->quote($value, PDO::PARAM_LOB);
+                        } else {
+                            $value = $this->pdo->quote($value, PDO::PARAM_STR);
+                        }
+                        $list[] = "{$key}={$value}";
+                    }
+                    return implode(" AND ", $list);
+                } elseif (is_int(array_keys($where))) {
+                    //0=>["nome","=","a"],1 = ["senha","=","123"]
+                    $list = [];
+                    for ($index = 0; $index < count($where); $index++) {
+                        $jesse = $where[$index];
+                        if ($this->is_multibyte($jesse[2])) {
+                            $jesse[2] = $this->pdo->quote($jesse[2], PDO::PARAM_LOB);
+                        } else {
+                            $jesse[2] = $this->pdo->quote($jesse[2], PDO::PARAM_STR);
+                        }
+                        $list[] = $where[0] . "" . $where[1] . "" . $where[2];
+                    }
+                    return implode(" AND ", $list);
+                } else {
+                    return "1=1";
+                }
+            } else {
+                return "1=1";
+            }
+        } else {
+            return $where;
+        }
+    }
+
     /**
      * 
      * @param string $sql
      * @param array $parameters
      * @return PDOStatement
      */
-    function statement($sql, $parameters = null) {
+    function statement($sql, $parameters = array()) {
         $sql = str_replace(PHP_EOL, '', $sql);
         $sql = str_replace("\r", '', $sql);
         $sql = str_replace("\n", '', $sql);
@@ -89,7 +216,17 @@ class Db {
         $this->last_sql = $sql;
         $this->last_parameters = $parameters;
         $p = $this->pdo->prepare($sql);
-        if (!$p->execute($parameters)) {
+        $c = 1;
+//		s($sql);
+        foreach ($parameters as $key => $value) {
+            if ($this->is_multibyte($value)) {
+                $p->bindValue($c, $value, PDO::PARAM_LOB);
+            } else {
+                $p->bindValue($c, $value, PDO::PARAM_STR);
+            }
+            $c++;
+        }
+        if (!$p->execute()) {
 //            var_dump($p->errorInfo());
             $info = $p->errorInfo();
             $this->last_error = "{$info[0]}:{$info[1]}:{$info[2]}:$sql:";
@@ -136,7 +273,16 @@ class Db {
      * @param string $driver
      * @return string
      */
-    function detranslate_field($type, $driver) {
+    function detranslate_field($type, $driver = null) {
+        if ($driver === null) {
+            $driver = $this->driver;
+        }
+        if (strpos($type, "|")) {
+            $type = explode("|", $type)[0];
+        }
+        if (class_exists($type)) {
+            return "integer";
+        }
         switch ($type) {
             case "integer":
             case "serial":
@@ -188,6 +334,60 @@ class Db {
         }
     }
 
+    public function get_pk_auto($driver = null) {
+        if ($driver === null) {
+            $driver = $this->driver;
+        }
+        switch ($driver) {
+            case "mysql":
+                $sql = "primary key auto_increment";
+                break;
+//            case "firebird":
+//                $sql = "SELECT FIRST 1 * FROM {$table}";
+//                break;
+            case "pgsql":
+                $sql = "primary key"; //usar serial
+                break;
+            case "sqlite":
+                $sql = "primary key autoincrement";
+                break;
+            case "sqlsrv":
+                $sql = "identity primary key";
+                break;
+            default:
+                $sql = "primary key";
+                break;
+        }
+        return $sql;
+    }
+
+    public function get_current_timestamp($driver = null) {
+        if ($driver === null) {
+            $driver = $this->driver;
+        }
+        switch ($driver) {
+            case "mysql":
+                $sql = "current_timestamp";
+                break;
+//            case "firebird":
+//                $sql = "SELECT FIRST 1 * FROM {$table}";
+//                break;
+            case "pgsql":
+                $sql = "current_timestamp"; //usar serial
+                break;
+            case "sqlite":
+                $sql = "datetime('now','localtime')";
+                break;
+            case "sqlsrv":
+                $sql = "identity primary key";
+                break;
+            default:
+                $sql = "current_timestamp";
+                break;
+        }
+        return $sql;
+    }
+
     /**
      * 
      * @param string $type
@@ -228,7 +428,7 @@ class Db {
                 break;
             case "timestamp":
             case "datetime":
-                return "time";
+                return "datetime";
                 break;
             default:
                 //varchar
@@ -245,7 +445,7 @@ class Db {
     function table_fields($table) {
         $sql = "";
         $db = $this->db;
-        switch (conf::$servidor) {
+        switch ($this->driver) {
             case "mysql":
                 $sql = "select COLUMN_NAME as 'name', DATA_TYPE as 'type' from information_schema.COLUMNS WHERE TABLE_schema='{$db}' and TABLE_NAME='{$table}'";
                 break;
@@ -269,7 +469,7 @@ class Db {
         for ($index = 0; $index < count($s); $index++) {
             $s[$index]->dbtype = $s[$index]->type;
             $s[$index]->type = $this->translate_field($s[$index]->type);
-            $s[$index]->detype = $this->detranslate_field($s[$index]->type,$this->driver);
+            $s[$index]->detype = $this->detranslate_field($s[$index]->type, $this->driver);
         }
         return $s;
     }
@@ -361,7 +561,7 @@ function col($query, $column) {
  * @param type $atributos
  * @param boolean $oo
  */
-function query($comando, $p = null) {
+function query($comando, $p = array()) {
     conectar();
     return conf::$pkj_bd_sis_conexao->query($comando, $p);
 }
