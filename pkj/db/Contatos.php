@@ -23,12 +23,7 @@ class Contatos extends DBTable {
      * @var Pessoas
      */
     public $pessoa;
-    public function __construct($tipo, $valor) {
-        $this->tipo = $tipo;
-        $this->valor = $valor;
-        parent::__construct();
-    }
-
+    
     public function get_table_name() {
         return "contatos";
     }

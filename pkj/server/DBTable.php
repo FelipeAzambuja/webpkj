@@ -58,12 +58,19 @@ class DBTable {
      * Fill data
      * @param array $form
      */
-    function fromArray($form) {
-        foreach ($this->fields as $f) {
+    public static function fromArray($form) {
+        $is_a = is_array($form);
+        $obj = (new ReflectionClass(get_called_class()))->newInstance();
+        foreach ($obj->fields as $f) {
             if (isset($form[$f->name])) {
-                $this->{$f->name} = $form[$f->name];
+                if ($is_a) {
+                    $obj->{$f->name} = $form[$f->name];
+                } else {
+                    $obj->{$f->name} = $form{$f->name};
+                }
             }
         }
+        return $obj;
     }
 
 //
@@ -98,7 +105,6 @@ class DBTable {
                                     $field = $tfieldName;
                                     break;
                                 }
-//                                echo "Como chegamos aqui ?!";
                             }
                         }
                     }
@@ -120,18 +126,16 @@ class DBTable {
                 } else {
                     $a[$f->name] = $this->{$f->name};
                 }
-                echo "";
             }
         }
         $i = $this->db->insert($this->table_name, $a);
         if ($i !== false) {
-            //já acabou jéssica ???!!!!!
-            $last = one($this->select($a, " order by id desc limit 1"));
+            $last = array();
             foreach ($objetos_criados as $obj) {
-                $obj["obj"]->{$obj["field"]} = $last->id;
+                $obj["obj"]->{$obj["field"]} = $this->db->last_insert_id($this->table_name);
                 $obj["obj"]->insert();
-                echo "";
             }
+            $last = one($this->select($a, " order by id desc limit 1"));
             return $last;
         } else {
             return false;
@@ -151,8 +155,28 @@ class DBTable {
     }
 
     function select($where = "", $plus = "") {
-        //não esquecer de buscar a mãe e os filhos da puta
-        return $this->db->select($this->table_name, $where, $plus);
+        $me = $this->db->select($this->table_name, $where, $plus);
+        for ($index = 0; $index < count($me); $index++) {
+            foreach ($this->fields as $tfield) {
+                if (isset($tfield->relation)) {
+                    if (count($tfield->relation) > 1) {
+                        $tfieldClass = explode(".", $tfield->relation[1])[0];
+                        $tfieldClassField = explode(".", $tfield->relation[1])[1];
+                        $tfieldName = $tfield->relation[0];
+                        $obj = (new ReflectionClass($tfieldClass))->newInstance();
+                        $retorno = $obj->select([
+                            $tfieldClassField => $me[$index]->id
+                        ]);
+                        if ($tfieldName !== "id") {
+                            $retorno = one($retorno);
+                        }
+                        $me[$index]->{$tfield->name} = $retorno;
+                    }
+                }
+            }
+        }
+        $fromArray = $this->fromArray($me);
+        return $fromArray;
     }
 
     /**
