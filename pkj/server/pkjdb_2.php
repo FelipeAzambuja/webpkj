@@ -64,6 +64,15 @@ class Db {
 // </editor-fold>
 
     /**
+     * last insert id
+     * @param string $table 
+     * @return integer
+     */
+    public function last_insert_id($table) {
+        return oneCol($this->query("select max(id) from {$table}"));
+    }
+
+    /**
      * 
      * @param string $table
      * @return boolean
@@ -115,7 +124,7 @@ class Db {
             $p[] = " {$key} = ? ";
         }
         $sql .= implode(",", $p);
-        $sql.= " where " . $this->where($where);
+        $sql .= " where " . $this->where($where);
         return $this->query($sql, array_values($values));
     }
 
@@ -512,6 +521,9 @@ function db_get_error() {
 }
 
 function one($query) {
+    if (is_object($query)) {
+        return $query;
+    }
     if (count($query) < 1) {
         return null;
     } else {
