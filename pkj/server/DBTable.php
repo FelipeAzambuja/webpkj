@@ -1,10 +1,10 @@
 <?php
 
 //me pergunto o que eu faço da minha vida
-class DBTable {
+class DBTable implements JsonSerializable {
 
     /**
-     *
+     * @internal description
      * @var string
      */
     public $table_name;
@@ -76,7 +76,7 @@ class DBTable {
 //
 //    //pegar os unicórnios e sair correndo
 //    public function __get($name) {
-//        
+//        echo "";
 //    }
 
     /**
@@ -153,10 +153,30 @@ class DBTable {
     function insert_or_update($where) {
         
     }
+    public function __debugInfo() {
+        return json_decode(json_encode($this,JSON_NUMERIC_CHECK),true);
+    }
 
+    public static function cast($destination, \stdClass $source) {
+        $sourceReflection = new \ReflectionObject($source);
+        $sourceProperties = $sourceReflection->getProperties();
+        foreach ($sourceProperties as $sourceProperty) {
+            $name = $sourceProperty->getName();
+            $destination->{$name} = $source->$name;
+        }
+        return $destination;
+    }
+
+    /**
+     * 
+     * @param type $where
+     * @param type $plus
+     * @return self|static|array
+     */
     function select($where = "", $plus = "") {
         $me = $this->db->select($this->table_name, $where, $plus);
         for ($index = 0; $index < count($me); $index++) {
+            $me[$index] = $this->cast(clone $this, $me[$index]);
             foreach ($this->fields as $tfield) {
                 if (isset($tfield->relation)) {
                     if (count($tfield->relation) > 1) {
@@ -175,8 +195,8 @@ class DBTable {
                 }
             }
         }
-        $fromArray = $this->fromArray($me);
-        return $fromArray;
+//        $fromArray = $this->fromArray($me);
+        return $me;
     }
 
     /**
@@ -277,6 +297,14 @@ class DBTable {
             }
             $this->on_alter();
         }
+    }
+
+    public function jsonSerialize() {
+        unset($this->fields);
+        unset($this->table_name);
+        unset($this->declared_fields);
+        unset($this->db);
+        return $this;
     }
 
 }
