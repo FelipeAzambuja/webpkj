@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * @return Pessoas
+ */
+function orm_pessoas(){
+    return new Pessoas();
+}
 class Pessoas extends DBTable {
 
     public $id;

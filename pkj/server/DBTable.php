@@ -1,5 +1,4 @@
 <?php
-
 //me pergunto o que eu faço da minha vida
 class DBTable implements JsonSerializable {
 
@@ -35,6 +34,13 @@ class DBTable implements JsonSerializable {
         
     }
 
+    /**
+     * @return static|parent
+     */
+    public static function create(){
+        $c =  get_called_class();
+        return new $c();
+    }
     /**
      * 
      * @param string $table_name
@@ -80,6 +86,7 @@ class DBTable implements JsonSerializable {
 //    }
 
     /**
+     * 
      * @return int id insert
      */
     function insert() {
@@ -141,20 +148,50 @@ class DBTable implements JsonSerializable {
             return false;
         }
     }
+    /**
+     * @param array $where
+     */
+    function delete($where) {
+        $this->db->delete($this->table_name, $where);
+    }   
 
-    function delete() {
-        
+    /**
+     * @param string where
+     * @return boolean 
+     */
+    function update($values, $where = array()) {
+        if(count($where) < 1){
+            foreach ($this->fields as $key => $value) {
+                $v = $this->{$value->name};
+                if($v !== null){
+                    $where[$value->name] = $v;
+                }
+            }
+        }
+        $this->db->update($this->table_name, $values, $where);
     }
 
-    function update($where) {
-        
+    public function exists($where){
+        return $this->db->exists($this->table_name,$where);
     }
 
     function insert_or_update($where) {
-        
+        if($this->exists($where)){
+            $values = [];
+            foreach ($this->fields as $key => $value) {
+                $v = $this->{$value->name};
+                if($v !== null){
+                    $values[$value->name] = $v;
+                }
+            }
+            return $this->update($values,$where);
+        }else{
+            return $this->insert();
+        }
     }
+
     public function __debugInfo() {
-        return json_decode(json_encode($this,JSON_NUMERIC_CHECK),true);
+        return json_decode(json_encode($this, JSON_NUMERIC_CHECK), true);
     }
 
     public static function cast($destination, \stdClass $source) {

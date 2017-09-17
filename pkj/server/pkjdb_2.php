@@ -135,7 +135,10 @@ class Db {
             return $this->insert($table, $values);
         }
     }
-
+    /**
+     * @param string table
+     * @param array|string where
+     */
     function exists($table, $where) {
         return $this->query("select id from {$table} where " . $this->where($where) . " limit 1") > 0;
     }
