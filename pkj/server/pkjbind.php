@@ -419,7 +419,11 @@ class Bind {
         $this->jquery($id, "hide()");
         return $this;
     }
-
+    function attr($id,$name,$value){
+        $value = JS::addslashes($value);
+        $this->jquery($id,"attr(\"$name\",\"$value\")");
+        return $this;
+    }
     /**
      * Get a Instance of UploadParser
      * @param type $id

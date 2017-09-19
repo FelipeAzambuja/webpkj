@@ -49,7 +49,13 @@ function ons_button($texto, $plus = "", $size = "") {
     echo div($html, $size);
 }
 
-function radio($id, $texto, $grupo, $plus = "", $size = 3) {
+function radio($id, $texto, $grupo = "", $plus = "", $size = 3) {
+    if($grupo === "" || is_numeric($grupo)){
+        if(is_numeric($grupo)){
+            $plus = $grupo;
+        }
+        $grupo = $id;
+    }
     if (_haveOnsen()) {
         return ons_radio($id, $texto, $grupo, $plus, $size);
     }
@@ -57,8 +63,12 @@ function radio($id, $texto, $grupo, $plus = "", $size = 3) {
         $size = $plus;
         $plus = '';
     }
+    $value = "value='$texto'";
+    if(contains($plus,"value")){
+        $value = "";
+    }
     conf::$pkj_uid_comp++;
-    $html = "<label style='cursor:pointer;margin-top:5px' data-radio='true' ><input id='$id' $plus type='radio' name='$grupo' value='$texto'  />  {$texto}</label>";
+    $html = "<label style='cursor:pointer;margin-top:5px' data-radio='true' ><input id='$id' $plus type='radio' name='$grupo' $value  />  {$texto}</label>";
     echo div($html, $size);
 }
 
@@ -68,10 +78,14 @@ function ons_radio($id, $texto, $grupo, $plus = "", $size = 3) {
         $plus = '';
     }
     conf::$pkj_uid_comp++;
+    $value = "value='$texto'";
+    if(contains($plus,"value")){
+        $value = "";
+    }
     ob_start();
     ?>
     <label class="left">
-        <ons-input <?= $plus ?> type="radio" name="<?= $grupo ?>" value='<?= $texto ?>' id='<?= "pkj" . conf::$pkj_uid_comp . "_" . $id ?>' input-id="<?= $id ?>"></ons-input>
+        <ons-input <?= $plus ?> type="radio" name="<?= $grupo ?>" <?= $value ?> id='<?= "pkj" . conf::$pkj_uid_comp . "_" . $id ?>' input-id="<?= $id ?>"></ons-input>
     </label>
     <label onclick='$("#<?= "pkj" . conf::$pkj_uid_comp . "_" . $id ?>").trigger("click")' for="<?= "pkj" . conf::$pkj_uid_comp . "_" . $id ?>" class="center">
         <?= $texto ?>
@@ -108,6 +122,10 @@ function check($id, $texto, $grupo = "", $plus = "", $size = 3) {
     if (_haveOnsen()) {
         return ons_check($id, $texto, $grupo, $plus, $size);
     }
+    if(startswith($grupo,"checked")){
+        $grupo = "";
+        $plus = "checked = 'true'";
+    }
     if (is_numeric($grupo)) {
         $size = $grupo;
         $grupo = "";
@@ -121,6 +139,11 @@ function check($id, $texto, $grupo = "", $plus = "", $size = 3) {
         $grupo = " name='$grupo' ";
     }
     $idREF = "pkj" . conf::$pkj_uid_comp ;
+    $value = "value = '$texto'";
+
+    if(contains($plus,"value")){
+        $value = "";//melhor ficar quieto
+    }    
     $html = "<label onclick='$(\"input[data-pkj-id=\\\"{$idREF}\\\"]\").trigger(\"click\")'  style='margin-top:5px'><input data-pkj-id='$idREF' id='$id' $grupo type='checkbox' value='$texto' $plus  />  {$texto}</label>";
     echo div($html, $size);
 }

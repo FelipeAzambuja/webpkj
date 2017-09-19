@@ -7,7 +7,9 @@ function import ( $name ) {
 function jquery ( $id , $code ) {
   bind ()->jquery ( $id , $code );
 }
-
+function attr($id,$name,$value){
+  bind()->attr($id,$name,$value);
+}
 function alert ( $msg ) {
   JS::alert ( $msg );
 }

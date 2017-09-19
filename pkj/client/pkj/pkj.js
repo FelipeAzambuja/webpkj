@@ -262,6 +262,7 @@ function tagUpdate() {
             $(e).val($(e).attr("value"));
         }
     });
+    /*
     $("input[type='checkbox']").each(function (i, e) {
         if ($(e).attr("value") != undefined) {
             if ($(e).attr("value") == "true") {
@@ -270,8 +271,8 @@ function tagUpdate() {
                 $(e).removeAttr("checked");
             }
         }
-
     });
+    */
     var contador = 0;
     var hasOnsen = ($("script[src*='onsenui.min.js']").size() > 0);
     $('input').each(function (i, e) {
