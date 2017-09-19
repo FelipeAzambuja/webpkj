@@ -31,6 +31,8 @@ if (isset($_POST["CMD"])) {
     $tmp2 = $_POST;
     addslashes_array($tmp2);
     unset($tmp2["CMD"]);
+    unset($tmp2["PAGE"]);
+    unset($tmp2["HOST"]);
     if ($tmp2["post0"] === "") {
         unset($tmp2["post0"]);
     }

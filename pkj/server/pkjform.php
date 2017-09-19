@@ -144,7 +144,7 @@ function check($id, $texto, $grupo = "", $plus = "", $size = 3) {
     if(contains($plus,"value")){
         $value = "";//melhor ficar quieto
     }    
-    $html = "<label onclick='$(\"input[data-pkj-id=\\\"{$idREF}\\\"]\").trigger(\"click\")'  style='margin-top:5px'><input data-pkj-id='$idREF' id='$id' $grupo type='checkbox' value='$texto' $plus  />  {$texto}</label>";
+    $html = "<label onclick='$(\"input[data-pkj-id=\\\"{$idREF}\\\"]\").trigger(\"click\")'  style='margin-top:5px'><input data-pkj-id='$idREF' id='$id' $grupo type='checkbox' $value $plus  />  {$texto}</label>";
     echo div($html, $size);
 }
 
