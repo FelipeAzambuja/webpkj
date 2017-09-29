@@ -24,6 +24,7 @@ class conf {
     public static $random = "";
     public static $pkj_uid_comp = 0;
     public static $pkj_row = true;
+    public static $resource = null;
 
 }
 $home  = replace(ini_get("auto_prepend_file"),$_SERVER["DOCUMENT_ROOT"],"");
@@ -56,4 +57,7 @@ unset($_SERVER["pkj_senha"]);
 unset($_SERVER["pkj_base"]);
 unset($_SERVER["pkj_sessao"]);
 unset($home);
-?>
+
+function pkj_get_home() {
+    return replace(ini_get("auto_prepend_file"),"/pkj/server/pkjall.php","");
+}

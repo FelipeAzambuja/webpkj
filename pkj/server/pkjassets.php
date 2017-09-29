@@ -5,16 +5,12 @@
  * @return \Resource
  */
 function resource() {
-    return new Resource();
+    if(conf::$resource === null){
+        conf::$resource = new Resource();
+    }
+    return conf::$resource;
 }
 
-/**
- * 
- * @return \Resource
- */
-function source() {
-    return new Resource();
-}
 
 class Resource {
 

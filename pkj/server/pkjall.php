@@ -25,7 +25,7 @@ function show_errors($v = true) {
 
 show_errors();
 include 'pkjsession.php';
-$useSmarty = false;
+$useSmarty = true;
 if ($useSmarty) {
     include 'smarty/Smarty.class.php';
 }
@@ -56,4 +56,6 @@ include 'DBTable.php';
 foreach (glob(__DIR__ . "/../db/*.php") as $db):
     include $db;
 endforeach;
-include "pkjbind.php";
+if (isset($_POST["CMD"])) {
+    include "pkjbind.php";
+}
