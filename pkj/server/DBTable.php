@@ -1,4 +1,5 @@
 <?php
+
 //me pergunto o que eu faço da minha vida
 class DBTable implements JsonSerializable {
 
@@ -37,10 +38,11 @@ class DBTable implements JsonSerializable {
     /**
      * @return static|parent
      */
-    public static function create(){
-        $c =  get_called_class();
+    public static function create() {
+        $c = get_called_class();
         return new $c();
     }
+
     /**
      * 
      * @param string $table_name
@@ -99,18 +101,26 @@ class DBTable implements JsonSerializable {
                 continue;
             }
             if (is_array($this->{$f->name})) {
+                //o c tem que ser eu
                 foreach ($this->{$f->name} as $c) {
                     //Vamos a guerra
                     $field = null;
                     foreach ($c->fields as $tfield) {
+                        if ($f->name === "contatos") {
+                            sd($this->{$f->name});
+                        }
                         if (isset($tfield->relation)) {
-                            //vai que eu tenho umas ideias diferenciadas
+                            //vai que eu tenho umas ideias diferenciadas)
                             if (count($tfield->relation) > 1) {
                                 $tfieldClass = explode(".", $tfield->relation[1])[0];
                                 $tfieldName = $tfield->relation[0];
                                 if ($tfieldClass === $myNameIs) {
                                     $field = $tfieldName;
                                     break;
+                                }
+                                if ($f->name === "contatos") {
+                                    sd($f);
+                                    exit();
                                 }
                             }
                         }
@@ -148,22 +158,23 @@ class DBTable implements JsonSerializable {
             return false;
         }
     }
+
     /**
      * @param array $where
      */
     function delete($where) {
         $this->db->delete($this->table_name, $where);
-    }   
+    }
 
     /**
      * @param string where
      * @return boolean 
      */
     function update($values, $where = array()) {
-        if(count($where) < 1){
+        if (count($where) < 1) {
             foreach ($this->fields as $key => $value) {
                 $v = $this->{$value->name};
-                if($v !== null){
+                if ($v !== null) {
                     $where[$value->name] = $v;
                 }
             }
@@ -171,21 +182,21 @@ class DBTable implements JsonSerializable {
         $this->db->update($this->table_name, $values, $where);
     }
 
-    public function exists($where){
-        return $this->db->exists($this->table_name,$where);
+    public function exists($where) {
+        return $this->db->exists($this->table_name, $where);
     }
 
     function insert_or_update($where) {
-        if($this->exists($where)){
+        if ($this->exists($where)) {
             $values = [];
             foreach ($this->fields as $key => $value) {
                 $v = $this->{$value->name};
-                if($v !== null){
+                if ($v !== null) {
                     $values[$value->name] = $v;
                 }
             }
-            return $this->update($values,$where);
-        }else{
+            return $this->update($values, $where);
+        } else {
             return $this->insert();
         }
     }
