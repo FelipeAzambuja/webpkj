@@ -48,6 +48,9 @@ function substring(texto, inicio, quantidade) {
     return texto.substr(inicio, quantidade);
 }
 function part(texto, separador) {
+    if(texto === undefined){
+        debugger;
+    }
     return texto.split(separador);
 }
 function in_array(texto, array) {

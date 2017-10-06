@@ -1,0 +1,20 @@
+php_value output_buffering 0
+php_value date.timezone "America/Sao_Paulo"
+setenv pkj_dateformat "d/m/Y"
+setenv pkj_servidor "mysql"
+setenv pkj_endereco "127.0.0.1"
+setenv pkj_usuario "root"
+setenv pkj_senha "root"
+setenv pkj_base "webpkj"
+setenv pkj_sessao "database"
+
+RewriteEngine On
+
+# Redirect Trailing Slashes If Not A Folder...
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+# Handle Front Controller...
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ pkj/server/router.php [L]

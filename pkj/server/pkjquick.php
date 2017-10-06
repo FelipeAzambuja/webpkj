@@ -97,7 +97,7 @@ function tpl($file, $data = array()) {
 }
 
 function template($file, $data = array()) {
-    $file = pkj_get_home() . "/pkj/templates/{$file}.tpl";
+//    $file = pkj_get_home() . "/pkj/templates/{$file}.tpl";
     if (!file_exists($file)) {
         throw new Exception("Arquivo não existe");
     }

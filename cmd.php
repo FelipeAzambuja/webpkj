@@ -1,6 +1,5 @@
 <?php
-
-include './vendor/autoload.php';
+include './pkj/server/pkjall.php';
 
 function isCLI() {
     return (PHP_SAPI == 'cli');
@@ -61,12 +60,12 @@ switch ($argv[1]) {
         break;
     case "tables":
         $pdo = conf::$pkj_bd_sis_conexao;
-        $climate = new League\CLImate\CLImate();
+//        $climate = new League\CLImate\CLImate();
         $table = [];
         foreach ($pdo->database_tables() as $t) {
             $table[] = ["name" => $t];
         }
-        $climate->table($table);
+        s($table);
         break;
     case "config":
     case "configurar":
@@ -107,7 +106,7 @@ switch ($argv[1]) {
         file_put_contents(".htaccess", $s);
         break;
     case "top":
-        $climate = new League\CLImate\CLImate();
+//        $climate = new League\CLImate\CLImate();
         $table = $argv[2];
         if (count($argv) > 3) {
             $top = $argv[3];
@@ -116,13 +115,13 @@ switch ($argv[1]) {
         }
         $r = query("select * from {$table} order by id desc limit {$top} ");
         if (!$r) {
-            $climate->error("Vazio");
+            echo ("Vazio");
             exit();
         }
-        $climate->table($r);
+        s($r);
         break;
     case "insert":
-        $climate = new League\CLImate\CLImate();
+//        $climate = new League\CLImate\CLImate();
         $c = conf::$pkj_bd_sis_conexao;
         $f = col($c->table_fields($argv[2]), "name");
         $a = [];
@@ -130,7 +129,7 @@ switch ($argv[1]) {
             if ($c === "id") {
                 continue;
             }
-            $climate->out("Valor do campo {$c}");
+            echo("Valor do campo {$c}");
             $v = trim(fgets(STDIN));
             if ($v === "null") {
                 continue;
@@ -140,20 +139,20 @@ switch ($argv[1]) {
         $sql = SQLinsert($argv[2], $a);
         $query = query($sql);
         if (!$query) {
-            $climate->error(db_get_error());
+            echo (db_get_error());
             exit();
         } else {
             echo "OK";
         }
         break;
     case "sql":
-        $climate = new League\CLImate\CLImate();
+        
         $r = query($argv[2]);
         if (!$r) {
-            $climate->dump(db_get_error());
+            s(db_get_error());
             exit();
         }
-        $climate->table($r);
+        s($r);
         break;
     case "table_info":
     case "table":
@@ -164,11 +163,11 @@ switch ($argv[1]) {
         }
         conectar();
         $info = conf::$pkj_bd_sis_conexao->table_fields($argv[2]);
-        $climate = new League\CLImate\CLImate();
+      
         if (count($info) === 0) {
-            $climate->out("Sem info");
+            echo ("Sem info");
         } else {
-            $climate->table($info);
+            s($info);
         }
         break;
     case "orm":

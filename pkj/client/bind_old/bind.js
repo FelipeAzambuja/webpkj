@@ -1,4 +1,6 @@
-
+var bind_out = "body";
+var bind_router = "/pkj/server/pkjall.php";
+var bind_default = "";
 
 var eventos = [];
 var session = {};
@@ -10,37 +12,44 @@ function sisBindInterval(e, tipo) {
     if (fun !== undefined) {
         var pagina = $(e).attr("page");
         if (pagina === undefined) {
-            pagina = "";
+            pagina = bind_default;
         }
-        var data = formData($(e).parents("form:eq(0),tr:eq(0)"));
-        data.session = session;
+        var sisfunHAppyyyy = formData($(e).parents("form:eq(0),tr:eq(0)"));
+        sisfunHAppyyyy.session = session;
         var funName = part(fun, "(")[0];
         var atrStr = part(part(fun, "(")[1], ")")[0];
         var atrs = part(atrStr, ",");
         atrStr = "";
         for (i = 0; i < atrs.length; i++) {
             var v = atrs[i];
-            eval("data.post" + i + ' = "' + v + '";');
+            eval("sisfunHAppyyyy.post" + i + ' = "' + v + '";');
         }
         if ($(e).attr("lock") !== undefined) {
             var loading_text = $(e).attr("load-text");
             var orig_text = $(e).val();
-            if (typeof loading_text !== "undefined") {
+            if (typeof loading_text != "undefined") {
                 $(e).val(loading_text);
             }
             lock(e);
         }
-        data.CMD = funName;
-        data.PAGE = pagina;
-        data.HOST = window.location.protocol + "//" + window.location.hostname;
+        sisfunHAppyyyy.CMD = funName;
+        sisfunHAppyyyy.PAGE = pagina;
+        if (typeof page != "undefined") {
+//            sisfunHAppyyyy.MUSTACHE = page.data["home"];
+            sisfunHAppyyyy.MUSTACHE = $.extend({}, page.data);
+        }
+        sisfunHAppyyyy.HOST = window.location.protocol + "//" + window.location.hostname;
+        if (bind_router !== "") {
+            pagina = bind_router;
+        }
         $.ajaxSetup({
             xhrFields: {
                 withCredentials: true
             },
             cache: false
         });
-        data.GET = $_GET;
-        $.post("", data, function (resp) {
+        sisfunHAppyyyy.GET = $_GET;
+        $.post(pagina, sisfunHAppyyyy, function (resp) {
             if (len(trim(resp)) > 0) {
                 try {
                     eval(resp);
@@ -52,7 +61,7 @@ function sisBindInterval(e, tipo) {
             if ($(e).attr("lock") !== undefined) {
                 lock(e);
                 var loading_text = $(e).attr("load-text");
-                if (typeof loading_text !== "undefined") {
+                if (typeof loading_text != "undefined") {
                     $(e).val(orig_text);
                 }
             }
@@ -60,7 +69,7 @@ function sisBindInterval(e, tipo) {
             if ($(e).attr("lock") !== undefined) {
                 lock(e);
                 var loading_text = $(e).attr("load-text");
-                if (typeof loading_text !== "undefined") {
+                if (typeof loading_text != "undefined") {
                     $(e).val(orig_text);
                 }
             }
@@ -68,50 +77,9 @@ function sisBindInterval(e, tipo) {
             http = erro.status;
             msg = erro.responseText;
             alert("ERRO " + http + ":" + msg + ":" + pagina);
-        });
+        })
     }
-    return true;
-}
-function bindCall(pagina, funcao, data, done) {
-    if (data === undefined) {
-        data = {};
-    }
-//    debugger;;
-    data.session = session;
-    var funName = part(funcao, "(")[0];
-    var atrStr = part(part(funcao, "(")[1], ")")[0];
-    var atrs = part(atrStr, ",");
-    atrStr = "";
-    for (i = 0; i < atrs.length; i++) {
-        var v = atrs[i];
-        eval("data.post" + i + ' = "' + v + '";');
-    }
-
-    data.CMD = funName;
-    data.PAGE = pagina;
-    data.HOST = window.location.protocol + "//" + window.location.hostname;
-    $.ajaxSetup({
-        xhrFields: {
-            withCredentials: true
-        },
-        cache: false
-    });
-    data.GET = $_GET;
-    $.post("", data, function (resp) {
-        if (len(trim(resp)) > 0) {
-            try {
-                eval(resp);
-            } catch (e) {
-                console.log(resp);
-                console.log(e);
-            }
-        }
-    }).fail(function (erro) {
-        console.log(erro);
-        http = erro.status;
-        msg = erro.responseText;
-        alert("ERRO " + http + ":" + msg + ":" + pagina);
-    });
+    return true
 }
 var bind_runing = false;
 function bindRefresh() {
@@ -162,16 +130,64 @@ function bindRefresh() {
             })
         }
     });
-    $('form').on('keyup keypress', function (e) {
-        var code = e.keyCode || e.which;
-        if (code === 13) {
-            e.preventDefault();
-            return false;
-        }
-    });
     bind_runing = false;
 }
 
+function bindCall(pagina, funcao, data, done) {
+    if (pagina == null) {
+        pagina = bind_default;
+    }
+    if (pagina == "") {
+        pagina == bind_default;
+    }
+    if (data === undefined) {
+        data = {};
+        data.post0 = "";
+    }
+    data.CMD = funcao;
+    data.PAGE = pagina;
+    if (data === {}) {
+        data.post0 = "";
+    }
+    if (data.post0 === undefined) {
+        data.post0 = "";
+    }
+    if (bind_router !== "") {
+        pagina = bind_router;
+    }
+    $.ajaxSetup({
+        xhrFields: {
+            withCredentials: true
+        },
+        cache: false
+    });
+    data.HOST = window.location.protocol + "//" + window.location.hostname;
+
+//    if (typeof page != "undefined") {
+//        data.MUSTACHE = page.data;
+//    }
+
+    data.GET = $_GET;
+    $.post(pagina, data, function (resp) {
+        if (len(trim(resp)) > 0) {
+            try {
+                eval(resp);
+            } catch (e) {
+                console.log(resp);
+                console.log(e);
+                console.log(resp.stack);
+            }
+        }
+        if (typeof (done) !== "undefined") {
+            done(resp);
+        }
+    }).fail(function (erro) {
+        console.log(erro);
+        http = erro.status;
+        msg = erro.responseText;
+        alert("ERRO " + http + ":" + msg);
+    })
+}
 
 function formData(formulario) {
     var form = {};
@@ -278,9 +294,6 @@ $(function () {
     setInterval(function () {
         bindRefresh();
     }, 100);
-    bindRefresh();
-
-    bindCall("", 'init( )');
 });
 function fileData(input, ok) {
     var f = $(input).prop("files")[0];

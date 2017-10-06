@@ -32,9 +32,7 @@ class Db {
                     PDO::ATTR_PERSISTENT => true
                 ));
             } else {
-                $this->pdo = new PDO("{$servidor}:host={$endereco};dbname={$base}" . (($servidor === "mysql") ? ";charset=UTF8" : ""), $usuario, $senha, array(
-                    PDO::ATTR_PERSISTENT => true
-                ));
+                $this->pdo = new PDO("{$servidor}:host={$endereco};dbname={$base}" . (($servidor === "mysql") ? ";charset=UTF8" : ""), $usuario, $senha);
             }
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
@@ -135,6 +133,7 @@ class Db {
             return $this->insert($table, $values);
         }
     }
+
     /**
      * @param string table
      * @param array|string where
@@ -220,21 +219,30 @@ class Db {
      * @return PDOStatement
      */
     function statement($sql, $parameters = array()) {
-        $sql = str_replace(PHP_EOL, '', $sql);
-        $sql = str_replace("\r", '', $sql);
-        $sql = str_replace("\n", '', $sql);
-        $sql = str_replace("\t", ' ', $sql);
-        $sql = trim($sql);
+//        $sql = str_replace(PHP_EOL, '', $sql);
+//        $sql = str_replace("\r", '', $sql);
+//        $sql = str_replace("\n", '', $sql);
+//        $sql = str_replace("\t", ' ', $sql);
+//        $sql = trim($sql);
         $this->last_sql = $sql;
         $this->last_parameters = $parameters;
         $p = $this->pdo->prepare($sql);
         $c = 1;
 //		s($sql);
         foreach ($parameters as $key => $value) {
+
             if ($this->is_multibyte($value)) {
-                $p->bindValue($c, $value, PDO::PARAM_LOB);
+                if (is_numeric($key)) {
+                    $p->bindValue($c, $value, PDO::PARAM_LOB);
+                }else{
+                    $p->bindValue($key, $value, PDO::PARAM_LOB);
+                }
             } else {
-                $p->bindValue($c, $value, PDO::PARAM_STR);
+                if (is_numeric($key)) {
+                    $p->bindValue($c, $value, PDO::PARAM_STR);
+                }else{
+                    $p->bindValue($key, $value, PDO::PARAM_STR);
+                }
             }
             $c++;
         }
@@ -516,6 +524,14 @@ function conectar() {
  * @return Db
  */
 function db_get_connection() {
+    return conf::$pkj_bd_sis_conexao;
+}
+
+/**
+ * 
+ * @return Db
+ */
+function db() {
     return conf::$pkj_bd_sis_conexao;
 }
 

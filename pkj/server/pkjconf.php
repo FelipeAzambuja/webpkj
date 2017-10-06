@@ -27,9 +27,10 @@ class conf {
     public static $resource = null;
 
 }
-$home  = replace(ini_get("auto_prepend_file"),$_SERVER["DOCUMENT_ROOT"],"");
-$home  = replace($home,"/server/pkjall.php","");
-conf::$pkjHome = $home;
+//$home  = replace(ini_get("auto_prepend_file"),$_SERVER["DOCUMENT_ROOT"],"");
+//$home = replace(__DIR__, "\\", "/");
+//$home  = replace($home,"/server/pkjall.php","");
+//conf::$pkjHome = $home;
 conf::$dateFormat = $_SERVER["pkj_dateformat"];
 conf::$servidor = $_SERVER["pkj_servidor"];
 conf::$endereco = $_SERVER["pkj_endereco"];

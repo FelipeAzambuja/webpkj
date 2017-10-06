@@ -1,9 +1,11 @@
 <?php
-
-$notpkj = array("phpliteadmin.php");
-if (in_array(basename($_SERVER["SCRIPT_NAME"]), $notpkj)) {
-    return false;
-}
+register_shutdown_function(function () {
+    db()->db = null;
+});
+//$notpkj = array("phpliteadmin.php");
+//if (in_array(basename($_SERVER["SCRIPT_NAME"]), $notpkj)) {
+//    return false;
+//}
 if (isset($_POST["HOST"])) {
     header("Access-Control-Allow-Credentials:true");
     if ($_POST["HOST"] !== "file://") {
@@ -52,10 +54,8 @@ if (conf::$quick) {
 //  query ( 'SET character_set_results=utf8' );
 //}
 //include "pkjorm.php";
-include 'DBTable.php';
-foreach (glob(__DIR__ . "/../db/*.php") as $db):
+include 'ORM.php';
+foreach (glob(__DIR__ . "/../../orm/*.php") as $db):
     include $db;
 endforeach;
-if (isset($_POST["CMD"])) {
-    include "pkjbind.php";
-}
+
