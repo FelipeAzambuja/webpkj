@@ -37,14 +37,6 @@ class ORM implements JsonSerializable {
     }
 
     /**
-     * @return static|parent
-     */
-    public static function create() {
-        $c = get_called_class();
-        return new $c();
-    }
-
-    /**
      * 
      * @param string $table_name
      * @param Db $db
@@ -67,26 +59,32 @@ class ORM implements JsonSerializable {
      * Fill data
      * @param array $form
      */
-    public static function fromArray($form) {
+    public function fromArray($form) {
         $is_a = is_array($form);
-        $obj = (new ReflectionClass(get_called_class()))->newInstance();
-        foreach ($obj->fields as $f) {
+
+        foreach ($this->fields as $f) {
             if (isset($form[$f->name])) {
                 if ($is_a) {
-                    $obj->{$f->name} = $form[$f->name];
+                    $this->{$f->name} = $form[$f->name];
                 } else {
-                    $obj->{$f->name} = $form{$f->name};
+                    $this->{$f->name} = $form{$f->name};
                 }
             }
         }
-        return $obj;
+//        return $obj;
     }
 
-//
-//    //pegar os unicórnios e sair correndo
-//    public function __get($name) {
-//        echo "";
-//    }
+    /**
+     * 
+     * @param int $id
+     * @return self|static
+     */
+    function byId($id) {
+        $id = intval(trim($id));
+        return $this->select([
+                    "id" => $id
+                ])[0];
+    }
 
     /**
      * 

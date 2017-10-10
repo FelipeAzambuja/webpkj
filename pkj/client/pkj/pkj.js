@@ -48,7 +48,7 @@ function substring(texto, inicio, quantidade) {
     return texto.substr(inicio, quantidade);
 }
 function part(texto, separador) {
-    if(texto === undefined){
+    if (texto === undefined) {
         debugger;
     }
     return texto.split(separador);
@@ -213,8 +213,10 @@ function tagUpdate() {
 //            $(function () {
             var responsive = $(e).hasClass("datatables-responsive");
             if (!$.fn.dataTable.isDataTable(e)) {
+
                 var tabela = $(e).DataTable({
-                    dom: 'Bfrtip',
+//                    dom: 'Blfrtip',
+                    dom: 'lBfrtip',
                     buttons: [
                         'copyHtml5',
                         'excelHtml5',
@@ -231,11 +233,11 @@ function tagUpdate() {
                         "sInfoFiltered": "(Filtrados de _MAX_ registros)",
                         "sInfoPostFix": "",
                         "sInfoThousands": ".",
-                        "sLengthMenu": "_MENU_ resultados por página",
+                        "sLengthMenu": "_MENU_ ",
                         "sLoadingRecords": "Carregando...",
                         "sProcessing": "Processando...",
                         "sZeroRecords": "Nenhum registro encontrado",
-                        "sSearch": "Pesquisar",
+                        "sSearch": " ",
                         "oPaginate": {
                             "sNext": "Próximo",
                             "sPrevious": "Anterior",
@@ -255,6 +257,7 @@ function tagUpdate() {
                 tabela.on('draw.dt', function () {
                     tagUpdate();
                 });
+                
             }
 //            });
         });
@@ -266,19 +269,19 @@ function tagUpdate() {
         }
     });
     /*
-    $("input[type='checkbox']").each(function (i, e) {
-        if ($(e).attr("value") != undefined) {
-            if ($(e).attr("value") == "true") {
-                $(e).attr("checked", "true");
-            } else {
-                $(e).removeAttr("checked");
-            }
-        }
-    });
-    */
+     $("input[type='checkbox']").each(function (i, e) {
+     if ($(e).attr("value") != undefined) {
+     if ($(e).attr("value") == "true") {
+     $(e).attr("checked", "true");
+     } else {
+     $(e).removeAttr("checked");
+     }
+     }
+     });
+     */
     var contador = 0;
     var hasOnsen = ($("script[src*='onsenui.min.js']").size() > 0);
-    $('input').each(function (i, e) {
+    $('input,select').each(function (i, e) {
         if (ucase($(e).attr("type")) === "BUTTON") {
             $(e).addClass("btn");
             var color = lcase($(e).attr("color"));
@@ -290,7 +293,8 @@ function tagUpdate() {
         if (!hasOnsen) {
             if (!$(e).hasClass("form-control")) {
                 if (
-                        in_array(ucase($(e).attr("type")), ["TEXT", "BUTTON", "FILE","TEL","NUMBER"])
+                        in_array(ucase($(e).attr("type")), ["TEXT", "BUTTON", "FILE", "TEL", "NUMBER","SEARCH"]) ||
+                        $(e).get(0).tagName === "SELECT"
                         
                         ) {
                     $(e).addClass("form-control");

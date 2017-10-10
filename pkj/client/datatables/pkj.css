@@ -1,3 +1,14 @@
 div.dt-buttons{
-    margin-top:1.5em;
+    margin-top:1px;
+    padding-left:6px;
+}
+.datatables .pkjdiv{
+    padding:0 !important;
+    height:auto !important;
+}
+.datatables td{
+    vertical-align: middle !important;
+}
+.dataTables_filter{
+    padding-top: 4px;
 }

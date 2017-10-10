@@ -177,7 +177,7 @@ function combo($id, $itens, $valoresItens = array(), $plus = "", $size = 3) {
     echo div($retorno, $size, 4);
 }
 
-function label($texto = "", $size = 2) {
+function label($texto = "", $size = 1) {
     conf::$pkj_uid_comp++;
     $retorno = "<div data-label='true' style='line-height:35px' >$texto</div>";
     echo div($retorno, $size);
