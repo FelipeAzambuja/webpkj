@@ -20,6 +20,9 @@ class Db {
         if ($servidor === "postgre") {
             $servidor = "pgsql";
         }
+        if ($servidor == "mysql") {
+            $this->escape = "`";
+        }
         $this->driver = $servidor;
         if (!in_array($servidor, array("mysql", "firebird", "odbc", "pgsql", "sqlite", "sqlsrv"))) {
             echo "servidor invalido";
@@ -106,7 +109,7 @@ class Db {
 
     function insert($table, $values) {
         $sql = "insert into {$table} ";
-        $sql .= "(" . implode(",", array_keys($values)) . ") values";
+        $sql .= "(" . $this->escape . implode($this->escape . "," . $this->escape, array_keys($values)) . $this->escape . ") values";
         $p = [];
         for ($index = 0; $index < count($values); $index++) {
             $p[] = "?";
@@ -119,6 +122,7 @@ class Db {
         $sql = "update {$table} set ";
         $p = [];
         foreach ($values as $key => $value) {
+            $key  = $this->escape.$key.$this->escape;
             $p[] = " {$key} = ? ";
         }
         $sql .= implode(",", $p);
@@ -139,7 +143,7 @@ class Db {
      * @param array|string where
      */
     function exists($table, $where) {
-        return $this->query("select id from {$table} where " . $this->where($where) . " limit 1") > 0;
+        return count($this->query("select id from {$table} where " . $this->where($where) . " limit 1")) > 0;
     }
 
     function delete($table, $where) {
@@ -234,13 +238,13 @@ class Db {
             if ($this->is_multibyte($value)) {
                 if (is_numeric($key)) {
                     $p->bindValue($c, $value, PDO::PARAM_LOB);
-                }else{
+                } else {
                     $p->bindValue($key, $value, PDO::PARAM_LOB);
                 }
             } else {
                 if (is_numeric($key)) {
                     $p->bindValue($c, $value, PDO::PARAM_STR);
-                }else{
+                } else {
                     $p->bindValue($key, $value, PDO::PARAM_STR);
                 }
             }

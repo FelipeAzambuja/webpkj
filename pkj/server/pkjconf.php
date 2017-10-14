@@ -2,7 +2,8 @@
 
 class conf {
 
-    public static $pkjHome = "/webpkj/pkj";
+//    public static $pkjHome = "/webpkj/pkj";
+    public static $pkjHome = "/e-robot/ws/ws/painel/pkj";
     public static $dateFormat = "d/m/Y";
 // mysql pgsql mssql odbc oledb sqlite
     public static $servidor = "sqlite";
