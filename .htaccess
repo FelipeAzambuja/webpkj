@@ -2,19 +2,26 @@ php_value output_buffering 0
 php_value date.timezone "America/Sao_Paulo"
 setenv pkj_dateformat "d/m/Y"
 setenv pkj_servidor "mysql"
-setenv pkj_endereco "127.0.0.1"
-setenv pkj_usuario "root"
-setenv pkj_senha "root"
-setenv pkj_base "webpkj"
+#setenv pkj_endereco "localhost"
+setenv pkj_endereco "188.166.162.130"
+setenv pkj_usuario "ekontroll"
+setenv pkj_senha "8tkAGwDtJxJO"
+setenv pkj_base "ekont562_db_ek"
 setenv pkj_sessao "database"
 
 RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !^/public
+RewriteRule ([^/]*).(css|js|png|svg|jpe?g)$ public/$1.$2 [L]
+
 
 # Redirect Trailing Slashes If Not A Folder...
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)/$ /$1 [L,R=301]
 
 # Handle Front Controller...
+RewriteCond %{REQUEST_URI} !(\.css|\.js|\.png|\.jpg|\.gif|robots\.txt)$ [NC]
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^ index.php [L]
