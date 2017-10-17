@@ -2,7 +2,8 @@
 
 class conf {
 
-    public static $pkjHome = "/webpkj/pkj";
+//    public static $pkjHome = "/webpkj/pkj";
+    //public static $pkjHome = "";
     public static $dateFormat = "d/m/Y";
 // mysql pgsql mssql odbc oledb sqlite
     public static $servidor = "sqlite";
@@ -59,6 +60,15 @@ unset($_SERVER["pkj_base"]);
 unset($_SERVER["pkj_sessao"]);
 unset($home);
 
-function pkj_get_home() {
-    return replace(ini_get("auto_prepend_file"),"/pkj/server/pkjall.php","");
+function pkj_get_home($dir = __DIR__) {
+    $root = "";
+    $dir = str_replace('\\', '/', realpath($dir));
+    if (!empty($_SERVER['CONTEXT_PREFIX'])) {
+        $root .= $_SERVER['CONTEXT_PREFIX'];
+        $root .= substr($dir, strlen($_SERVER['CONTEXT_DOCUMENT_ROOT']));
+    }
+    else {
+        $root .= substr($dir, strlen($_SERVER['DOCUMENT_ROOT']));
+    }
+    return '/'.$root.'/';
 }

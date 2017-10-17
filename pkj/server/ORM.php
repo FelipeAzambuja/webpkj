@@ -116,7 +116,10 @@ class ORM implements JsonSerializable {
                 //testar 1 para 1
                 if (is_object($this->{$f->name})) {
                     $o = $this->{$f->name};
-                    $o = $o->insert();
+                    if (!is_numeric($o->id)) {
+                        
+                        $o = $o->insert();
+                    }
                     $a[$f->name] = $o->id;
                 } else {
                     $a[$f->name] = $this->{$f->name};
@@ -128,7 +131,12 @@ class ORM implements JsonSerializable {
             $last = array();
             foreach ($objetos_criados as $obj) {
                 $obj["obj"]->{$obj["field"]} = $this->db->last_insert_id($this->table_name);
-                $obj["obj"]->insert();
+                echo $obj["obj"]->id;
+                if (!is_numeric($obj["obj"]->id)) {
+                    
+                    $obj["obj"]->insert();
+                }
+                
             }
             $last = one($this->select($a, " order by id desc limit 1 "));
             return $last;

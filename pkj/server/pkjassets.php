@@ -49,10 +49,7 @@ class Resource {
             $protocol = 'http';
         }
         $url = "{$protocol}://{$_SERVER['HTTP_HOST']}/client/pkj/$name/";
-        if (conf::$pkjHome{0} != "/") {
-            conf::$pkjHome = "/" . conf::$pkjHome;
-        }
-        $url = conf::$pkjHome . "/client/$name/";
+        $url = pkj_get_home(__DIR__.'../../') . "client/$name/";
         foreach ($this->resources[$name]->files as $value) {
             if (endswith($value, ".js")) {
                 ?>
