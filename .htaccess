@@ -5,7 +5,7 @@ setenv pkj_servidor "mysql"
 #setenv pkj_endereco "localhost"
 setenv pkj_endereco "localhost"
 setenv pkj_usuario "root"
-setenv pkj_senha "123"
+setenv pkj_senha "root"
 setenv pkj_base "webpkj"
 setenv pkj_sessao "database"
 
