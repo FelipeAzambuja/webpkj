@@ -1,9 +1,6 @@
 <?php
 
 class conf {
-
-//    public static $pkjHome = "/webpkj/pkj";
-    //public static $pkjHome = "";
     public static $dateFormat = "d/m/Y";
 // mysql pgsql mssql odbc oledb sqlite
     public static $servidor = "sqlite";
