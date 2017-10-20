@@ -25,7 +25,11 @@ class Resource {
         <script nonce="<?= conf::$random ?>">var nonce = "<?= conf::$random ?>";</script>
         <?php
     }
-
+    function tag_view(){
+        ?>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <?php
+    }
     function __construct() {
         if (conf::$random === "") {
             conf::$random = rand(1, 9) . "" . rand(0, 9) . "" . rand(0, 9) . "" . rand(0, 9) . "" . rand(0, 9) . "" . rand(0, 9) . "" . rand(0, 9) . "" . rand(0, 9) . "" . rand(0, 9) . "" . rand(0, 9) . "" . rand(1, 9) . "";
@@ -65,10 +69,6 @@ class Resource {
         if (isset($this->resources[$name]->onload)):
             ?>
             <script nonce="<?= conf::$random ?>">
-            <?php if ($name === "bind"): ?>
-                bind_router = "<?= conf::$pkjHome ?>/server/pkjall.php";
-                bind_default = "<?= replace($_SERVER["PHP_SELF"], replace(conf::$pkjHome, "/pkj", ""), "") ?>";
-            <?php endif; ?>
             <?php if ($name === "jquery"): ?>
                 $(function () {
                     try {

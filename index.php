@@ -4,6 +4,7 @@ include 'pkj/server/pkjall.php';
 ob_start();
 $path = pkj_get_home(__DIR__);
 $path = 'public/'.replace($_SERVER["REQUEST_URI"],$path,'');
+$path = replace($path,'?'.$_SERVER["QUERY_STRING"],'');
 if (endswith($path, "public/")) {
     $path = "public/index";
 }
