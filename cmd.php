@@ -36,7 +36,6 @@ function loadht($file) {
                 break;
         }
     }
-//    var_dump($_SERVER);
     if (!function_exists("query")) {
         require './pkj/server/pkjall.php';
     }
