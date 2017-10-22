@@ -27,7 +27,7 @@ function show_errors($v = true) {
 
 show_errors();
 include 'pkjsession.php';
-$useSmarty = true;
+$useSmarty = false;
 if ($useSmarty) {
     include 'smarty/Smarty.class.php';
 }
