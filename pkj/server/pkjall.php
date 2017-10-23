@@ -55,7 +55,7 @@ if (conf::$quick) {
 //}
 //include "pkjorm.php";
 include 'ORM.php';
-foreach (glob(__DIR__ . "/../../orm/*.php") as $db):
+foreach (glob(__DIR__ . "/../../orm/*/*.php") as $db):
     include $db;
 endforeach;
 

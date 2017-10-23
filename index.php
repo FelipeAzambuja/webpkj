@@ -12,8 +12,7 @@ if (endswith($path, "public/")) {
 }
 $path .= '.php';
 if (!file_exists($path)) {
-    echo "Arquivo não encontrado $path ";
-    exit();
+    $path = "public/err_404.php";
 }
 
 include $path;
