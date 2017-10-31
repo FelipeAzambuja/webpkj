@@ -179,7 +179,7 @@ function combo($id, $itens, $valoresItens = array(), $plus = "", $size = 3) {
 
 function label($texto = "", $size = 1) {
     conf::$pkj_uid_comp++;
-    $retorno = "<div data-label='true' style='line-height:35px' >$texto</div>";
+    $retorno = "<label data-label='true' class='control-label' style='line-height:35px' >$texto</label>";
     echo div($retorno, $size);
 }
 

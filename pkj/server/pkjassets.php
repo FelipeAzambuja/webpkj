@@ -53,7 +53,14 @@ class Resource {
             $protocol = 'http';
         }
         $url = "{$protocol}://{$_SERVER['HTTP_HOST']}/client/pkj/$name/";
-        $url = pkj_get_home(__DIR__.'../../') . "client/$name/";
+
+
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            $url = pkj_get_home(__DIR__ . '../../') . "client/$name/";
+        } else {
+            $url = pkj_get_home(__DIR__ . '/../../') . "pkj/client/$name/";
+        }
+
         foreach ($this->resources[$name]->files as $value) {
             if (endswith($value, ".js")) {
                 ?>

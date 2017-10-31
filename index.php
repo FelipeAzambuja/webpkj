@@ -5,6 +5,7 @@ $template = '';
 ob_start();
 $path = pkj_get_home(__DIR__);
 $url = $path;
+$public = $url.'public/';
 $path = 'public/'.replace($_SERVER["REQUEST_URI"],$path,'');
 $path = replace($path,'?'.$_SERVER["QUERY_STRING"],'');
 if (endswith($path, "public/")) {
@@ -12,6 +13,7 @@ if (endswith($path, "public/")) {
 }
 $path .= '.php';
 if (!file_exists($path)) {
+    $file_not_found = $path;
     $path = "public/err_404.php";
 }
 

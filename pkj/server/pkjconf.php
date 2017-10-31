@@ -62,10 +62,17 @@ function pkj_get_home($dir = __DIR__) {
     $dir = str_replace('\\', '/', realpath($dir));
     if (!empty($_SERVER['CONTEXT_PREFIX'])) {
         $root .= $_SERVER['CONTEXT_PREFIX'];
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
         $root .= substr($dir, strlen($_SERVER['CONTEXT_DOCUMENT_ROOT']));
+        } else {
+            $root .= substr($dir, strlen($_SERVER['CONTEXT_DOCUMENT_ROOT']));
     }
-    else {
+    } else {
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
         $root .= substr($dir, strlen($_SERVER['DOCUMENT_ROOT']));
+        } else {
+            $root .= substr($dir, strlen(realpath($_SERVER['DOCUMENT_ROOT']))+1);
     }
-    return '/'.$root.'/';
+}
+    return '/' . $root . '/';
 }
