@@ -1,6 +1,6 @@
 {
     "name": "chosen",
-    "files": ["css.css","js.js"],
+    "files": ["js.js","bootstrap.css"],
     "onload":"$(\"select\").chosen({width: \"95%\",no_results_text: \"Nada Encontrado\"});",
     "upload":"$(\"select\").chosen({width: \"95%\",no_results_text: \"Nada Encontrado\"});",
     "author": "https://harvesthq.github.io/chosen/"
