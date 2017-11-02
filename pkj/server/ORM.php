@@ -219,7 +219,7 @@ class ORM implements JsonSerializable {
                         $tfieldName = $tfield->relation[0];
                         $obj = (new ReflectionClass($tfieldClass))->newInstance();
                         $retorno = $obj->select([
-                            $tfieldClassField => $me[$index]->id
+                            $tfieldClassField => $me[$index]->{$tfieldName}
                         ]);
                         if ($tfieldName !== "id") {
                             $retorno = one($retorno);
