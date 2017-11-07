@@ -750,7 +750,7 @@ function table_exists($name) {
             $sql = "SELECT * FROM information_schema.tables  where table_catalog='$base' and table_name='$name'";
             break;
         case "mysql":
-            $sql = "SELECT * FROM `COLUMNS` WHERE TABLE_NAME='$name' AND TABLE_SCHEMA='$base'";
+            $sql = "SELECT * FROM information_schema.`COLUMNS` WHERE TABLE_NAME='$name' AND TABLE_SCHEMA='$base'";
             break;
         case "sqlite":
             $sql = "SELECT name FROM sqlite_master WHERE type='table' AND name='$name'";
