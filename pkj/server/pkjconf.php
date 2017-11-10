@@ -29,6 +29,43 @@ class conf {
 //$home = replace(__DIR__, "\\", "/");
 //$home  = replace($home,"/server/pkjall.php","");
 //conf::$pkjHome = $home;
+function fix_loadht($file) {
+    $lines = explode("\n", file_get_contents($file));
+    $requires = [];
+    foreach ($lines as $l) {
+        if (trim($l) === "") {
+            continue;
+        }
+        if ($l[0] === "#") {
+            continue;
+        }
+        $arg = explode(" ", $l);
+        for ($index = 0; $index < count($arg); $index++) {
+            $arg[$index] = str_replace("\"", "", trim($arg[$index]));
+        }
+        $cmd = $arg[0];
+        switch ($cmd) {
+            case "php_value":
+                if ($arg[1] === "auto_prepend_file") {
+                    $requires[] = $arg[2];
+                } else {
+                    ini_set($arg[1], $arg[2]);
+                }
+                break;
+            case "setenv":
+                $_SERVER[$arg[1]] = $arg[2];
+                break;
+            default:
+//                echo "ENV não reconhecida";
+                break;
+        }
+    }
+
+}
+
+if (!isset($_SERVER["pkj_sessao"])) {
+    fix_loadht('.htaccess');
+}
 conf::$dateFormat = $_SERVER["pkj_dateformat"];
 conf::$servidor = $_SERVER["pkj_servidor"];
 conf::$endereco = $_SERVER["pkj_endereco"];
