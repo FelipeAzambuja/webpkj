@@ -1,5 +1,6 @@
 <?php
-
+$version = 1.7;
+$repo = "";
 ini_set("display_errors", "0");
 error_reporting(0);
 

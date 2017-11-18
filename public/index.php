@@ -1,4 +1,10 @@
 <?php $template = "templates/template.php"; ?>
+<?php
+
+function init() {
+
+}
+?>
 <form class="row" >
     <?php
     label_text("Nome", "nome", 6);
@@ -10,9 +16,9 @@
     label_mask("CPF", "cpf", "999.999.999-99", 3);
     label_money("Saldo", "saldo", 3);
     label_number("Idade", "idade", 3);
-    check("estado", "Vivo", "",3);
-    radio("sexo", "Masculino", "sexo",3);
-    radio("sexo", "Feminino", "sexo",3);
+    check("estado", "Vivo", "", 3);
+    radio("sexo", "Masculino", "sexo", 3);
+    radio("sexo", "Feminino", "sexo", 3);
     button("Teste", "click='teste()'  lock", 3);
 
     function teste($form) {
@@ -20,3 +26,18 @@
     }
     ?>
 </form>
+<table class="datatables" ajax="<?= $url ?>ajax/pessoas" >
+<!--<table class="datatables"  >-->
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>Nome</th>
+        </tr>
+    </thead>
+    <tbody >
+        <tr>
+            <td>asdsad</td>
+            <td>dsadas</td>
+        </tr>
+    </tbody>
+</table>

@@ -211,7 +211,7 @@ function tagUpdate() {
     if (typeof ($.fn.dataTableExt) !== "undefined") {
         $(".datatables").each(function (i, e) {
 //            $(function () {
-            var responsive = $(e).hasClass("datatables-responsive");
+            var responsive = $(e).hasClass("datatables-responsive");            
             if (!$.fn.dataTable.isDataTable(e)) {
 
                 var tabela = $(e).DataTable({
@@ -224,6 +224,7 @@ function tagUpdate() {
                         'pdfHtml5'
                     ],
                     responsive: responsive,
+                    ajax:$(e).attr("ajax"),
                     select: true,
                     keys: true,
                     "language": {

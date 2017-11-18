@@ -1,5 +1,4 @@
 <?php
-
 include 'pkj/server/pkjall.php';
 $template = '';
 ob_start();

@@ -13,6 +13,7 @@
         import('bootstrap');
 //        import('ui');
         import('mask');
+        import('datatables');
         ?>
     </head>
     <body>

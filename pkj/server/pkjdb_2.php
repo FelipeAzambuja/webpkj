@@ -10,6 +10,7 @@ class Db {
     public $last_error;
     public $last_sql;
     public $last_parameters;
+    public $dump;
     public $fetch;
     public $db;
     public $driver;
@@ -90,7 +91,7 @@ class Db {
      */
     function query($sql, $parameters = array()) {
         $p = $this->statement($sql, $parameters);
-        if (!$p) {
+        if ($p === false) {
             return false;
         }
         if ($this->fetch === null) {
@@ -122,7 +123,7 @@ class Db {
         $sql = "update {$table} set ";
         $p = [];
         foreach ($values as $key => $value) {
-            $key  = $this->escape.$key.$this->escape;
+            $key = $this->escape . $key . $this->escape;
             $p[] = " {$key} = ? ";
         }
         $sql .= implode(",", $p);
@@ -231,6 +232,9 @@ class Db {
         $this->last_sql = $sql;
         $this->last_parameters = $parameters;
         $p = $this->pdo->prepare($sql);
+        if ($p === false) {
+            return false;
+        }
         $c = 1;
 //		s($sql);
         foreach ($parameters as $key => $value) {
@@ -250,10 +254,17 @@ class Db {
             }
             $c++;
         }
+        ob_start();
+        $p->debugDumpParams();
+        $this->dump = ob_get_contents();
+        ob_end_clean();
         if (!$p->execute()) {
 //            var_dump($p->errorInfo());
             $info = $p->errorInfo();
+
+
             $this->last_error = "{$info[0]}:{$info[1]}:{$info[2]}:$sql:";
+            $this->dump = "{$info[0]}:{$info[1]}:{$info[2]}:$sql:";
             return false;
         }
         return $p;
