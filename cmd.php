@@ -1,6 +1,5 @@
 <?php
-$version = 1.7;
-$repo = "";
+$repo = "https://newbgp.com.br/ide/workspace/webpkj/pkj.zip";
 ini_set("display_errors", "0");
 error_reporting(0);
 
@@ -61,6 +60,15 @@ switch ($argv[1]) {
 //        $pessoas->teste();
 //        s($pessoas);
 //        $pessoas->teste();
+        break;
+    case "update":
+        echo "Fazendo download" . PHP_EOL;
+        file_put_contents("tmp.zip", file_get_contents($repo));
+        $zip = new ZipArchive;
+        $zip->open("tmp.zip");
+        $zip->extractTo("pkj2");
+        $zip->close();
+        unlink("tmp.zip");
         break;
     case "tables":
         $pdo = conf::$pkj_bd_sis_conexao;
@@ -248,32 +256,32 @@ function orm2($tabela, $pasta = "orm") {
     $con = conf::$pkj_bd_sis_conexao;
     $campos = $con->table_fields($tabela);
     $fields = col($campos, "name");
-    $s = "<?php ".PHP_EOL;
+    $s = "<?php " . PHP_EOL;
     ob_start();
     ?>
-/**
- * @return <?=$classe?>
- */
-function orm_<?=$tabela?>(){
-    return new <?=$classe?>();
-}
-class <?=$classe?> extends ORM {
-    <?php foreach($campos as $campo): ?>
-
     /**
-     * @var <?=$campo->type?> 
-     * @comment Gerado pelo pkj 
-     */
-    public $<?=$campo->name ?>; 
-    
+    * @return <?= $classe ?>
+    */
+    function orm_<?= $tabela ?>(){
+    return new <?= $classe ?>();
+    }
+    class <?= $classe ?> extends ORM {
+    <?php foreach ($campos as $campo): ?>
+
+        /**
+        * @var <?= $campo->type ?> 
+        * @comment Gerado pelo pkj 
+        */
+        public $<?= $campo->name ?>; 
+
     <?php endforeach; ?>
 
 
     public function get_table_name() {
-        return "<?=$tabela?>";
+    return "<?= $tabela ?>";
     }
 
-}
+    }
     <?php
     $s .= ob_get_clean();
     echo $s;
@@ -300,6 +308,8 @@ function ajuda() {
     echo " Assistente para adicionar registros a tabela" . PHP_EOL;
     echo color("config configurar", "white");
     echo " Configura o webpkj" . PHP_EOL;
+    echo color("update", "white");
+    echo " Atualiza a pasta pkj" . PHP_EOL;
 
 //    echo color("crud", "white");
 //    echo " Cria um 'crud' basico com base na tabela informada" . PHP_EOL;
