@@ -1,6 +1,6 @@
 {
     "name": "jquery",
-    "files": ["jquery.js"],
+    "files": ["jquery-3.2.1.min.js","jquery-migrate-3.0.0.min.js"],
     "onload":"$(\"body\").show()",
     "author": "The jQuery Team"
 }

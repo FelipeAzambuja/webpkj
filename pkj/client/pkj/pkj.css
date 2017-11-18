@@ -1,3 +1,12 @@
 /*body{
     display: none;
 }*/
+.form-group *{
+    line-height: normal !important;
+    min-height: 0 !important;
+}
+
+.form-group div[class^="col-md-12"]{
+    padding-left: 5px !important;
+    padding-right: 0 !important;    
+}

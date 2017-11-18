@@ -5,9 +5,9 @@ function _haveOnsen() {
     return in_array("onsen", Resource::$list);
 }
 
-function row() {
+function row($class = "") {
     if (conf::$pkj_row) {
-        echo "<div class=\"row\">";
+        echo "<div class=\"row {$class}\">";
         conf::$pkj_row = false;
     } else {
         echo "</div>";
@@ -49,9 +49,18 @@ function ons_button($texto, $plus = "", $size = "") {
     echo div($html, $size);
 }
 
+/**
+ * 
+ * @param type $id identificação
+ * @param type $texto Texto
+ * @param type $grupo Agrupamento 
+ * @param type $plus atributos adicionais
+ * @param type $size colunas
+ * @return type
+ */
 function radio($id, $texto, $grupo = "", $plus = "", $size = 3) {
-    if($grupo === "" || is_numeric($grupo)){
-        if(is_numeric($grupo)){
+    if ($grupo === "" || is_numeric($grupo)) {
+        if (is_numeric($grupo)) {
             $plus = $grupo;
         }
         $grupo = $id;
@@ -64,7 +73,7 @@ function radio($id, $texto, $grupo = "", $plus = "", $size = 3) {
         $plus = '';
     }
     $value = "value='$texto'";
-    if(contains($plus,"value")){
+    if (contains($plus, "value")) {
         $value = "";
     }
     conf::$pkj_uid_comp++;
@@ -79,7 +88,7 @@ function ons_radio($id, $texto, $grupo, $plus = "", $size = 3) {
     }
     conf::$pkj_uid_comp++;
     $value = "value='$texto'";
-    if(contains($plus,"value")){
+    if (contains($plus, "value")) {
         $value = "";
     }
     ob_start();
@@ -88,7 +97,7 @@ function ons_radio($id, $texto, $grupo, $plus = "", $size = 3) {
         <ons-input <?= $plus ?> type="radio" name="<?= $grupo ?>" <?= $value ?> id='<?= "pkj" . conf::$pkj_uid_comp . "_" . $id ?>' input-id="<?= $id ?>"></ons-input>
     </label>
     <label onclick='$("#<?= "pkj" . conf::$pkj_uid_comp . "_" . $id ?>").trigger("click")' for="<?= "pkj" . conf::$pkj_uid_comp . "_" . $id ?>" class="center">
-        <?= $texto ?>
+    <?= $texto ?>
     </label>
     <?php
     $html = ob_get_clean();
@@ -111,18 +120,27 @@ function ons_check($id, $texto, $grupo = "", $plus = "", $size = 3) {
         <ons-input <?= $plus ?>  <?= ($grupo !== "") ? "name='$grupo'" : "" ?>  type="checkbox" value='<?= $texto ?>' id='<?= "pkj" . conf::$pkj_uid_comp . "_" . $id ?>' input-id="<?= $id ?>"></ons-input>
     </label>
     <label onclick='$("#<?= "pkj" . conf::$pkj_uid_comp . "_" . $id ?>").trigger("click")'  for="<?= "pkj" . conf::$pkj_uid_comp . "_" . $id ?>" class="center">
-        <?= $texto ?>
+    <?= $texto ?>
     </label>
     <?php
     $html = ob_get_clean();
     echo div($html, $size);
 }
 
+/**
+ * Cria um input tipo checkbox
+ * @param type $id identificador
+ * @param type $texto Texto
+ * @param type $grupo Para agrupar em array, se vazio envia 'true' ou 'false'
+ * @param type $plus atributos adicionais
+ * @param type $size tamanho da coluna
+ * @return type
+ */
 function check($id, $texto, $grupo = "", $plus = "", $size = 3) {
     if (_haveOnsen()) {
         return ons_check($id, $texto, $grupo, $plus, $size);
     }
-    if(startswith($grupo,"checked")){
+    if (startswith($grupo, "checked")) {
         $grupo = "";
         $plus = "checked = 'true'";
     }
@@ -138,12 +156,12 @@ function check($id, $texto, $grupo = "", $plus = "", $size = 3) {
     if ($grupo !== "") {
         $grupo = " name='$grupo' ";
     }
-    $idREF = "pkj" . conf::$pkj_uid_comp ;
+    $idREF = "pkj" . conf::$pkj_uid_comp;
     $value = "value = '$texto'";
 
-    if(contains($plus,"value")){
-        $value = "";//melhor ficar quieto
-    }    
+    if (contains($plus, "value")) {
+        $value = ""; //melhor ficar quieto
+    }
     $html = "<label onclick='$(\"input[data-pkj-id=\\\"{$idREF}\\\"]\").trigger(\"click\")'  style='margin-top:5px'><input data-pkj-id='$idREF' id='$id' $grupo type='checkbox' $value $plus  />  {$texto}</label>";
     echo div($html, $size);
 }
@@ -310,7 +328,7 @@ function ons_col($elemento = "", $tamanho = "") {
     }
 }
 
-function div($elemento = "", $tamanho = 2, $padding = 5) {
+function div($elemento = "", $tamanho = 2, $class = "") {
 //    if (in_array("onsen", Resource::$list)) {
 //        if(is_numeric($tamanho)){
 //            $tamanho = ($tamanho * 10) . "%";
@@ -318,11 +336,103 @@ function div($elemento = "", $tamanho = 2, $padding = 5) {
 //        return ons_col($elemento, $tamanho);
 //    }
     conf::$pkj_uid_comp++;
-    if ($elemento == "") {
-        return "<div class='col_$tamanho col-sm-$tamanho pkjdiv' style='text-align:center;padding-top:{$padding}px;padding-bottom:{$padding}px;height:45px' >$elemento</div>\n";
-    } else {
-        return "<div class='col_$tamanho col-sm-$tamanho pkjdiv' style='text-align:center;padding-top:{$padding}px;padding-bottom:{$padding}px;height:45px' >$elemento</div>\n";
+    return "<div class='col-md-$tamanho $class pkjdiv' style='min-height:35px' >$elemento</div>\n";
+}
+
+function label_text($label, $id, $plus = "", $size = 3) {
+    if (is_numeric($plus)) {
+        $size = $plus;
+        $plus = "";
     }
+    ob_start();
+    label($label, 12);
+    text($id, $plus, 12);
+    $html = ob_get_clean();
+    echo div($html, $size, "form-group");
+}
+
+function label_combo($label, $id, $itens = [], $valoresItens = [], $plus = "", $size = 3) {
+    if (is_numeric($plus)) {
+        $size = $plus;
+        $plus = "";
+    }
+    ob_start();
+    label($label, 12);
+    combo($id, $itens, $valoresItens, $plus, 12);
+    $html = ob_get_clean();
+    echo div($html, $size, "form-group");
+}
+
+function label_upload($label, $id, $plus = "", $size = 3) {
+    if (is_numeric($plus)) {
+        $size = $plus;
+        $plus = "";
+    }
+    ob_start();
+    label($label, 12);
+    upload($id, $plus, 12);
+    $html = ob_get_clean();
+    echo div($html, $size, "form-group");
+}
+
+function label_password($label, $id, $plus = "", $size = 3) {
+    if (is_numeric($plus)) {
+        $size = $plus;
+        $plus = "";
+    }
+    ob_start();
+    label($label, 12);
+    password($id, $plus, 12);
+    $html = ob_get_clean();
+    echo div($html, $size, "form-group");
+}
+
+function label_money($label, $id, $plus = "", $size = 3) {
+    if (is_numeric($plus)) {
+        $size = $plus;
+        $plus = "";
+    }
+    ob_start();
+    label($label, 12);
+    money($id, $plus, 12);
+    $html = ob_get_clean();
+    echo div($html, $size, "form-group");
+}
+
+function label_calendar($label, $id, $plus = "", $size = 3) {
+    if (is_numeric($plus)) {
+        $size = $plus;
+        $plus = "";
+    }
+    ob_start();
+    label($label, 12);
+    calendar($id, $plus, 12);
+    $html = ob_get_clean();
+    echo div($html, $size, "form-group");
+}
+
+function label_mask($label, $id, $mask = "9999", $plus = "", $size = 3) {
+    if (is_numeric($plus)) {
+        $size = $plus;
+        $plus = "";
+    }
+    ob_start();
+    label($label, 12);
+    mask($id, $mask, $plus, 12);
+    $html = ob_get_clean();
+    echo div($html, $size, "form-group");
+}
+
+function label_number($label, $id, $plus = "", $size = 3) {
+    if (is_numeric($plus)) {
+        $size = $plus;
+        $plus = "";
+    }
+    ob_start();
+    label($label, 12);
+    number($id, $plus, 12);
+    $html = ob_get_clean();
+    echo div($html, $size, "form-group");
 }
 
 function hidden($id, $value = "", $show = false) {
