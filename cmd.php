@@ -66,7 +66,7 @@ switch ($argv[1]) {
         file_put_contents("tmp.zip", file_get_contents($repo));
         $zip = new ZipArchive;
         $zip->open("tmp.zip");
-        $zip->extractTo("pkj2");
+        $zip->extractTo("pkj");
         $zip->close();
         unlink("tmp.zip");
         break;
