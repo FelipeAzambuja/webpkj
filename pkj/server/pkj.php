@@ -9,6 +9,22 @@ function is_array_numeric($a) {
     return false;
 }
 
+/**
+ * Scan the api path, recursively including all PHP files
+ *
+ * @param string  $dir
+ */
+function require_all($dir) {
+    $scan = glob("$dir" . DIRECTORY_SEPARATOR . "*");
+    foreach ($scan as $path) {
+        if (preg_match('/\.php$/', $path)) {
+            require_once $path;
+        } elseif (is_dir($path)) {
+            require_all($path);
+        }
+    }
+}
+
 function download($arquivo, $mine = "") {
     $ext = explode(".", $arquivo);
     $ext = ((empty($ext[count($ext) - 1]) || count($ext) == 1) ? "" : $ext[count($ext) - 1]);

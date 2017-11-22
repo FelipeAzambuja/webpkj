@@ -55,7 +55,8 @@ if (conf::$quick) {
 //}
 //include "pkjorm.php";
 include 'ORM.php';
-foreach (glob(__DIR__ . "/../../orm/*/*.php") as $db):
-    include $db;
-endforeach;
+require_all(realpath(__DIR__ . DIRECTORY_SEPARATOR."..". DIRECTORY_SEPARATOR."..". DIRECTORY_SEPARATOR."orm"));
+//foreach (glob(__DIR__ . "/../../orm/*/*.php") as $db):
+//    include $db;
+//endforeach;
 
