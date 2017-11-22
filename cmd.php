@@ -115,6 +115,24 @@ switch ($argv[1]) {
         $s .= 'setenv pkj_base "' . $base . '"' . PHP_EOL;
         $s .= 'setenv pkj_sessao "database"' . PHP_EOL;
         $s .= '' . PHP_EOL;
+        $rewrite = <<<REWRITE
+            RewriteEngine On
+
+            RewriteCond %{REQUEST_FILENAME} !-f
+            RewriteCond %{REQUEST_URI} !^/public
+            RewriteRule ([^/]*).(css|js|png|svg|jpe?g)$ public/$1.$2 [L]
+
+            # Redirect Trailing Slashes If Not A Folder...
+            RewriteCond %{REQUEST_FILENAME} !-d
+            RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+            # Handle Front Controller...
+            RewriteCond %{REQUEST_URI} !(\.css|\.js|\.png|\.jpg|\.gif|robots\.txt)$ [NC]
+            RewriteCond %{REQUEST_FILENAME} !-d
+            RewriteCond %{REQUEST_FILENAME} !-f
+            RewriteRule ^ index.php [L]        
+REWRITE;
+        $s .= $rewrite;
         file_put_contents(".htaccess", $s);
         break;
     case "top":
