@@ -10,7 +10,7 @@ $public = $url . 'public/' ;
 if ( $path !== '/' ) {
     $path = 'public/' . replace( $_SERVER[ "REQUEST_URI" ] , $path , '' ) ;
 } else {
-    $path = 'public/' . substr($_SERVER[ "REQUEST_URI" ], 1)  ;
+    $path = 'public/' . substr( $_SERVER[ "REQUEST_URI" ] , 1 ) ;
 }
 
 $path = replace( $path , '?' . $_SERVER[ "QUERY_STRING" ] , '' ) ;
