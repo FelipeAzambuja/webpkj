@@ -1,10 +1,11 @@
 <?php 
 set_time_limit(60);
 $data = [];
-foreach (db()->query("select id,nome from pessoas limit 10000") as $d) {
+foreach (range(1,1000) as $d) {
     $data["data"][] = [
-        $d->id,
-        $d->nome
+        $d,
+        implode("",range(1,9))
     ];
 }
+Debug::wait();
 echo json_encode($data);

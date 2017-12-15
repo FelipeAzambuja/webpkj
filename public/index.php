@@ -22,14 +22,14 @@ function init() {
     radio( "sexo" , "Masculino" , "sexo" , 3 ) ;
     radio( "sexo" , "Feminino" , "sexo" , 3 ) ;
     button( "Teste" , "click='teste()'  lock" , 3 ) ;
-
+    Debug::wait();
     function teste( $form ) {
         alert( $form[ "nome" ] ) ;
     }
     ?>
 </form>
+<?php ob_start(); ?>
 <table class="datatables" ajax="<?= $url ?>ajax/pessoas" >
-<!--<table class="datatables"  >-->
     <thead>
         <tr>
             <th>id</th>
@@ -40,3 +40,4 @@ function init() {
    
     </tbody>
 </table>
+<?php $table = ob_get_clean(); ?>

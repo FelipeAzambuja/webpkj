@@ -212,6 +212,9 @@ REWRITE;
         }
         break;
 
+    case "debug":
+        s(Debug::cmd($argv[2], explode(',',$argv[3]))->watchs);
+        break;
     case "ajuda":
     case "help":
         ajuda();
@@ -328,6 +331,8 @@ function ajuda() {
     echo " Configura o webpkj" . PHP_EOL;
     echo color("update", "white");
     echo " Atualiza a pasta pkj" . PHP_EOL;
+    echo color('debug pagina "$variavel1,cmd1(),$variavel2"', "white");
+    echo " Executa esse debug aonde esta o Debug::wait() da pagina" . PHP_EOL;
 
 //    echo color("crud", "white");
 //    echo " Cria um 'crud' basico com base na tabela informada" . PHP_EOL;

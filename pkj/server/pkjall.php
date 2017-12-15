@@ -32,7 +32,7 @@ if ($useSmarty) {
     include 'smarty/Smarty.class.php';
 }
 include "pkjstring.php";
-include "pkjconf.php";
+include "pkjconf.php";//
 
 include "pkj.php";
 if (conf::$endereco !== "") {
@@ -56,6 +56,7 @@ if (conf::$quick) {
 //include "pkjorm.php";
 include 'ORM.php';
 require_all(realpath(__DIR__ . DIRECTORY_SEPARATOR."..". DIRECTORY_SEPARATOR."..". DIRECTORY_SEPARATOR."orm"));
+include 'Debug.php';
 //foreach (glob(__DIR__ . "/../../orm/*/*.php") as $db):
 //    include $db;
 //endforeach;
