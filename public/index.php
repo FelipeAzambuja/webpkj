@@ -22,7 +22,7 @@ function init() {
     radio( "sexo" , "Masculino" , "sexo" , 3 ) ;
     radio( "sexo" , "Feminino" , "sexo" , 3 ) ;
     button( "Teste" , "click='teste()'  lock" , 3 ) ;
-    Debug::wait();
+    
     function teste( $form ) {
         alert( $form[ "nome" ] ) ;
     }

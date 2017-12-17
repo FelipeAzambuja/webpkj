@@ -18,17 +18,6 @@ if ( endswith( $path , "public/" ) ) {
     $path = "public/index" ;
 }
 $path .= '.php' ;
-if ( !file_exists( $path ) ) {
-    if ( file_exists( replace( $path , '.php' , '.html' ) ) ) {
-        $html = file_get_contents( replace( $path , '.php' , '.html' ) ) ;
-        $html = replace( $html , 'href="' , 'href="' . $url . dirname( $path ) . '/' ) ;
-        $html = replace( $html , 'src="' , 'src="' . $url . dirname( $path ) . '/' ) ;
-        echo $html ;
-        exit() ;
-    }
-    $file_not_found = $path ;
-    $path = "public/err_404.php" ;
-}
 if ( isset( $_SERVER[ 'HTTPS' ] ) &&
         ($_SERVER[ 'HTTPS' ] == 'on' || $_SERVER[ 'HTTPS' ] == 1) ||
         isset( $_SERVER[ 'HTTP_X_FORWARDED_PROTO' ] ) &&
@@ -38,12 +27,56 @@ if ( isset( $_SERVER[ 'HTTPS' ] ) &&
     $protocol = 'http' ;
 }
 $url = "{$protocol}://{$_SERVER[ 'HTTP_HOST' ]}" . $url ;
-include $path ;
 
-if ( isset( $_POST[ "CMD" ] ) ) {
-    ob_clean() ;
-    include "pkj/server/pkjbind.php" ;
+//if ( !file_exists( $path ) ) {
+if ( file_exists( replace( $path , '.php' , '.html' ) ) ) {
+    $html = file_get_contents( replace( $path , '.php' , '.html' ) ) ;
+    $html = replace( $html , 'href="' , 'href="' . $url . dirname( $path ) . '/' ) ;
+    $html = replace( $html , 'src="' , 'src="' . $url . dirname( $path ) . '/' ) ;
+    echo $html ;
+    exit() ;
+} elseif ( file_exists( replace( $path , '.php' , '.tpl' ) ) ) {
+    include 'pkj/server/smarty/SmartyBC.class.php' ;
+    $smarty = new SmartyBC() ;
+    $smarty->assign('url',$url);
+    $smarty->assign('template',$template);
+    $smarty->assign('path',$path);
+    
+    
+    $smarty->php_handling = Smarty::PHP_ALLOW ;
+    $smarty->setTemplateDir( __DIR__ . 'pkj/server/smarty/templates' ) ;
+    $smarty->setCompileDir( __DIR__ . 'pkj/server/smarty/templates_c' ) ;
+    $smarty->setCacheDir( __DIR__ . 'pkj/server/smarty/cache' ) ;
+    $smarty->setConfigDir( __DIR__ . 'pkj/server/smarty/configs' ) ;
+    $smarty->display( replace( $path , '.php' , '.tpl' ) ) ;
+
+
+    if ( isset( $_POST[ "CMD" ] ) ) {
+        if(file_exists($path)){
+            include $path;
+        }
+        ob_clean() ;
+        include "pkj/server/pkjbind.php" ;
+    }
+    exit() ;
+} elseif ( file_exists( $path ) ) {
+    include $path ;
+
+    if ( isset( $_POST[ "CMD" ] ) ) {
+        ob_clean() ;
+        include "pkj/server/pkjbind.php" ;
+    } else {
+        if ( $template !== '' ) {
+            $content = ob_get_clean() ;
+            include "public/" . $template ;
+            exit() ;
+        }
+        echo ob_get_clean() ;
+    }
 } else {
+    $file_not_found = $path ;
+    $path = "public/err_404.php" ;
+    include $path ;
     if ( $template !== '' ) {
         $content = ob_get_clean() ;
         include "public/" . $template ;
@@ -51,3 +84,5 @@ if ( isset( $_POST[ "CMD" ] ) ) {
     }
     echo ob_get_clean() ;
 }
+//}
+//arquivos php 

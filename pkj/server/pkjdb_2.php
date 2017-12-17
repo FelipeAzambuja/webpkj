@@ -14,9 +14,10 @@ class Db {
     public $fetch ;
     public $db ;
     public $driver ;
+    public $querys ;
 
     function __construct( $servidor , $endereco = null , $base = null , $usuario = null , $senha = null ) {
-
+        $this->querys = [] ;
         $this->db = $base ;
         if ( $servidor === "postgre" ) {
             $servidor = "pgsql" ;
@@ -34,7 +35,7 @@ class Db {
                 $endereco = __DIR__ . '/' . $endereco ;
                 $this->pdo = new PDO( "sqlite:{$endereco}" , null , null , array(
                     PDO::ATTR_PERSISTENT => true
-                ) ) ;
+                        ) ) ;
             } else {
                 $this->pdo = new PDO( "{$servidor}:host={$endereco};dbname={$base}" . (($servidor === "mysql") ? ";charset=UTF8" : "") , $usuario , $senha ) ;
             }
@@ -101,6 +102,9 @@ class Db {
     }
 
     function is_multibyte( $s ) {
+        if ( !is_string( $s ) ) {
+            return false ;
+        }
         return mb_strlen( $s , 'utf-8' ) < strlen( $s ) ;
     }
 
@@ -165,21 +169,6 @@ class Db {
             }
         }
         if ( is_array( $where ) ) {
-            //remover nulls
-            if ( is_array_numeric( $where ) ) {
-                for ( $index1 = 0 ; $index1 < count( $where ) ; $index1++ ) {
-                    if ( $where[ $index1 ] === null ) {
-                        array_slice( $where , $index1 ) ;
-                    }
-                }
-            } else {
-                foreach ( $where as $key => $value ) {
-                    if ( $value === null ) {
-                        unset( $where[ $key ] ) ;
-                    }
-                }
-            }
-
             if ( count( $where ) > 0 ) {
                 if ( is_array( array_keys( $where ) ) ) {
                     //["nome"=>"a"],["senha"=>"123"]
@@ -188,9 +177,19 @@ class Db {
                         if ( $this->is_multibyte( $value ) ) {
                             $value = $this->pdo->quote( $value , PDO::PARAM_LOB ) ;
                         } else {
-                            $value = $this->pdo->quote( $value , PDO::PARAM_STR ) ;
+                            if ( $value !== null && is_string( $value ) ) {
+                                $value = $this->pdo->quote( $value , PDO::PARAM_STR ) ;
+                            }
                         }
-                        $list[] = "{$key}={$value}" ;
+                        if ( $value === null ) {
+                            $list[] = "{$key} is null" ;
+                        } elseif ( is_array( $value ) ) {
+                            $list[] = "{$key} in (" . implode( ',' , array_map( function($v) {
+                                                return (is_string( $v ) || is_null( $v )) ? "'{$v}'" : $v ;
+                                            } , $value ) ) . ")" ;
+                        } else {
+                            $list[] = "{$key}={$value}" ;
+                        }
                     }
                     return implode( " AND " , $list ) ;
                 } elseif ( is_int( array_keys( $where ) ) ) {
@@ -254,6 +253,10 @@ class Db {
             }
             $c++ ;
         }
+        $this->querys[] = [
+            'sql' => $this->last_sql ,
+            'parameters' => $this->last_parameters
+                ] ;
         ob_start() ;
         $p->debugDumpParams() ;
         $this->dump = ob_get_contents() ;
