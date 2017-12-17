@@ -34,6 +34,9 @@
 
         </tbody>
     </table>
+    {foreach $pessoas as $pessoa}
+        {$pessoa->id}
+    {/foreach}
 {/block}
 
 
