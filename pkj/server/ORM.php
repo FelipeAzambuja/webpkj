@@ -8,24 +8,24 @@ class ORM implements JsonSerializable {
      * @access private
      * @var string
      */
-    public $table_name;
+    public $table_name ;
     //name   | type    | dbtype   | detype
-    public $fields = [];
+    public $fields = [] ;
     //name   | type (php)
-    public $declared_fields = [];
+    public $declared_fields = [] ;
 
     /**
      *
      * @var Db 
      */
-    public $db = null;
+    public $db = null ;
 
-    function get_default($name) {
-        return false;
+    function get_default( $name ) {
+        return false ;
     }
 
     function get_table_name() {
-        return "";
+        return "" ;
     }
 
     function on_create() {
@@ -41,33 +41,33 @@ class ORM implements JsonSerializable {
      * @param string $table_name
      * @param Db $db
      */
-    function __construct($table_name = null, $db = null) {
-        if ($table_name === null) {
-            $table_name = $this->get_table_name();
+    function __construct( $table_name = null , $db = null ) {
+        if ( $table_name === null ) {
+            $table_name = $this->get_table_name() ;
         }
-        $this->table_name = $table_name;
-        if ($db === null) {
-            $this->db = conf::$pkj_bd_sis_conexao;
+        $this->table_name = $table_name ;
+        if ( $db === null ) {
+            $this->db = conf::$pkj_bd_sis_conexao ;
         } else {
-            $this->db = $db;
+            $this->db = $db ;
         }
-        $this->parse_fields();
-        $this->create_table();
+        $this->parse_fields() ;
+        $this->create_table() ;
     }
 
     /**
      * Fill data
      * @param array $form
      */
-    public function fromArray($form) {
-        $is_a = is_array($form);
+    public function fromArray( $form ) {
+        $is_a = is_array( $form ) ;
 
-        foreach ($this->fields as $f) {
-            if (isset($form[$f->name])) {
-                if ($is_a) {
-                    $this->{$f->name} = $form[$f->name];
+        foreach ( $this->fields as $f ) {
+            if ( isset( $form[ $f->name ] ) ) {
+                if ( $is_a ) {
+                    $this->{$f->name} = $form[ $f->name ] ;
                 } else {
-                    $this->{$f->name} = $form{$f->name};
+                    $this->{$f->name} = $form{$f->name} ;
                 }
             }
         }
@@ -79,11 +79,11 @@ class ORM implements JsonSerializable {
      * @param int $id
      * @return self|static
      */
-    function byId($id) {
-        $id = intval(trim($id));
-        return $this->select([
+    function byId( $id ) {
+        $id = intval( trim( $id ) ) ;
+        return $this->select( [
                     "id" => $id
-                ])[0];
+                ] )[ 0 ] ;
     }
 
     /**
@@ -91,114 +91,119 @@ class ORM implements JsonSerializable {
      * @return int id insert
      */
     function insert() {
-        $myNameIs = get_class($this);
+        $myNameIs = get_class( $this ) ;
         //primeiro verificar se precisa criar os relacionados
-        $a = array();
-        $objetos_criados = [];
-        foreach ($this->fields as $f) {
-            if ($f->name === "id") {
-                continue;
+        $a = array() ;
+        $objetos_criados = [] ;
+        foreach ( $this->fields as $f ) {
+            if ( $f->name === "id" ) {
+                continue ;
             }
-            if (is_array($this->{$f->name})) {
+            if ( is_array( $this->{$f->name} ) ) {
 
-                foreach ($this->{$f->name} as $c) {
-                    $tfieldClass = explode(".", $f->relation[1])[0];
+                foreach ( $this->{$f->name} as $c ) {
+                    $tfieldClass = explode( "." , $f->relation[ 1 ] )[ 0 ] ;
 //                    $tfieldName = $f->relation[0];
-                    $tfieldName = explode(".", $f->relation[1])[1];
+                    $tfieldName = explode( "." , $f->relation[ 1 ] )[ 1 ] ;
 
                     $objetos_criados[] = [
-                        "obj" => $c,
+                        "obj" => $c ,
                         "field" => $tfieldName
-                    ];
+                            ] ;
                 }
             } else {
                 //também tem treta 
                 //testar 1 para 1
-                if (is_object($this->{$f->name})) {
-                    $o = $this->{$f->name};
-                    if (!is_numeric($o->id)) {
-                        
-                        $o = $o->insert();
+                if ( is_object( $this->{$f->name} ) ) {
+                    $o = $this->{$f->name} ;
+                    if ( !is_numeric( $o->id ) ) {
+
+                        $o = $o->insert() ;
                     }
-                    $a[$f->name] = $o->id;
+                    $a[ $f->name ] = $o->id ;
                 } else {
-                    $a[$f->name] = $this->{$f->name};
+                    $a[ $f->name ] = $this->{$f->name} ;
                 }
             }
         }
-        $i = $this->db->insert($this->table_name, $a);
-        if ($i !== false) {
-            $last = array();
-            foreach ($objetos_criados as $obj) {
-                $obj["obj"]->{$obj["field"]} = $this->db->last_insert_id($this->table_name);
-                echo $obj["obj"]->id;
-                if (!is_numeric($obj["obj"]->id)) {
-                    
-                    $obj["obj"]->insert();
+        $i = $this->db->insert( $this->table_name , $a ) ;
+        if ( $i !== false ) {
+            $last = array() ;
+            foreach ( $objetos_criados as $obj ) {
+                $obj[ "obj" ]->{$obj[ "field" ]} = $this->db->last_insert_id( $this->table_name ) ;
+                echo $obj[ "obj" ]->id ;
+                if ( !is_numeric( $obj[ "obj" ]->id ) ) {
+
+                    $obj[ "obj" ]->insert() ;
                 }
-                
             }
-            $last = one($this->select($a, " order by id desc limit 1 "));
-            return $last;
+            $last = one( $this->select( $a , " order by id desc limit 1 " ) ) ;
+            return $last ;
         } else {
-            return false;
+            return false ;
         }
     }
 
     /**
      * @param array $where
      */
-    function delete($where) {
-        $this->db->delete($this->table_name, $where);
+    function delete( $where ) {
+        $this->db->delete( $this->table_name , $where ) ;
     }
 
     /**
      * @param string where
      * @return boolean 
      */
-    function update($values, $where = array()) {
-        if (count($where) < 1) {
-            foreach ($this->fields as $key => $value) {
-                $v = $this->{$value->name};
-                if ($v !== null) {
-                    $where[$value->name] = $v;
+    function update( $where = array() ) {
+        $values = [] ;
+        foreach ( $this->fields as $field ) {
+            if ( $this->{$field->name} !== null ) {
+                $values[ $field->name ] = $this->{$field->name} ;
+            }
+        }
+        if ( count( $where ) < 1 ) {
+            foreach ( $this->fields as $key => $value ) {
+                $v = $this->{$value->name} ;
+                if ( $v !== null ) {
+                    $where[ $value->name ] = $v ;
                 }
             }
         }
-        $this->db->update($this->table_name, $values, $where);
+        $this->db->update( $this->table_name , $values , $where ) ;
     }
 
-    public function exists($where) {
-        return $this->db->exists($this->table_name, $where);
+    public function exists( $where ) {
+        return $this->db->exists( $this->table_name , $where ) ;
     }
 
-    function insert_or_update($where) {
-        if ($this->exists($where)) {
-            $values = [];
-            foreach ($this->fields as $key => $value) {
-                $v = $this->{$value->name};
-                if ($v !== null) {
-                    $values[$value->name] = $v;
+    function insert_or_update( $where ) {
+        if ( $this->exists( $where ) ) {
+            $values = [] ;
+            foreach ( $this->fields as $key => $value ) {
+                $v = $this->{$value->name} ;
+                if ( $v !== null ) {
+                    $values[ $value->name ] = $v ;
                 }
             }
-            return $this->update($values, $where);
+            return $this->update( $values , $where ) ;
         } else {
-            return $this->insert();
+            return $this->insert() ;
         }
     }
 
     public function __debugInfo() {
-        return json_decode(json_encode($this, JSON_NUMERIC_CHECK), true);
+        return json_decode( json_encode( $this , JSON_NUMERIC_CHECK ) , true ) ;
     }
 
-    public static function cast($destination, \stdClass $source) {
-        $sourceReflection = new \ReflectionObject($source);
-        $sourceProperties = $sourceReflection->getProperties();
-        foreach ($sourceProperties as $sourceProperty) {
-            $name = $sourceProperty->getName();
-            $destination->{$name} = $source->$name;
+    public static function cast( $destination , \stdClass $source ) {
+        $sourceReflection = new \ReflectionObject( $source ) ;
+        $sourceProperties = $sourceReflection->getProperties() ;
+        foreach ( $sourceProperties as $sourceProperty ) {
+            $name = $sourceProperty->getName() ;
+            $destination->{$name} = $source->$name ;
         }
-        return $destination;
+        return $destination ;
     }
 
     /**
@@ -207,24 +212,24 @@ class ORM implements JsonSerializable {
      * @param type $plus
      * @return self|static|array
      */
-    function select($where = "", $plus = "") {
-        $me = $this->db->select($this->table_name, $where, $plus);
-        for ($index = 0; $index < count($me); $index++) {
-            $me[$index] = $this->cast(clone $this, $me[$index]);
-            foreach ($this->fields as $tfield) {
-                if (isset($tfield->relation)) {
-                    if (count($tfield->relation) > 1) {
-                        $tfieldClass = explode(".", $tfield->relation[1])[0];
-                        $tfieldClassField = explode(".", $tfield->relation[1])[1];
-                        $tfieldName = $tfield->relation[0];
-                        $obj = (new ReflectionClass($tfieldClass))->newInstance();
-                        $retorno = $obj->select([
-                            $tfieldClassField => $me[$index]->{$tfieldName}
-                        ]);
-                        if ($tfieldName !== "id") {
-                            $retorno = one($retorno);
+    function select( $where = "" , $plus = "" ) {
+        $me = $this->db->select( $this->table_name , $where , $plus ) ;
+        for ( $index = 0 ; $index < count( $me ) ; $index++ ) {
+            $me[ $index ] = $this->cast( clone $this , $me[ $index ] ) ;
+            foreach ( $this->fields as $tfield ) {
+                if ( isset( $tfield->relation ) ) {
+                    if ( count( $tfield->relation ) > 1 ) {
+                        $tfieldClass = explode( "." , $tfield->relation[ 1 ] )[ 0 ] ;
+                        $tfieldClassField = explode( "." , $tfield->relation[ 1 ] )[ 1 ] ;
+                        $tfieldName = $tfield->relation[ 0 ] ;
+                        $obj = (new ReflectionClass( $tfieldClass ) )->newInstance() ;
+                        $retorno = $obj->select( [
+                            $tfieldClassField => $me[ $index ]->{$tfieldName}
+                                ] ) ;
+                        if ( $tfieldName !== "id" ) {
+                            $retorno = one( $retorno ) ;
                         }
-                        $me[$index]->{$tfield->name} = $retorno;
+                        $me[ $index ]->{$tfield->name} = $retorno ;
                     }
                 }
             }
@@ -234,7 +239,7 @@ class ORM implements JsonSerializable {
 //            unset($me[$index]->db);
         }
 //        $fromArray = $this->fromArray($me);
-        return $me;
+        return $me ;
     }
 
     /**
@@ -242,107 +247,107 @@ class ORM implements JsonSerializable {
      * @param string $doc
      * @return object
      */
-    private function doc_info($doc) {
-        $r = [];
-        $doc = explode("\n", $doc);
-        foreach ($doc as $l) {
-            $l = trim(str_replace(['*', '/'], ['', ''], $l));
-            if ($l !== '') {
-                $ex = array_filter(explode(' ', $l));
-                if (count($ex) > 1) {
-                    for ($index = 2; $index < count($ex); $index++) {
-                        $ex[1] .= $ex[$index];
+    private function doc_info( $doc ) {
+        $r = [] ;
+        $doc = explode( "\n" , $doc ) ;
+        foreach ( $doc as $l ) {
+            $l = trim( str_replace( [ '*' , '/' ] , [ '' , '' ] , $l ) ) ;
+            if ( $l !== '' ) {
+                $ex = array_filter( explode( ' ' , $l ) ) ;
+                if ( count( $ex ) > 1 ) {
+                    for ( $index = 2 ; $index < count( $ex ) ; $index++ ) {
+                        $ex[ 1 ] .= $ex[ $index ] ;
                     }
-                    $r[$ex[0]] = $ex[1];
+                    $r[ $ex[ 0 ] ] = $ex[ 1 ] ;
                 } else {
-                    $r[$ex[0]] = true;
+                    $r[ $ex[ 0 ] ] = true ;
                 }
             }
         }
-        return $r;
+        return $r ;
     }
 
-    private function get_info($info, $key, $default) {
-        foreach ($info as $k => $v) {
-            if ($k === $key) {
-                return trim($v);
+    private function get_info( $info , $key , $default ) {
+        foreach ( $info as $k => $v ) {
+            if ( $k === $key ) {
+                return trim( $v ) ;
             }
         }
-        return $default;
+        return $default ;
     }
 
     public function parse_fields() {
-        $vars = get_class_vars(get_class($this));
-        $parsed = [];
-        foreach ($vars as $k => $v) {
-            $rv = new ReflectionProperty(get_class($this), $k);
-            if ($rv->getDeclaringClass()->name === get_class($this)) {
-                $tmp = new stdClass();
-                $tmp->name = $rv->getName();
-                $tmp->doc = (string) $rv->getDocComment();
-                $tmp->info = $this->doc_info($tmp->doc);
-                $tmp->type = $this->get_info($tmp->info, '@var', 'string');
-                $tmp->dbtype = $this->db->detranslate_field($tmp->type);
-                $tmp->lenght = $this->get_info($tmp->info, '@lenght', '0');
-                $tmp->pk = $this->get_info($tmp->info, '@pk', 'false');
-                $tmp->default = $this->get_info($tmp->info, '@default', '');
-                $relation = $this->get_info($tmp->info, '@relation', 'false');
-                $tmp->relation = explode("=", $relation);
-                $class = $tmp->type;
-                if (strpos($class, "|")) {
-                    $class = explode("|", $class)[0];
+        $vars = get_class_vars( get_class( $this ) ) ;
+        $parsed = [] ;
+        foreach ( $vars as $k => $v ) {
+            $rv = new ReflectionProperty( get_class( $this ) , $k ) ;
+            if ( $rv->getDeclaringClass()->name === get_class( $this ) ) {
+                $tmp = new stdClass() ;
+                $tmp->name = $rv->getName() ;
+                $tmp->doc = ( string ) $rv->getDocComment() ;
+                $tmp->info = $this->doc_info( $tmp->doc ) ;
+                $tmp->type = $this->get_info( $tmp->info , '@var' , 'string' ) ;
+                $tmp->dbtype = $this->db->detranslate_field( $tmp->type ) ;
+                $tmp->lenght = $this->get_info( $tmp->info , '@lenght' , '0' ) ;
+                $tmp->pk = $this->get_info( $tmp->info , '@pk' , 'false' ) ;
+                $tmp->default = $this->get_info( $tmp->info , '@default' , '' ) ;
+                $relation = $this->get_info( $tmp->info , '@relation' , 'false' ) ;
+                $tmp->relation = explode( "=" , $relation ) ;
+                $class = $tmp->type ;
+                if ( strpos( $class , "|" ) ) {
+                    $class = explode( "|" , $class )[ 0 ] ;
                 }
 //                s($class);
-                if (!class_exists($class)) {
-                    $class = false;
+                if ( !class_exists( $class ) ) {
+                    $class = false ;
                 }
-                $tmp->class = $class;
-                $tmp->comment = $this->get_info($tmp->info, '@comment', '');
-                if ($tmp->name === "id" && $tmp->pk === "false") {
-                    $tmp->pk = "true";
-                    $tmp->type = "integer";
-                    if ($this->db->driver === "pgsql") {
-                        $tmp->dbtype = "serial";
+                $tmp->class = $class ;
+                $tmp->comment = $this->get_info( $tmp->info , '@comment' , '' ) ;
+                if ( $tmp->name === "id" && $tmp->pk === "false" ) {
+                    $tmp->pk = "true" ;
+                    $tmp->type = "integer" ;
+                    if ( $this->db->driver === "pgsql" ) {
+                        $tmp->dbtype = "serial" ;
                     } else {
-                        $tmp->dbtype = "int";
+                        $tmp->dbtype = "int" ;
                     }
                 }
-                $parsed[] = $tmp;
+                $parsed[] = $tmp ;
             }
         }
-        $this->fields = $parsed;
+        $this->fields = $parsed ;
     }
 
     public function create_table() {
-        if (!$this->db->table_exists($this->table_name)) {
-            $sql = "create table " . $this->table_name;
-            $sql .= "(";
-            $fs = [];
-            foreach ($this->fields as $f) {
-                $fs [] = "{$f->name} {$f->dbtype}" . (( intval($f->lenght) > 0 ) ? "({$f->lenght})" : "") . " " . (($f->pk === "true") ? $this->db->get_pk_auto() : "");
+        if ( !$this->db->table_exists( $this->table_name ) ) {
+            $sql = "create table " . $this->table_name ;
+            $sql .= "(" ;
+            $fs = [] ;
+            foreach ( $this->fields as $f ) {
+                $fs [] = "{$f->name} {$f->dbtype}" . (( intval( $f->lenght ) > 0 ) ? "({$f->lenght})" : "") . " " . (($f->pk === "true") ? $this->db->get_pk_auto() : "") ;
             }
-            $sql .= implode(",", $fs);
-            $sql .= ")";
-            $this->db->query($sql);
-            $this->on_create();
+            $sql .= implode( "," , $fs ) ;
+            $sql .= ")" ;
+            $this->db->query( $sql ) ;
+            $this->on_create() ;
         } else {
-            $table_fields = $this->db->table_fields($this->table_name);
-            foreach ($this->fields as $f) {
-                if (!in_array($f->name, col($table_fields, "name"))) {
-                    $sql = "alter table {$this->table_name} add column {$f->name} {$f->dbtype}" . (( intval($f->lenght) > 0 ) ? "({$f->lenght})" : "") . " " . (($f->pk === "true") ? $this->db->get_pk_auto() : "");
-                    $this->db->query($sql);
+            $table_fields = $this->db->table_fields( $this->table_name ) ;
+            foreach ( $this->fields as $f ) {
+                if ( !in_array( $f->name , col( $table_fields , "name" ) ) ) {
+                    $sql = "alter table {$this->table_name} add column {$f->name} {$f->dbtype}" . (( intval( $f->lenght ) > 0 ) ? "({$f->lenght})" : "") . " " . (($f->pk === "true") ? $this->db->get_pk_auto() : "") ;
+                    $this->db->query( $sql ) ;
                 }
             }
-            $this->on_alter();
+            $this->on_alter() ;
         }
     }
 
     public function jsonSerialize() {
-        unset($this->fields);
-        unset($this->table_name);
-        unset($this->declared_fields);
-        unset($this->db);
-        return $this;
+        unset( $this->fields ) ;
+        unset( $this->table_name ) ;
+        unset( $this->declared_fields ) ;
+        unset( $this->db ) ;
+        return $this ;
     }
 
 }

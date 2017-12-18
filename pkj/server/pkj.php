@@ -25,6 +25,14 @@ function require_all($dir) {
     }
 }
 
+function imgtag64( $data , $plus = '' ) {
+    return '<img src=' . srcbase64( $data ) . ' ' . $plus . ' />' ;
+}
+
+function srcbase64( $data , $mime = 'image' ) {
+    return 'data:' . $mime . ';base64,' . base64_encode( $data ) ;
+}
+
 function download($arquivo, $mine = "") {
     $ext = explode(".", $arquivo);
     $ext = ((empty($ext[count($ext) - 1]) || count($ext) == 1) ? "" : $ext[count($ext) - 1]);
