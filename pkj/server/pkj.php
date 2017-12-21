@@ -26,6 +26,9 @@ function require_all($dir) {
 }
 
 function imgtag64( $data , $plus = '' ) {
+    if($data === null){
+        return '';
+    }
     return '<img src=' . srcbase64( $data ) . ' ' . $plus . ' />' ;
 }
 

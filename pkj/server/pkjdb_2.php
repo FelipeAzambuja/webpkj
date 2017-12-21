@@ -223,11 +223,6 @@ class Db {
      * @return PDOStatement
      */
     function statement( $sql , $parameters = array() ) {
-//        $sql = str_replace(PHP_EOL, '', $sql);
-//        $sql = str_replace("\r", '', $sql);
-//        $sql = str_replace("\n", '', $sql);
-//        $sql = str_replace("\t", ' ', $sql);
-//        $sql = trim($sql);
         $this->last_sql = $sql ;
         $this->last_parameters = $parameters ;
         $p = $this->pdo->prepare( $sql ) ;
@@ -235,7 +230,7 @@ class Db {
             return false ;
         }
         $c = 1 ;
-//		s($sql);
+
         foreach ( $parameters as $key => $value ) {
 
             if ( $this->is_multibyte( $value ) ) {

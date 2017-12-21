@@ -69,9 +69,17 @@ class ORM implements JsonSerializable {
                 } else {
                     $this->{$f->name} = $form{$f->name} ;
                 }
+                //não apagar a foto quando vier null para casos de formulario de updates
+                if ( in_array( $f->type , [ 'blob' , 'image' ] ) && $this->{$f->name} == 'null' ) {
+                    unset( $this->{$f->name} ) ;
+                    continue ;
+                }
+                if ( in_array( $f->type , [ 'blob' , 'image' ] ) ) {
+                    $this->{$f->name} = upload_parser( $form{$f->name} )->getData() ;
+                }
             }
         }
-//        return $obj;
+        return $this;
     }
 
     /**
@@ -148,7 +156,7 @@ class ORM implements JsonSerializable {
      * @param array $where
      */
     function delete( $where ) {
-        $this->db->delete( $this->table_name , $where ) ;
+        return $this->db->delete( $this->table_name , $where ) ;
     }
 
     /**
@@ -170,7 +178,7 @@ class ORM implements JsonSerializable {
                 }
             }
         }
-        $this->db->update( $this->table_name , $values , $where ) ;
+        return $this->db->update( $this->table_name , $values , $where ) ;
     }
 
     public function exists( $where ) {
