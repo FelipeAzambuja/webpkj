@@ -71,7 +71,7 @@ class ORM implements JsonSerializable {
                 }
                 //não apagar a foto quando vier null para casos de formulario de updates
                 if ( in_array( $f->type , [ 'blob' , 'image' ] ) && $this->{$f->name} == 'null' ) {
-                    unset( $this->{$f->name} ) ;
+                    $this->{$f->name} = null;
                     continue ;
                 }
                 if ( in_array( $f->type , [ 'blob' , 'image' ] ) ) {
