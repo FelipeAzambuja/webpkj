@@ -1,135 +1,139 @@
 <?php
 
-function import($name) {
-    resource()->import($name);
+function sql_join( &$select , $table , $where , $plus = '' ) {
+    return db()->join( $select , $table , $where , $plus );
 }
 
-function jquery($id, $code) {
-    bind()->jquery($id, $code);
+function import( $name ) {
+    resource()->import( $name );
 }
 
-function attr($id, $name, $value) {
-    bind()->attr($id, $name, $value);
+function jquery( $id , $code ) {
+    bind()->jquery( $id , $code );
 }
 
-function alert($msg) {
-    JS::alert($msg);
+function attr( $id , $name , $value ) {
+    bind()->attr( $id , $name , $value );
 }
 
-function console($msg) {
-    JS::console($msg);
+function alert( $msg ) {
+    JS::alert( $msg );
 }
 
-function redirect($page, $data = "") {
-    JS::redirect($page, $data);
+function console( $msg ) {
+    JS::console( $msg );
 }
 
-function popup($msg, $id = "") {
-    JS::popup($msg, $id);
+function redirect( $page , $data = "" ) {
+    JS::redirect( $page , $data );
 }
 
-function popup_close($id = "") {
-    JS::popup_close($id);
+function popup( $msg , $id = "" ) {
+    JS::popup( $msg , $id );
 }
 
-function value($id, $value) {
-    setValue($id, $value);
+function popup_close( $id = "" ) {
+    JS::popup_close( $id );
 }
 
-function setValue($id, $value) {
-    bind()->setValue($id, $value);
+function value( $id , $value ) {
+    setValue( $id , $value );
 }
 
-function html($id, $html) {
-    bind()->setHtml($id, $html);
+function setValue( $id , $value ) {
+    bind()->setValue( $id , $value );
 }
 
-function setHtml($id, $html) {
-    bind()->setHtml($id, $html);
+function html( $id , $html ) {
+    bind()->setHtml( $id , $html );
 }
 
-function setText($id, $text) {
-    bind()->setText($id, $text);
+function setHtml( $id , $html ) {
+    bind()->setHtml( $id , $html );
 }
 
-function append($id, $text) {
-    bind()->append($id, $text);
+function setText( $id , $text ) {
+    bind()->setText( $id , $text );
 }
 
-function setEnable($id) {
-    bind()->setEnable($id);
+function append( $id , $text ) {
+    bind()->append( $id , $text );
 }
 
-function setDisable($id) {
-    bind()->setDisable($id);
+function setEnable( $id ) {
+    bind()->setEnable( $id );
 }
 
-function show($id) {
-    bind()->show($id);
+function setDisable( $id ) {
+    bind()->setDisable( $id );
 }
 
-function hide($id) {
-    bind()->hide($id);
+function show( $id ) {
+    bind()->show( $id );
 }
 
-function focus($id) {
-    bind()->focus($id);
+function hide( $id ) {
+    bind()->hide( $id );
 }
 
-function setInterval($function, $time, $parameters = array(), $page = "") {
-    bind()->setInterval($function, $time, $parameters, $page);
+function focus( $id ) {
+    bind()->focus( $id );
 }
 
-function setTimeout($function, $time, $parameters = array(), $page = "") {
-    bind()->setTimeout($function, $time, $parameters, $page);
+function setInterval( $function , $time , $parameters = array() , $page = "" ) {
+    bind()->setInterval( $function , $time , $parameters , $page );
 }
 
-function stopInterval($function) {
-    bind()->stopInterval($function);
+function setTimeout( $function , $time , $parameters = array() , $page = "" ) {
+    bind()->setTimeout( $function , $time , $parameters , $page );
 }
 
-function stopTimeout($function) {
-    bind()->stopTimeout($function);
+function stopInterval( $function ) {
+    bind()->stopInterval( $function );
 }
 
-function tpl($file, $data = array()) {
-    return template($file, $data);
+function stopTimeout( $function ) {
+    bind()->stopTimeout( $function );
 }
 
-function template($file, $data = array()) {
+function tpl( $file , $data = array() ) {
+    return template( $file , $data );
+}
+
+function template( $file , $data = array() ) {
     $file = "templates/{$file}.tpl";
 
-    if (!file_exists($file)) {
-        throw new Exception("Arquivo não existe $file");
+    if ( !file_exists( $file ) ) {
+        throw new Exception( "Arquivo não existe $file" );
     }
     $smarty = new Smarty();
-    foreach ($data as $key => $value) {
-        $smarty->assign($key, $value);
+    foreach ( $data as $key => $value ) {
+        $smarty->assign( $key , $value );
     }
     ob_start();
-    $smarty->display($file);
+    $smarty->display( $file );
     $html = ob_get_contents();
     ob_end_clean();
     return $html;
 }
 
-function smarty($file, $data = null, $cache = true) {
+function smarty( $file , $data = null , $cache = true ) {
     $smarty = new Smarty();
-    if ($data != null) {
-        foreach ($data as $key => $value) {
-            $smarty->assign($key, $value);
+    if ( $data != null ) {
+        foreach ( $data as $key => $value ) {
+            $smarty->assign( $key , $value );
         }
     }
-    $smarty->setTemplateDir(__DIR__ . '/smarty/templates');
-    $smarty->setCompileDir(__DIR__ . '/smarty/templates_c');
-    $smarty->setCacheDir(__DIR__ . '/smarty/cache');
-    $smarty->setConfigDir(__DIR__ . '/smarty/configs');
+    $smarty->setTemplateDir( __DIR__ . '/smarty/templates' );
+    $smarty->setCompileDir( __DIR__ . '/smarty/templates_c' );
+    $smarty->setCacheDir( __DIR__ . '/smarty/cache' );
+    $smarty->setConfigDir( __DIR__ . '/smarty/configs' );
     $mod = (($cache) ? "string" : "eval");
     ob_start();
-    if (is_file($file)) {
-        $smarty->display($mod . ":" . file_get_contents($file));
+    if ( is_file( $file ) ) {
+        $smarty->display( $mod . ":" . file_get_contents( $file ) );
     } else {
-        $smarty->display($mod . ":" . $file);
+        $smarty->display( $mod . ":" . $file );
     }
 //  $html = str_replace ( array ( "\r" , "\n" ) , "" , ob_get_contents () );
     $html = ob_get_contents();
