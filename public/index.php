@@ -1,15 +1,12 @@
 <?php
 $template = "templates/template.php";
-
-$users = db()->select( 'user' );
-sql_join( $users , 'contatos' , [ 'pessoa' => 'id' , 'valor is null' ] );
-sd( $users );
 ?>
 <?php
 
 function init() {
     
 }
+
 ?>
 <form class="row" >
     <?php

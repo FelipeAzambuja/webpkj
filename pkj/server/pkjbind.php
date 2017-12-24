@@ -206,6 +206,8 @@ class OnsDialog {
 
 }
 
+
+
 class JS {
 
 //TODO implementar javascript
@@ -221,6 +223,8 @@ class JS {
         }
     }
 
+    
+    //trocar 
     public static function popup($mensagem, $id = "") {
         ?>popup("<?php echo JS::addslashes($mensagem) ?>");<?php
     }
