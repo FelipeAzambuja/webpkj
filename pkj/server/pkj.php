@@ -25,15 +25,15 @@ function require_all($dir) {
     }
 }
 
-function imgtag64( $data , $plus = '' ) {
-    if($data === null){
+function imgtag64($data, $plus = '') {
+    if ($data === null) {
         return '';
     }
-    return '<img src=' . srcbase64( $data ) . ' ' . $plus . ' />' ;
+    return '<img src=' . srcbase64($data) . ' ' . $plus . ' />';
 }
 
-function srcbase64( $data , $mime = 'image' ) {
-    return 'data:' . $mime . ';base64,' . base64_encode( $data ) ;
+function srcbase64($data, $mime = 'image') {
+    return 'data:' . $mime . ';base64,' . base64_encode($data);
 }
 
 function download($arquivo, $mine = "") {
@@ -107,6 +107,12 @@ class Calendar {
         $data = $this->toString("americano completo");
         $timestamp = strtotime($data . $modify);
         return date($format, $timestamp);
+    }
+
+    public function timestamp() {
+        $data = $this->toString("americano completo");
+        $timestamp = strtotime($data);
+        return $timestamp;
     }
 
     public static function toSeconds($valor) {
@@ -274,6 +280,93 @@ function cstr($value) {
     return strval($value);
 }
 
+function is_empty($value, $trim = true) {
+    return !is_fill($value, $trim);
+}
+
+function is_fill($value, $trim = true) {
+    if (is_array($value)) {
+        foreach ($value as $v) {
+            if (!is_fill($v, $trim)) {
+                return false;
+            }
+        }
+        return true;
+    } else {
+        if (isset($value)) {
+            $check = $value;
+            if (is_null($check)) {
+                return false;
+            }
+            if ($trim) {
+                $check = trim($check);
+            }
+            if ($check === '') {
+                return false;
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+}
+
+function is_greater($value, $another_value) {
+    if (is_date($value)) {
+        $value = cdate($value)->timestamp();
+        $another_value = cdate($another_value)->timestamp();
+        return ($value >= $another_value);
+    } elseif (is_time($value)) {
+        $value = cdate()->toSeconds($value);
+        $another_value = cdate()->toSeconds($another_value);
+        return ($value >= $another_value);
+    } elseif (is_double($value) || is_numeric($value) || is_int($value)) {
+        return ($value >= $another_value);
+    }
+}
+
+function is_less($value, $another_value) {
+    if (is_date($value)) {
+        $value = cdate($value)->timestamp();
+        $another_value = cdate($another_value)->timestamp();
+        return ($value <= $another_value);
+    } elseif (is_time($value)) {
+        $value = cdate()->toSeconds($value);
+        $another_value = cdate()->toSeconds($another_value);
+        return ($value <= $another_value);
+    } elseif (is_double($value) || is_numeric($value) || is_int($value)) {
+        return ($value <= $another_value);
+    }
+}
+
+function is_between($value, $start, $end) {
+    if (is_date($value)) {
+        $value = cdate($value)->timestamp();
+        $start = cdate($start)->timestamp();
+        $end = cdate($end)->timestamp();
+        return (($start <= $value) && ($value <= $end));
+    } elseif (is_time($value)) {
+        $value = cdate()->toSeconds($value);
+        $start = cdate()->toSeconds($start);
+        $end = cdate()->toSeconds($end);
+        return (($start <= $value) && ($value <= $end));
+    } elseif (is_double($value) || is_numeric($value) || is_int($value)) {
+        return (($start <= $value) && ($value <= $end));
+    }
+}
+
+function compare($value, $another_value, $case = true) {
+    if ($case) {
+        return md5($value) === md5($another_value);
+    } else {
+        return md5(strtolower($value)) === md5(strtolower($another_value));
+    }
+}
+
+function is_email($value) {
+    return filter_var($value, FILTER_VALIDATE_EMAIL) !== false;
+}
+
 /**
  * Instancia um calendar
  * @param Calendar $value
@@ -284,7 +377,28 @@ function cdate($value = "") {
 }
 
 function is_date($value) {
-    return preg_match("/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $value);
+    $v = explode('-', $value);
+    if (count($v) > 1) {
+        foreach ($v as $t) {
+            if (intval($t) < 1) {
+                c('cagou aqui ' . $t);
+                return false;
+            }
+        }
+    }
+    $v = checkdate($v[1], $v[2], $v[0]);
+    if ($v === false) {
+        $v = explode('/', $value);
+        if (count($v) > 1) {
+            foreach ($v as $t) {
+                if (intval($t) < 1) {
+                    return false;
+                }
+            }
+        }
+        $v = checkdate($v[1], $v[0], $v[2]);
+    }
+    return $v;
 }
 
 function is_time($value) {

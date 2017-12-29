@@ -5,4 +5,3 @@ function teste2( $form ) {
 }
 
 $view[ 'pessoas' ] = db()->select( 'pessoas' , '' , 'limit 100' ) ;
-join($glue, $pieces);

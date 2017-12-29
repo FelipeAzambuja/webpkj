@@ -50,7 +50,7 @@ if ( file_exists( replace( $path , '.php' , '.html' ) ) ) {
             $smarty->assign($key, $value);
         }
     }
-
+    
     $smarty->php_handling = Smarty::PHP_ALLOW ;
     $smarty->setTemplateDir( __DIR__ . 'pkj/server/smarty/templates' ) ;
     $smarty->setCompileDir( __DIR__ . 'pkj/server/smarty/templates_c' ) ;
