@@ -1,7 +1,7 @@
 <?php
 
-function teste2( $form ) {
-    alert( $form[ "nome" ] ) ;
+function teste2($form) {
+    alert($form["nome"]);
 }
 
-$view[ 'pessoas' ] = db()->select( 'pessoas' , '' , 'limit 100' ) ;
+$view['pessoas'] = db()->select('pessoas', '', 'limit 100');
