@@ -52,10 +52,10 @@ if ( file_exists( replace( $path , '.php' , '.html' ) ) ) {
     }
     
     $smarty->php_handling = Smarty::PHP_ALLOW ;
-    $smarty->setTemplateDir( __DIR__ . 'pkj/server/smarty/templates' ) ;
-    $smarty->setCompileDir( __DIR__ . 'pkj/server/smarty/templates_c' ) ;
-    $smarty->setCacheDir( __DIR__ . 'pkj/server/smarty/cache' ) ;
-    $smarty->setConfigDir( __DIR__ . 'pkj/server/smarty/configs' ) ;
+    $smarty->setTemplateDir( __DIR__ . '/pkj/server/smarty/templates' ) ;
+    $smarty->setCompileDir( __DIR__ . '/pkj/server/smarty/templates_c' ) ;
+    $smarty->setCacheDir( __DIR__ . '/pkj/server/smarty/cache' ) ;
+    $smarty->setConfigDir( __DIR__ . '/pkj/server/smarty/configs' ) ;
     $smarty->display( replace( $path , '.php' , '.tpl' ) ) ;
 
 
