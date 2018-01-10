@@ -1,4 +1,19 @@
 <?php
+/**
+ * 
+ * @param object $destination
+ * @param \stdClass $source
+ * @return object
+ */
+function cast($destination, \stdClass $source) {
+    $sourceReflection = new \ReflectionObject($source);
+    $sourceProperties = $sourceReflection->getProperties();
+    foreach ($sourceProperties as $sourceProperty) {
+        $name = $sourceProperty->getName();
+        $destination->{$name} = $source->$name;
+    }
+    return $destination;
+}
 
 function is_array_numeric($a) {
     foreach (array_keys($a) as $key) {
@@ -84,8 +99,10 @@ class Calendar {
     public $minuto = "00";
     public $segundo = "00";
     public $semana = 1; //dia da semana
+    public $data = null;
 
     function __construct($data = "") {
+        $this->data = $data;
         if ($data == "") {
             $this->fromString(date('Y-m-d H:i:s'));
         } else {
@@ -104,6 +121,9 @@ class Calendar {
     }
 
     public function format($format, $modify = '') {
+        if ($this->data === null) {
+            return null;
+        }
         $data = $this->toString("americano completo");
         $timestamp = strtotime($data . $modify);
         return date($format, $timestamp);

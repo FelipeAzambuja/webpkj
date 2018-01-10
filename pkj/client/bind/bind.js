@@ -238,6 +238,9 @@ function formData(formulario) {
                 }
             } else {
                 if (typeof (valor) === "array" || typeof (valor) === "object") {
+                    if (valor === null) {
+                        valor = [];
+                    }
                     if (valor.length < 1) {
                         delete form[id];
                         id = id.replace('[]', '');

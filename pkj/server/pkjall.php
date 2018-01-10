@@ -26,6 +26,7 @@ function show_errors($v = true) {
 }
 
 show_errors();
+include 'Undefined.php';
 include 'pkjsession.php';
 $useSmarty = false;
 if ($useSmarty) {

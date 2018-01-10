@@ -1,12 +1,19 @@
 <?php
 
 /**
+ * 
+ * @return \Contatos
+ */
+function orm_contatos() {
+    return new Contatos();
+}
+
+/**
  * Description of Contatos
  *
  * @author felipe
  */
-class Contatos extends ORM
-{
+class Contatos extends ORM {
 
     public $id;
     public $tipo;
@@ -18,8 +25,7 @@ class Contatos extends ORM
      */
     public $pessoa;
 
-    public function get_table_name()
-    {
+    public function get_table_name() {
         return "contatos";
     }
 

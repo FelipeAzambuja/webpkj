@@ -265,7 +265,7 @@ function calendar($id, $plus = "", $size = 3) {
         $plus = "";
     }
     conf::$pkj_uid_comp++;
-    $html = "<input type='tel' id='{$id}'  data-calendar='true' {$plus} />";
+    $html = "<input type='text' id='{$id}'  data-calendar='true' {$plus} />";
     echo div($html, $size);
 }
 

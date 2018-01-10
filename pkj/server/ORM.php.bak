@@ -63,48 +63,32 @@ class ORM implements JsonSerializable {
         }
     }
 
-
     /**
      * Fill data
      * @param array $form
      */
     public function fromArray($form) {
         $is_a = is_array($form);
+
         foreach ($this->fields as $f) {
-            if ($is_a) {
-                if (array_key_exists($f->name, $form)) {
+            if (isset($form[$f->name])) {
+                if ($is_a) {
                     $this->{$f->name} = $form[$f->name];
-                    //não apagar a foto quando vier null para casos de formulario de updates
-                    if (in_array($f->type, ['blob', 'image']) && $form->{$f->name} == 'null') {
-                        $this->{$f->name} = null;
-                        continue;
-                    }
-                    if (in_array($f->type, ['blob', 'image'])) {
-                        $this->{$f->name} = upload_parser($form[$f->name])->getData();
-                    }
-                    if (in_array($f->type, ['date', 'datetime'])) {
-                        $this->{$f->name} = cdate($form[$f->name])->format('Y-m-d H:i:s');
-                    }
-                }
-            } else {
-                if (property_exists($form, $f->name)) {
+                } else {
                     $this->{$f->name} = $form{$f->name};
-                    //não apagar a foto quando vier null para casos de formulario de updates
-                    if (in_array($f->type, ['blob', 'image']) && $this->{$f->name} == 'null') {
-                        $this->{$f->name} = null;
-                        continue;
-                    }
-                    if (in_array($f->type, ['blob', 'image'])) {
-                        $this->{$f->name} = upload_parser($form->{$f->name})->getData();
-                    }
-                    if (in_array($f->type, ['date', 'datetime'])) {
-                        $this->{$f->name} = cdate($form->{$f->name})->format('Y-m-d H:i:s');
-                    }
+                }
+                //não apagar a foto quando vier null para casos de formulario de updates
+                if (in_array($f->type, ['blob', 'image']) && $this->{$f->name} == 'null') {
+                    $this->{$f->name} = null;
+                    continue;
+                }
+                if (in_array($f->type, ['blob', 'image'])) {
+                    $this->{$f->name} = upload_parser($form{$f->name})->getData();
                 }
             }
         }
         return $this;
-    } 
+    }
 
     /**
      * 
@@ -195,7 +179,7 @@ class ORM implements JsonSerializable {
     function update($where = array()) {
         $values = [];
         foreach ($this->fields as $field) {
-            if (!is_undefined($this->{$field->name}) ) {
+            if ($this->{$field->name} !== null) {
                 $values[$field->name] = $this->{$field->name};
             }
         }
@@ -358,7 +342,6 @@ class ORM implements JsonSerializable {
                         $tmp->dbtype = "int";
                     }
                 }
-                unset($tmp->doc);
                 $parsed[] = $tmp;
             }
         }
