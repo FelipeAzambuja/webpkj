@@ -1,6 +1,9 @@
 <?php
+
 register_shutdown_function(function () {
-    db()->db = null;
+    if (function_exists('db')) {
+        db()->db = null;
+    }
 });
 //$notpkj = array("phpliteadmin.php");
 //if (in_array(basename($_SERVER["SCRIPT_NAME"]), $notpkj)) {
@@ -32,18 +35,18 @@ $useSmarty = false;
 if ($useSmarty) {
     include 'smarty/Smarty.class.php';
 }
-include "pkjstring.php";
-include "pkjconf.php";//
+include 'pkjstring.php';
+include 'pkjconf.php'; //
 
-include "pkj.php";
+include 'pkj.php';
 if (conf::$endereco !== "") {
 //  include "pkjdb.php";
-    include "pkjdb_2.php";
+    include 'pkjdb_2.php';
     conectar();
 }
-include "kint/Kint.class.php";
+include 'kint/Kint.class.php';
 include 'pkjassets.php';
-include "pkjform.php";
+include 'pkjform.php';
 if (conf::$quick) {
     include 'pkjquick.php';
 }
@@ -55,8 +58,11 @@ if (conf::$quick) {
 //  query ( 'SET character_set_results=utf8' );
 //}
 //include "pkjorm.php";
-include 'ORM.php';
-require_all(realpath(__DIR__ . DIRECTORY_SEPARATOR."..". DIRECTORY_SEPARATOR."..". DIRECTORY_SEPARATOR."orm"));
+if (is_dir(realpath(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "orm"))) {
+    include 'ORM.php';
+    require_all(realpath(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "orm"));
+}
+
 include 'Debug.php';
 //foreach (glob(__DIR__ . "/../../orm/*/*.php") as $db):
 //    include $db;
