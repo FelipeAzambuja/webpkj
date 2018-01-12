@@ -2,29 +2,29 @@
 
 class conf {
 
-    public static $dateFormat = "d/m/Y" ;
+    public static $dateFormat = "d/m/Y";
 // mysql pgsql mssql odbc oledb sqlite
-    public static $servidor = "sqlite" ;
+    public static $servidor = "sqlite";
 //    public static $servidor = "mysql";
-    public static $endereco = "../../banco.sqlite" ;
+    public static $endereco = "../../banco.sqlite";
 //    public static $endereco = "";
-    public static $usuario = "" ;
-    public static $senha = "" ;
-    public static $base = "" ;
-    public static $quick = true ;
+    public static $usuario = "";
+    public static $senha = "";
+    public static $base = "";
+    public static $quick = true;
     //session default,database,javascript
-    public static $session = "database" ;
+    public static $session = "database";
 
     /**
      *
      * @var Db 
      */
-    public static $pkj_bd_sis_conexao = null ;
-    public static $lastError = "" ;
-    public static $random = "" ;
-    public static $pkj_uid_comp = 0 ;
-    public static $pkj_row = true ;
-    public static $resource = null ;
+    public static $pkj_bd_sis_conexao = null;
+    public static $lastError = "";
+    public static $random = "";
+    public static $pkj_uid_comp = 0;
+    public static $pkj_row = true;
+    public static $resource = null;
 
 }
 
@@ -32,95 +32,59 @@ class conf {
 //$home = replace(__DIR__, "\\", "/");
 //$home  = replace($home,"/server/pkjall.php","");
 //conf::$pkjHome = $home;
-function fix_loadht( $file ) {
-    $lines = explode( "\n" , file_get_contents( $file ) ) ;
-    $requires = [] ;
-    foreach ( $lines as $l ) {
-        if ( trim( $l ) === "" ) {
-            continue ;
+function fix_loadht($file) {
+    $lines = explode("\n", file_get_contents($file));
+    $requires = [];
+    foreach ($lines as $l) {
+        if (trim($l) === "") {
+            continue;
         }
-        if ( $l[ 0 ] === "#" ) {
-            continue ;
+        if ($l[0] === "#") {
+            continue;
         }
-        $arg = explode( " " , $l ) ;
-        for ( $index = 0 ; $index < count( $arg ) ; $index++ ) {
-            $arg[ $index ] = str_replace( "\"" , "" , trim( $arg[ $index ] ) ) ;
+        $arg = explode(" ", $l);
+        for ($index = 0; $index < count($arg); $index++) {
+            $arg[$index] = str_replace("\"", "", trim($arg[$index]));
         }
-        $cmd = $arg[ 0 ] ;
-        switch ( $cmd ) {
+        $cmd = $arg[0];
+        switch ($cmd) {
             case "php_value":
-                if ( $arg[ 1 ] === "auto_prepend_file" ) {
-                    $requires[] = $arg[ 2 ] ;
+                if ($arg[1] === "auto_prepend_file") {
+                    $requires[] = $arg[2];
                 } else {
-                    ini_set( $arg[ 1 ] , $arg[ 2 ] ) ;
+                    ini_set($arg[1], $arg[2]);
                 }
-                break ;
+                break;
             case "setenv":
-                $_SERVER[ $arg[ 1 ] ] = $arg[ 2 ] ;
-                break ;
+                $_SERVER[$arg[1]] = $arg[2];
+                break;
             default:
 //                echo "ENV não reconhecida";
-                break ;
+                break;
         }
     }
 }
 
-if ( !isset( $_SERVER[ "pkj_sessao" ] ) ) {
-    fix_loadht( '.htaccess' ) ;
-}
-conf::$dateFormat = $_SERVER[ "pkj_dateformat" ] ;
-conf::$servidor = $_SERVER[ "pkj_servidor" ] ;
-conf::$endereco = $_SERVER[ "pkj_endereco" ] ;
-conf::$usuario = $_SERVER[ "pkj_usuario" ] ;
-conf::$senha = $_SERVER[ "pkj_senha" ] ;
-conf::$base = $_SERVER[ "pkj_base" ] ;
-conf::$session = $_SERVER[ "pkj_sessao" ] ;
-putenv( 'pkj_servidor=' ) ;
-putenv( 'pkj_endereco=' ) ;
-putenv( 'pkj_usuario=' ) ;
-putenv( 'pkj_senha=' ) ;
-putenv( 'pkj_base=' ) ;
-putenv( 'pkj_sessao=' ) ;
-unset( $_ENV[ "pkj_servidor" ] ) ;
-unset( $_ENV[ "pkj_endereco" ] ) ;
-unset( $_ENV[ "pkj_usuario" ] ) ;
-unset( $_ENV[ "pkj_senha" ] ) ;
-unset( $_ENV[ "pkj_base" ] ) ;
-unset( $_ENV[ "pkj_sessao" ] ) ;
+include 'config.php';
 
-unset( $_SERVER[ "pkj_servidor" ] ) ;
-unset( $_SERVER[ "pkj_endereco" ] ) ;
-unset( $_SERVER[ "pkj_usuario" ] ) ;
-unset( $_SERVER[ "pkj_senha" ] ) ;
-unset( $_SERVER[ "pkj_base" ] ) ;
-unset( $_SERVER[ "pkj_sessao" ] ) ;
-unset( $home ) ;
+function pkj_get_home($dir = __DIR__) {
+    $root = "";
+    $dir = str_replace('\\', '/', realpath($dir));
 
-function pkj_get_home( $dir = __DIR__ ) {
-    $root = "" ;
-    $dir = str_replace( '\\' , '/' , realpath( $dir ) ) ;
-    if ( !empty( $_SERVER[ 'CONTEXT_PREFIX' ] ) ) {
-        $root .= $_SERVER[ 'CONTEXT_PREFIX' ] ;
-        if ( strtoupper( substr( PHP_OS , 0 , 3 ) ) === 'WIN' ) {
-            $root .= substr( $dir , strlen( $_SERVER[ 'CONTEXT_DOCUMENT_ROOT' ] ) ) ;
-        } else {
-            $root .= substr( $dir , strlen( $_SERVER[ 'CONTEXT_DOCUMENT_ROOT' ] ) ) ;
-        }
+    if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+        $root .= substr($dir, strlen($_SERVER['DOCUMENT_ROOT']));
     } else {
-        if ( strtoupper( substr( PHP_OS , 0 , 3 ) ) === 'WIN' ) {
-            $root .= substr( $dir , strlen( $_SERVER[ 'DOCUMENT_ROOT' ] ) ) ;
-        } else {
-            $root .= substr( $dir , strlen( realpath( $_SERVER[ 'DOCUMENT_ROOT' ] ) ) + 1 ) ;
-        }
+        $root .= substr($dir, strlen(realpath($_SERVER['DOCUMENT_ROOT'])) + 1);
     }
-    if ( $root === '' ) {
-        return '/' ;
+
+    if ($root === '') {
+        return '/';
     } else {
 //        if (  $root[0] === '/'  ) {
-        if ( startswith( $root , '/' ) ) {
-            return $root . '/' ;
+        if (startswith($root, '/')) {
+            return $root . '/';
         } else {
-            return '/' . $root . '/' ;
+            return '/' . $root . '/';
         }
     }
 }

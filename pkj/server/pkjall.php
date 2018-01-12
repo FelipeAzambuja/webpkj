@@ -5,6 +5,8 @@ register_shutdown_function(function () {
         db()->db = null;
     }
 });
+ini_set('output_buffering',0);
+ini_set('date.timezone','America/Sao_Paulo');
 //$notpkj = array("phpliteadmin.php");
 //if (in_array(basename($_SERVER["SCRIPT_NAME"]), $notpkj)) {
 //    return false;
