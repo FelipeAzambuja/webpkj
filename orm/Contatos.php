@@ -24,7 +24,7 @@ class Contatos extends ORM {
      * @var Pessoas
      */
     public $pessoa;
-
+    
     public function get_table_name() {
         return "contatos";
     }

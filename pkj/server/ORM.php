@@ -63,7 +63,6 @@ class ORM implements JsonSerializable {
         }
     }
 
-
     /**
      * Fill data
      * @param array $form
@@ -75,7 +74,7 @@ class ORM implements JsonSerializable {
                 if (array_key_exists($f->name, $form)) {
                     $this->{$f->name} = $form[$f->name];
                     //não apagar a foto quando vier null para casos de formulario de updates
-                    if (in_array($f->type, ['blob', 'image']) && $form->{$f->name} == 'null') {
+                    if (in_array($f->type, ['blob', 'image']) && $form[$f->name] == 'null') {
                         $this->{$f->name} = null;
                         continue;
                     }
@@ -104,7 +103,7 @@ class ORM implements JsonSerializable {
             }
         }
         return $this;
-    } 
+    }
 
     /**
      * 
@@ -195,7 +194,7 @@ class ORM implements JsonSerializable {
     function update($where = array()) {
         $values = [];
         foreach ($this->fields as $field) {
-            if (!is_undefined($this->{$field->name}) ) {
+            if (!is_undefined($this->{$field->name})) {
                 $values[$field->name] = $this->{$field->name};
             }
         }
