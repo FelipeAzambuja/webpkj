@@ -5,8 +5,8 @@ register_shutdown_function(function () {
         db()->db = null;
     }
 });
-ini_set('output_buffering',0);
-ini_set('date.timezone','America/Sao_Paulo');
+ini_set('output_buffering', 0);
+ini_set('date.timezone', 'America/Sao_Paulo');
 //$notpkj = array("phpliteadmin.php");
 //if (in_array(basename($_SERVER["SCRIPT_NAME"]), $notpkj)) {
 //    return false;
@@ -30,6 +30,12 @@ function show_errors($v = true) {
     }
 }
 
+function run_forever($v = true) {
+    set_time_limit(0);
+    ignore_user_abort(true);
+    ini_set('memory_limit', '-1');
+}
+
 show_errors();
 include 'Undefined.php';
 include 'pkjsession.php';
@@ -43,9 +49,14 @@ include 'pkjconf.php'; //
 include 'pkj.php';
 if (conf::$endereco !== "") {
 //  include "pkjdb.php";
+    include 'SQL.php';
     include 'pkjdb_2.php';
-    conectar();
+//    conectar();
 }
+
+//include 'vendor/autoload.php';
+
+
 include 'kint/Kint.class.php';
 include 'pkjassets.php';
 include 'pkjform.php';

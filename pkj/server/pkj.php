@@ -397,14 +397,18 @@ function cdate($value = "") {
 }
 
 function is_date($value) {
+    if(is_array($value)){
+        return false;
+    }
     $v = explode('-', $value);
     if (count($v) > 1) {
         foreach ($v as $t) {
             if (intval($t) < 1) {
-                c('cagou aqui ' . $t);
                 return false;
             }
         }
+    }else{
+        return false;
     }
     $v = checkdate($v[1], $v[2], $v[0]);
     if ($v === false) {
