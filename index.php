@@ -97,7 +97,7 @@ try {
 } catch (Throwable $ex) {
     dd($ex);
 } finally {
-    ob_flush();
+    //ob_flush();
 }
 //}
 //arquivos php 
