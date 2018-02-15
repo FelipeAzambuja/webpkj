@@ -41,6 +41,42 @@ class SQL {
     }
 
     /**
+     * 
+     * @param type $fields key = name, value = type
+     */
+    function create($fields) {
+        if ($this->db->table_exists($this->table)) {
+            $t_f = $this->db->table_fields($this->table);
+            foreach ($fields as $key => $value) {
+                if (!in_array($key, col($t_f, 'name'))) {
+                    $sql = 'alter table '.$this->table.' add column ' . $key . ' ' . $value;
+                    
+                    return $this->db->query($sql);
+                }
+            }
+        } else {
+            $sql = 'create table ' . $this->table . ' ';
+            if (!key_exists('id', $fields)) {
+                if ($this->db->driver === 'sqlite') {
+                    $fields['id'] = 'integer primary key autoincrement';
+                } elseif ($this->db->driver === 'pgsql') {
+                    $fields['id'] = 'serial primary key';
+                } else {
+                    $fields['id'] = 'int auto_increment primary key';
+                }
+            }
+            $sql .= '(' . implode(',', array_map(function($key, $value) {
+                                return $key . ' ' . $value;
+                            }, array_keys($fields), $fields)) . ')';
+            return $this->db->query($sql);
+        }
+    }
+
+    function drop() {
+        return $this->db->query('drop table ' . $this->table);
+    }
+
+    /**
      * Set the table name
      * @param string $name
      * @param Db $db
