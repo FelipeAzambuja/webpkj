@@ -1,5 +1,7 @@
 <?php
-
+function wait() {
+    return Debug::wait();
+}
 /**
  * Classe de debug
  *

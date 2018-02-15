@@ -1,10 +1,10 @@
-<?php 
-set_time_limit(60);
+<?php
+
+run_forever();
+show_errors();
 $data = [];
-foreach (range(1,1000) as $d) {
-    $data["data"][] = [
-        $d,
-        implode("",range(1,9))
-    ];
+foreach (range(1, 200000) as $d) {
+    $data[] = '[' . $d . ',"123456789"]';
 }
-echo json_encode($data);
+echo '{"data":[' . implode(',', $data) . ']}';
+

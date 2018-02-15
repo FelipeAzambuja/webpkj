@@ -1,5 +1,7 @@
 {
+    "name": "imperiums/server",
     "require": {
-        "usmanhalalit/pixie": "^2.0"
+        "php-ds/php-ds": "^1.2",
+        "danielstjules/stringy": "^3.1"
     }
 }

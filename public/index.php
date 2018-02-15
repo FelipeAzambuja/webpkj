@@ -1,2 +1,3 @@
 <?php
-db()->table('pessoas')->where()->select()->get()
+
+echo str('Felipe Nunes Azambuja')->slugify();

@@ -1,6 +1,15 @@
 <?php
 /**
  * 
+ * @param type $v
+ * @param type $enc
+ * @return Stringy\Stringy
+ */
+function str($v,$enc = null) {
+    return Stringy\Stringy::create($v, $enc);
+}
+/**
+ * 
  * @param object $destination
  * @param \stdClass $source
  * @return object

@@ -1,0 +1,7 @@
+{
+    "name": "bootstrap_old",
+    "files": ["css/bootstrap.min.css","css/bootstrap-theme.min.css","js/bootstrap.min.js","css/pkj.css","popup.js"],
+    "onload": "",
+    "update": "",
+    "author": "Bootstrap Team"
+}

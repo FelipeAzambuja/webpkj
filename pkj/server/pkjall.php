@@ -46,16 +46,15 @@ if ($useSmarty) {
 include 'pkjstring.php';
 include 'pkjconf.php'; //
 
+
+include 'vendor/autoload.php';
 include 'pkj.php';
-if (conf::$endereco !== "") {
+//if (conf::$endereco !== "") {
 //  include "pkjdb.php";
     include 'SQL.php';
     include 'pkjdb_2.php';
 //    conectar();
-}
-
-//include 'vendor/autoload.php';
-
+//}
 
 include 'kint/Kint.class.php';
 include 'pkjassets.php';
@@ -71,6 +70,7 @@ if (conf::$quick) {
 //  query ( 'SET character_set_results=utf8' );
 //}
 //include "pkjorm.php";
+
 if (is_dir(realpath(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "orm"))) {
     include 'ORM.php';
     require_all(realpath(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "orm"));
