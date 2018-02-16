@@ -2,9 +2,6 @@
 
 include 'pkj/server/pkjall.php';
 try {
-
-
-
     $template = '';
     ob_start();
     $path = pkj_get_home(__DIR__);

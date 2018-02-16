@@ -1,7 +1,7 @@
 <?php
 
 register_shutdown_function(function () {
-    if (function_exists('db')) {
+    if (function_exists('db') && conf::$endereco !== '') {
         db()->db = null;
     }
 });
@@ -51,8 +51,8 @@ include 'vendor/autoload.php';
 include 'pkj.php';
 //if (conf::$endereco !== "") {
 //  include "pkjdb.php";
-    include 'SQL.php';
-    include 'pkjdb_2.php';
+include 'SQL.php';
+include 'pkjdb_2.php';
 //    conectar();
 //}
 

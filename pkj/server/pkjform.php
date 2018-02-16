@@ -5,7 +5,7 @@ function _haveOnsen() {
     return in_array("onsen", Resource::$list);
 }
 
-function row($class = "") {
+function row($class = "row", $id = "") {
     if (conf::$pkj_row) {
         echo "<div class=\"row {$class}\">";
         conf::$pkj_row = false;

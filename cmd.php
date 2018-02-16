@@ -7,12 +7,12 @@ function isCLI() {
     return (PHP_SAPI == 'cli');
 }
 
-
 require( './pkj/server/pkjall.php');
 if (isCLI()) {
 //    loadht( dirname( __FILE__ ) . '/.htaccess' );
     require ("./config.php");
 }
+
 function loadht($file) {
     $lines = explode("\n", file_get_contents($file));
     $requires = [];
@@ -48,6 +48,7 @@ function loadht($file) {
         require './pkj/server/pkjall.php';
     }
 }
+
 conectar();
 switch ($argv[1]) {
     case "teste":

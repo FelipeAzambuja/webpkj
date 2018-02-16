@@ -31,20 +31,20 @@ class Db {
             echo "servidor invalido";
             exit();
         }
-        try {
-            if ($servidor === "sqlite") {
-                $endereco = __DIR__ . '/' . $endereco;
-                $this->pdo = new PDO("sqlite:{$endereco}", null, null, array(
-                    PDO::ATTR_PERSISTENT => true
-                ));
-            } else {
-                $this->pdo = new PDO("{$servidor}:host={$endereco};dbname={$base}" . (($servidor === "mysql") ? ";charset=UTF8" : ""), $usuario, $senha);
-            }
-        } catch (Exception $exc) {
-            echo $exc->getTraceAsString();
-        } finally {
-            
+//        try {
+        if ($servidor === "sqlite") {
+            $endereco = __DIR__ . '/' . $endereco;
+            $this->pdo = new PDO("sqlite:{$endereco}", null, null, array(
+                PDO::ATTR_PERSISTENT => true
+            ));
+        } else {
+            $this->pdo = new PDO("{$servidor}:host={$endereco};dbname={$base}" . (($servidor === "mysql") ? ";charset=UTF8" : ""), $usuario, $senha);
         }
+//        } catch (Exception $exc) {
+//            echo $exc->getTraceAsString();
+//        } finally {
+//            
+//        }
     }
 
     /**
