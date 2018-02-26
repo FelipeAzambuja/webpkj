@@ -265,6 +265,9 @@ class SQL {
      * @return array
      */
     function get() {
+        if($this->sql === ''){
+            $this->select();
+        }
         $data = $this->db->query($this->sql);
         if (count($this->join) > 0) {
             for ($index = 0; $index < count($data); $index++) {

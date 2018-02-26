@@ -480,6 +480,25 @@ class Bind {
         return $this->jquery($id, "focus()");
     }
 
+    function autocomplete($id, $values) {
+        $values = json_encode($values);
+        jquery($id, "attr('data-autocomplete','$values')");
+    }
+
+    function combo($id, $values, $names = []) {
+        $html = "";
+        if ($names === []) {
+            $names = $values;
+        }
+        for ($index = 0; $index < count($values); $index++) {
+            $v = $values[$index];
+            $n = $names[$index];
+            $html .= "<option value='$v'>$n</option>";
+        }
+        html($id, $html);
+    }
+
+
     /**
      * Force a jquery code
      * @param type $id
@@ -774,9 +793,9 @@ class Page {
         jquery($id, "attr('data-autocomplete','$values')");
     }
 
-    function combo($id, $values, $names = '') {
+    function combo($id, $values, $names = []) {
         $html = "";
-        if ($names == "") {
+        if ($names === []) {
             $names = $values;
         }
         for ($index = 0; $index < count($values); $index++) {

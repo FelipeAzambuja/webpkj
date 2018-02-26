@@ -7,7 +7,7 @@ function _haveOnsen() {
 
 function row($class = "row", $id = "") {
     if (conf::$pkj_row) {
-        echo "<div id=\"{$id}\" class=\"row {$class}\">";
+        echo "<div class=\"row {$class}\">";
         conf::$pkj_row = false;
     } else {
         echo "</div>";

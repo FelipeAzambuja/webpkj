@@ -100,6 +100,10 @@ function tpl( $file , $data = array() ) {
     return template( $file , $data );
 }
 
+function setComboData($id,$values,$names=[]){
+    return bind()->combo($id,$values,$names);
+}
+
 function template( $file , $data = array() ) {
     $file = "templates/{$file}.tpl";
 
