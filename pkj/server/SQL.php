@@ -234,7 +234,7 @@ class SQL {
         }
         $sql = 'update ' . $this->table . ' set ';
         $p = [];
-        foreach ($values as $key => $value) {
+        foreach ($prepared as $key => $value) {
             $p[] = " {$key} = {$value} ";
         }
         $sql .= implode(',', $p);
