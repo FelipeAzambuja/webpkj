@@ -1,6 +1,8 @@
 <?php
 
 include 'pkj/server/pkjall.php';
+//include "pkj/server/pkjbind.php";
+//run_forever(false);
 try {
     $template = '';
     ob_start();
@@ -71,7 +73,7 @@ try {
 
         if (isset($_POST["CMD"])) {
             ob_clean();
-            include "pkj/server/pkjbind.php";
+//            include "pkj/server/pkjbind.php";
         } else {
             if ($template !== '') {
                 $content = ob_get_clean();
@@ -92,7 +94,8 @@ try {
         echo ob_get_clean();
     }
 } catch (Throwable $ex) {
-    dd($ex);
+//    exit();
+        d($ex);
 } finally {
     //ob_flush();
 }

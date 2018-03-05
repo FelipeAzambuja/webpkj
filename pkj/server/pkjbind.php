@@ -41,9 +41,9 @@ if (isset($_POST["CMD"])) {
 //            if (isset($_POST["MUSTACHE"])) {
 //                call_user_func($cmd, $tmp2, $_POST["MUSTACHE"]);
 //            } else {
-                call_user_func($cmd, $tmp2);
+            call_user_func($cmd, $tmp2);
 //            }
-        }else{
+        } else {
             console("Função não existe");
         }
     } catch (Throwable $t) {
@@ -206,8 +206,6 @@ class OnsDialog {
 
 }
 
-
-
 class JS {
 
 //TODO implementar javascript
@@ -219,11 +217,10 @@ class JS {
         if (is_array($mensagem)) {
             ?>console.log(<?php echo json_encode($mensagem) ?>);<?php
         } else {
-            ?>console.log("<?php echo JS::addslashes($mensagem) ?>");<?php
+            ?>console.log("<?= JS::addslashes($mensagem) ?>");<?php
         }
     }
 
-    
     //trocar 
     public static function popup($mensagem, $id = "") {
         ?>popup("<?php echo JS::addslashes($mensagem) ?>");<?php
@@ -240,7 +237,30 @@ class JS {
         ?>window.location.href="<?= $pagina . $data ?>";<?php
     }
 
+    public static function _addslashes($s) {
+
+        $l = strlen($s);
+        for ($i = 0; $i < $l; $i ++) {
+            switch ($s[$i]) {
+                case '\\': // \
+                    $s = substring($s, 0, $i) . '\\\\' . substring($s, $i + 1);
+                    $i = $i + 1;
+                    break;
+                case '"': // "
+                    $s = substring($s, 0, $i) . '\\"' . substring($s, $i + 1);
+                    $i = $i + 1;
+                    break;
+            }
+        }
+        $s = str_replace(PHP_EOL, '\n', $s);
+        return $s;
+    }
+
     public static function addslashes($s) {
+        if (is_array($s)) {
+            $s = json_encode($s);
+        }
+        return '"+' . str_replace(PHP_EOL, '\n', json_encode($s)) . '+"';
 //        $s = str_replace('*/', '* /', $s);//buaaa
         return '"+_heredoc(function(){/* ' . $s . ' */})+"';
 //        $a = array('<','>','\'','\\','"','\n','\r',PHP_EOL);
@@ -427,11 +447,13 @@ class Bind {
         $this->jquery($id, "hide()");
         return $this;
     }
-    function attr($id,$name,$value){
+
+    function attr($id, $name, $value) {
         $value = JS::addslashes($value);
-        $this->jquery($id,"attr(\"$name\",\"$value\")");
+        $this->jquery($id, "attr(\"$name\",\"$value\")");
         return $this;
     }
+
     /**
      * Get a Instance of UploadParser
      * @param type $id
@@ -497,7 +519,6 @@ class Bind {
         }
         html($id, $html);
     }
-
 
     /**
      * Force a jquery code
@@ -625,7 +646,7 @@ class UploadParser {
 
 function c($v) {
     ob_start();
-    s($v);
+    ~d($v);
     console(ob_get_clean());
 }
 
@@ -639,8 +660,8 @@ function cd($v) {
  * @param string $name
  * @return \Page
  */
-function page($name = "",$outputElement="") {
-    return new Page($name,$outputElement);
+function page($name = "", $outputElement = "") {
+    return new Page($name, $outputElement);
 }
 
 class Page {
@@ -659,7 +680,7 @@ class Page {
     }
 
     function go($data = array()) {
-        ?> page.go('<?= $this->name ?>','<?= $this->outputElement ?>',<?= json_encode($data) ?> ); <?php 
+        ?> page.go('<?= $this->name ?>','<?= $this->outputElement ?>',<?= json_encode($data) ?> ); <?php
         return $this;
     }
 
