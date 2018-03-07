@@ -1,0 +1,5 @@
+{
+    "name": "notify",
+    "files": ["notify.min.js"],
+    "author": "Notify"
+}

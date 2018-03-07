@@ -8,6 +8,7 @@ $template='templates/template.php';
     function mostrarNome($form) {
         if(is_empty($form['nome'])){
             focus('#nome');
+            notify('O Campo nome é obrigatório', 'warn');
             exit();
         }
         alert($form['nome']);

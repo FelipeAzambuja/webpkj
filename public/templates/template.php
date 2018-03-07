@@ -9,6 +9,7 @@
         import('jquery');
         import('bind');
         import('pkj');
+        import('notify');
         import('bpopup');
         import('bootstrap');
         import('mask');
