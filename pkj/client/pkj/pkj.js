@@ -306,7 +306,7 @@ function tagUpdate() {
                         $(e).get(0).tagName === "SELECT"
 
                         ) {
-                    $(e).addClass("form-control");
+//                    $(e).addClass("form-control");
                 }
             }
         }

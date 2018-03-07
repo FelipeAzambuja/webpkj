@@ -11,15 +11,12 @@
         import('pkj');
         import('bpopup');
         import('bootstrap');
-//        import('ui');
         import('mask');
-        import('datatables');
        ?>
     </head>
     <body>
         <div class="container">
             <?php echo $content ?>    
-            <?= @$table ?>
         </div>
 
     </body>

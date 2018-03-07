@@ -34,6 +34,9 @@ function button($texto, $plus = "", $size = 3) {
         $size = $plus;
         $plus = '';
     }
+    if (indexof($plus, 'class="') === -1) {
+        $plus .= 'class="btn btn-primary form-control"';
+    }
     conf::$pkj_uid_comp++;
     $html = "<input type='button' data-button='true' value='$texto' $plus />";
     echo div($html, $size);
@@ -97,7 +100,7 @@ function ons_radio($id, $texto, $grupo, $plus = "", $size = 3) {
         <ons-input <?= $plus ?> type="radio" name="<?= $grupo ?>" <?= $value ?> id='<?= "pkj" . conf::$pkj_uid_comp . "_" . $id ?>' input-id="<?= $id ?>"></ons-input>
     </label>
     <label onclick='$("#<?= "pkj" . conf::$pkj_uid_comp . "_" . $id ?>").trigger("click")' for="<?= "pkj" . conf::$pkj_uid_comp . "_" . $id ?>" class="center">
-    <?= $texto ?>
+        <?= $texto ?>
     </label>
     <?php
     $html = ob_get_clean();
@@ -120,7 +123,7 @@ function ons_check($id, $texto, $grupo = "", $plus = "", $size = 3) {
         <ons-input <?= $plus ?>  <?= ($grupo !== "") ? "name='$grupo'" : "" ?>  type="checkbox" value='<?= $texto ?>' id='<?= "pkj" . conf::$pkj_uid_comp . "_" . $id ?>' input-id="<?= $id ?>"></ons-input>
     </label>
     <label onclick='$("#<?= "pkj" . conf::$pkj_uid_comp . "_" . $id ?>").trigger("click")'  for="<?= "pkj" . conf::$pkj_uid_comp . "_" . $id ?>" class="center">
-    <?= $texto ?>
+        <?= $texto ?>
     </label>
     <?php
     $html = ob_get_clean();
@@ -177,6 +180,9 @@ function combo($id, $itens, $valoresItens = array(), $plus = "", $size = 3) {
         $size = $plus;
         $plus = '';
     }
+    if (indexof($plus, 'class="') === -1) {
+        $plus .= 'class="form-control"';
+    }
     conf::$pkj_uid_comp++;
     $retorno = "";
     $retorno .= "<select id='$id' data-combo='true' name='{$id}' $plus >";
@@ -224,6 +230,9 @@ function text($id, $plus = "", $size = 3) {
         $size = $plus;
         $plus = "";
     }
+    if (indexof($plus, 'class="') === -1) {
+        $plus .= 'class="form-control"';
+    }
     if (indexof($plus, "type") == -1) {
         $html = "<input id='" . $id . "' name='{$id}' data-text='true' type='text' $plus />";
     } else {
@@ -244,6 +253,9 @@ function mask($id, $mask = "999999", $plus = "", $size = 3) {
         $size = $plus;
         $plus = "";
     }
+    if (indexof($plus, 'class="') === -1) {
+        $plus .= 'class="form-control"';
+    }    
     if (indexof($plus, "type") == -1) {
         $html = "<input type='text' id='{$id}' data-mask='{$mask}' {$plus} />";
     } else {
@@ -264,6 +276,9 @@ function calendar($id, $plus = "", $size = 3) {
         $size = $plus;
         $plus = "";
     }
+    if (indexof($plus, 'class="') === -1) {
+        $plus .= 'class="form-control"';
+    }    
     conf::$pkj_uid_comp++;
     $html = "<input type='text' id='{$id}'  data-calendar='true' {$plus} />";
     echo div($html, $size);
@@ -274,6 +289,9 @@ function number($id, $plus = "", $size = 3) {
         $size = $plus;
         $plus = "";
     }
+    if (indexof($plus, 'class="') === -1) {
+        $plus .= 'class="form-control"';
+    }    
     conf::$pkj_uid_comp++;
     $html = "<input type='tel' id='{$id}' data-number='true' {$plus} />";
     echo div($html, $size);
@@ -284,6 +302,9 @@ function money($id, $plus = "", $size = 3) {
         $size = $plus;
         $plus = "";
     }
+    if (indexof($plus, 'class="') === -1) {
+        $plus .= 'class="form-control"';
+    }    
     conf::$pkj_uid_comp++;
     $html = "<input type='tel' id='{$id}' data-money='true' {$plus} />";
     echo div($html, $size);
@@ -294,6 +315,9 @@ function password($id, $plus = "", $size = 3) {
         $size = $plus;
         $plus = "";
     }
+    if (indexof($plus, 'class="') === -1) {
+        $plus .= 'class="form-control"';
+    }    
     conf::$pkj_uid_comp++;
     $html = "<input id='" . $id . "' name='{$id}' type='password' data-text='true' $plus />";
     echo div($html, $size);
@@ -304,17 +328,23 @@ function auto($id, $autocomplete = array('Voce esqueceu de passar o array animal
         $size = $plus;
         $plus = "";
     }
+    if (indexof($plus, 'class="') === -1) {
+        $plus .= 'class="form-control"';
+    }    
     conf::$pkj_uid_comp++;
     $json = json_encode($autocomplete);
     $html = "<input type='text' id='{$id}' data-autocomplete='{$json}' $plus />";
     echo div($html, $size);
 }
-
+//precisa atualizar
 function upload($id, $plus = "", $size = 3) {
     if (is_numeric($plus)) {
         $size = $plus;
         $plus = "";
     }
+    if (indexof($plus, 'class="') === -1) {
+        $plus .= 'class="form-control"';
+    }    
     conf::$pkj_uid_comp++;
     $r = "<input $plus type='file' id='{$id}' data-upload='true' $plus />";
     echo div($r, $size);

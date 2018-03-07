@@ -63,7 +63,6 @@ try {
 
 
         if (isset($_POST["CMD"])) {
-
             ob_clean();
             include "pkj/server/pkjbind.php";
         }
@@ -73,7 +72,7 @@ try {
 
         if (isset($_POST["CMD"])) {
             ob_clean();
-//            include "pkj/server/pkjbind.php";
+            include "pkj/server/pkjbind.php";
         } else {
             if ($template !== '') {
                 $content = ob_get_clean();
