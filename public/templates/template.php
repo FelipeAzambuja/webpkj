@@ -7,7 +7,7 @@
         <title><?=@$title?></title>
         <?php
         import('jquery');
-        import('bind');
+        import('bind2');
         import('pkj');
         import('notify');
         import('bpopup');
@@ -19,6 +19,5 @@
         <div class="container">
             <?php echo $content ?>    
         </div>
-
     </body>
 </html>

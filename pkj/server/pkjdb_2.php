@@ -100,7 +100,7 @@ class Db {
      * @param array $parameters
      * @return array
      */
-    function query($sql, $parameters = array()) {
+    function query($sql, $parameters = array(), $class = null) {
         $p = $this->statement($sql, $parameters);
         if ($p === false) {
             return false;
@@ -108,7 +108,13 @@ class Db {
         if ($this->fetch === null) {
             $this->fetch = PDO::FETCH_OBJ;
         }
-        return $p->fetchAll($this->fetch);
+        if ($class !== null) {
+            $this->fetch = PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE;
+            $p->setFetchMode($this->fetch, $class);
+            return $p->fetchAll();
+        } else {
+            return $p->fetchAll($this->fetch);
+        }
     }
 
     function is_multibyte($s) {

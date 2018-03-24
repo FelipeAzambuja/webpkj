@@ -1,0 +1,7 @@
+{
+    "name": "bind2",
+    "files": ["jquery.form.min.js","bind.js"],
+    "onload": "",
+    "update": "",
+    "author": "Felipe Nunes Azambuja"
+}

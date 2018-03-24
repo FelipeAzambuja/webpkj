@@ -7,6 +7,7 @@ namespace Composer\Autoload;
 class ComposerStaticInita78a23c1ef6e4a3d941b04eebe772db3
 {
     public static $files = array (
+        'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '65fec9ebcfbb3cbb4fd0d519687aea01' => __DIR__ . '/..' . '/danielstjules/stringy/src/Create.php',
         '3917c79c5052b270641b5a200963dbc2' => __DIR__ . '/..' . '/kint-php/kint/init.php',
@@ -19,9 +20,17 @@ class ComposerStaticInita78a23c1ef6e4a3d941b04eebe772db3
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Stringy\\' => 8,
         ),
-        'D' => 
+        'P' => 
         array (
-            'Ds\\' => 3,
+            'Psr\\Http\\Message\\' => 17,
+        ),
+        'I' => 
+        array (
+            'Intervention\\Image\\' => 19,
+        ),
+        'G' => 
+        array (
+            'GuzzleHttp\\Psr7\\' => 16,
         ),
     );
 
@@ -34,9 +43,17 @@ class ComposerStaticInita78a23c1ef6e4a3d941b04eebe772db3
         array (
             0 => __DIR__ . '/..' . '/danielstjules/stringy/src',
         ),
-        'Ds\\' => 
+        'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/php-ds/php-ds/src',
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
+        'Intervention\\Image\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/intervention/image/src/Intervention/Image',
+        ),
+        'GuzzleHttp\\Psr7\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
         ),
     );
 

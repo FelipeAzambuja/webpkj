@@ -1,9 +1,18 @@
 <?php
-
-conf::$dateFormat = 'd/m/Y' ;
-conf::$servidor = 'mysql' ;
-conf::$endereco = '' ;
-conf::$usuario = 'root' ;
-conf::$senha = 'root' ;
-conf::$base = 'mysql' ;
-conf::$session = 'database';
+if ($_SERVER['SERVER_NAME'] === 'newbgp.com.br') {
+    conf::$dateFormat = 'd/m/Y';
+    conf::$servidor = 'mysql';
+    conf::$endereco = 'localhost';
+    conf::$usuario = 'newbgp_test';
+    conf::$senha = 'naosouumasenha';
+    conf::$base = 'newbgp_test';
+    conf::$session = 'database';
+} else {
+    conf::$dateFormat = 'd/m/Y';
+    conf::$servidor = 'mysql';
+    conf::$endereco = 'localhost';
+    conf::$usuario = 'root';
+    conf::$senha = 'root';
+    conf::$base = 'c2sistema';
+    conf::$session = 'database';
+}

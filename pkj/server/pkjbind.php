@@ -7,6 +7,7 @@ if ($bindDebug) {
 $noUse = get_defined_functions();
 if (isset($_POST["CMD"])) {
     $cmd = $_POST["CMD"];
+    header('Content-Type: text/javascript; charset=UTF-8');
     if (in_array($cmd, $noUse)) {
         if ($bindDebug) {
             echo "console.log(\"função proibida\");";
@@ -33,8 +34,10 @@ if (isset($_POST["CMD"])) {
     unset($tmp2["CMD"]);
     unset($tmp2["PAGE"]);
     unset($tmp2["HOST"]);
-    if ($tmp2["post0"] === "") {
-        unset($tmp2["post0"]);
+    if (isset($tmp2['post0'])) {
+        if ($tmp2["post0"] === "") {
+            unset($tmp2["post0"]);
+        }
     }
     try {
         if (function_exists($cmd)) {
@@ -88,122 +91,6 @@ function __normalizePath($path) {
         }
     }
     return implode('/', $parts);
-}
-
-/**
- * New instance of OnsSlitter
- * @param type $id
- * @return \OnsSlitter
- */
-function ons_splitter($id) {
-    return new OnsSplitter($id);
-}
-
-class OnsSplitter {
-
-    var $id;
-
-    function __construct($id) {
-        $this->id = $id;
-    }
-
-    function load($page, $done = "") {
-        ?>document.getElementById("<?php echo $this->id ?>").load("<?php echo $page ?>").then(function () {bindRefresh(); <?php if ($done != ""): ?>bindCall("<?php echo $_POST["PAGE"] ?>", "<?php echo $done ?>", {});<?php endif; ?>});<?php
-        bindUpdate();
-    }
-
-}
-
-/**
- * New instance of OnsNavigator
- * @param type $id
- * @return \OnsNavigator
- */
-function ons_navigator($id) {
-    return new OnsNavigator($id);
-}
-
-class OnsNavigator {
-
-    var $id;
-
-    //TODO Implementar metodos do onsen
-    function __construct($id) {
-        $this->id = $id;
-    }
-
-    function pushPage($page, $done = "") {
-        ?>document.getElementById("<?php echo $this->id ?>").pushPage("<?php echo $page ?>").then(function () {  bindRefresh();  <?php if ($done != ""): ?>bindCall("<?php echo $_POST["PAGE"] ?>", "<?php echo $done ?>", {}); <?php endif; ?>});<?php
-        bindUpdate();
-    }
-
-    function resetToPage($page, $done = "") {
-        ?>document.getElementById("<?php echo $this->id ?>").resetToPage("<?php echo $page ?>").then(function () {  bindRefresh();  <?php if ($done != ""): ?>bindCall("<?php echo $_POST["PAGE"] ?>", "<?php echo $done ?>", {}); <?php endif; ?>});<?php
-        bindUpdate();
-    }
-
-}
-
-/**
- * New Ons modal
- * @param type $id
- * @return \OnsModal
- */
-function ons_modal($id) {
-    return new OnsModal($id);
-}
-
-class OnsModal {
-
-    var $id;
-
-    function __construct($id) {
-        $this->id = $id;
-    }
-
-    function show() {
-        ?>document.getElementById('<?php echo $this->id ?>').show();<?php
-    }
-
-    function hide() {
-        ?>document.getElementById('<?php echo $this->id ?>').hide();<?php
-    }
-
-    function toggle() {
-        ?>document.getElementById('<?php echo $this->id ?>').toggle();<?php
-    }
-
-}
-
-/**
- * New Ons modal
- * @param type $id
- * @return \OnsModal
- */
-function ons_dialog($id) {
-    return new OnsDialog($id);
-}
-
-class OnsDialog {
-
-    var $id;
-
-    function __construct($id) {
-        $this->id = $id;
-    }
-
-    function show() {
-        ?>document.getElementById('<?php echo $this->id ?>').show();<?php
-    }
-
-    function hide() {
-        ?>document.getElementById('<?php echo $this->id ?>').hide();<?php
-    }
-
-    function toggle() {
-        ?>document.getElementById('<?php echo $this->id ?>').toggle();<?php
-    }
-
 }
 
 class JS {
@@ -317,7 +204,7 @@ class Bind {
     }
 
     function update() {
-        ?>if (typeof (PKJ) === "undefined") {$("*").removeAttr("bind");bindRefresh();}else{PKJ.refresh();}tagUpdate();<?php
+        ?>tagUpdate();<?php
     }
 
     /**
@@ -558,22 +445,23 @@ function upload_parser($value) {
 class UploadParser {
 
     private $raw = "";
-    private $name = "";
 
-    function __construct($value) {
-        ini_set("upload_max_filesize", "2048M");
-        ini_set("post_max_size", "2048M");
-        $d = explode("|filepkj|", $value);
-        $this->raw = $d[1];
-        $this->name = replace($d[0], "C:\\fakepath\\", "");
+    function __construct($name, $array = null) {
+        if ($array === null) {
+            $array = $_FILES;
+        }
+        $this->raw = $array[$name];
     }
 
     /**
      * Get a extension of file
      * @return string
      */
-    function getExt() {
-        $ext = explode("/", $this->getMime());
+    function ext() {
+        if (!$this->is_ok()) {
+            return false;
+        }
+        $ext = explode("/", $this->mime());
         $ext = $ext[1];
         if ($ext === "vnd.oasis.opendocument.spreadsheet") {
             $ext = "ods";
@@ -589,48 +477,108 @@ class UploadParser {
         return $ext;
     }
 
-    function getMime() {
-        $tmp = explode(";", $this->raw);
-        $tmp = $tmp[0];
-        $mime = explode(":", $tmp);
-        $mime = $mime[1];
-        return $mime;
+    function mime() {
+        if (!$this->is_ok()) {
+            return false;
+        }
+        return $this->raw['type'];
     }
 
     /**
      * Return base64 format of file
      * @return type
      */
-    function getBase64() {
-        $tmp = explode(";", $this->raw);
-        $tmp = $tmp[1];
-        $base = explode(",", $tmp);
-        $base = $base[1];
-        return $base;
+    function base64() {
+        if (!$this->is_ok()) {
+            return false;
+        }
+        return base64_encode($this->data());
     }
 
     /**
      * Get binary of file
      * @return type
      */
-    function getData() {
-        return base64_decode($this->getBase64());
+    function data() {
+        if (!$this->is_ok()) {
+            return false;
+        }
+        return file_get_contents($this->raw['tmp_name']);
     }
 
     /**
      * Try a get name of file
      * @return type
      */
-    function getName() {
-        return $this->name;
+    function name() {
+        if (!$this->is_ok()) {
+            return false;
+        }
+        return $this->raw['name'];
     }
 
     /**
      * Get my raw format dont use please
      * @return type
      */
-    function getRaw() {
+    function raw() {
         return $this->raw;
+    }
+
+    /**
+     * 
+     * @return int size in bytes
+     */
+    function size() {
+        if (!$this->is_ok()) {
+            return false;
+        }
+        return $this->raw['size'];
+    }
+
+    function error_code() {
+        return $this->raw['error'];
+    }
+
+    function error() {
+        return $this->codeToMessage($this->error_code());
+    }
+
+    function is_ok() {
+        return $this->error_code() === 0;
+    }
+
+    private function codeToMessage($code) {
+        switch ($code) {
+            case UPLOAD_ERR_OK:
+                $message = 'No error';
+            case UPLOAD_ERR_INI_SIZE:
+                $message = "The uploaded file exceeds the upload_max_filesize directive in php.ini";
+                break;
+            case UPLOAD_ERR_FORM_SIZE:
+                $message = "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form";
+                break;
+            case UPLOAD_ERR_PARTIAL:
+                $message = "The uploaded file was only partially uploaded";
+                break;
+            case UPLOAD_ERR_NO_FILE:
+                $message = "No file was uploaded";
+                break;
+            case UPLOAD_ERR_NO_TMP_DIR:
+                $message = "Missing a temporary folder";
+                break;
+            case UPLOAD_ERR_CANT_WRITE:
+                $message = "Failed to write file to disk";
+                break;
+            case UPLOAD_ERR_EXTENSION:
+                $message = "File upload stopped by extension";
+                break;
+
+            default:
+                $message = "Unknown upload error";
+                break;
+        }
+        return $message;
     }
 
     /**
@@ -638,19 +586,22 @@ class UploadParser {
      * @param type $fileName
      * @return boolean
      */
-    function save($fileName = "") {
-        if ($fileName == "") {
-            $fileName = $this->getName();
+    function save($fileName = '') {
+        if ($fileName === '') {
+            $fileName = $this->name();
         }
-        if ($this->raw == "null") {
-            return false;
+        if (strpos($fileName, '.') === false) {
+            $fileName = $fileName . '.' . $this->ext();
         }
-        if (strpos($fileName, ".") === false) {
-            $fileName = "{$fileName}." . $this->getExt();
-        }
-        file_put_contents($fileName, $this->getData());
+        file_put_contents($fileName, $this->data());
     }
-
+    /**
+     * 
+     * @return \Intervention\Image\Image
+     */
+    function image() {
+        return image($this->data());
+    }
 }
 
 function c($v) {
@@ -662,194 +613,4 @@ function c($v) {
 function cd($v) {
     c($v);
     exit();
-}
-
-/**
- * 
- * @param string $name
- * @return \Page
- */
-function page($name = "", $outputElement = "") {
-    return new Page($name, $outputElement);
-}
-
-class Page {
-
-    private $name;
-    private $outputElement;
-
-    public function __construct($name = "", $outputElement) {
-        $this->name = $name;
-        $this->outputElement = $outputElement;
-    }
-
-    function back($data = array()) {
-        ?> page.back(<?= json_encode($data) ?> ); <?php
-        return $this;
-    }
-
-    function go($data = array()) {
-        ?> page.go('<?= $this->name ?>','<?= $this->outputElement ?>',<?= json_encode($data) ?> ); <?php
-        return $this;
-    }
-
-    function update($data) {
-        ?> page.update('<?= $this->name ?>','<?= $this->outputElement ?>',<?= json_encode($data) ?> ); <?php
-        return $this;
-    }
-
-    //implementar todos os metodos do bind
-
-    /**
-     * Set value to html input
-     * @param type $id
-     * @param type $value
-     * @return \Bind
-     */
-    function setValue($id, $value) {
-//        $value = JS::addslashes($value);
-        $value = str_replace('*/', '* /', $value); //buaaa
-        $this->jquery($id, "val( _heredoc(function(){/*  {$value}  */}) )");
-        return $this;
-    }
-
-    /**
-     * Force a inner html values
-     * @param type $id
-     * @param type $html
-     */
-    function setHtml($id, $html) {
-        $html = JS::addslashes($html);
-        $this->jquery($id, "html(\"$html\")");
-        return $this;
-    }
-
-    /**
-     * Force a inner html values
-     * @param type $id
-     * @param type $html
-     */
-    function html($id, $html) {
-        $this->setHtml($id, $html);
-        return $this;
-    }
-
-    /**
-     * Set text to html element
-     * @param type $id
-     * @param type $text
-     */
-    function setText($id, $text) {
-        $text = JS::addslashes($text);
-        $this->jquery($id, "text(\"$text\")");
-        return $this;
-    }
-
-    /**
-     * Set text to html element
-     * @param type $id
-     * @param type $text
-     */
-    function append($id, $text) {
-        $text = JS::addslashes($text);
-        $this->jquery($id, "append(\"$text\")");
-        return $this;
-    }
-
-    /**
-     * Set text to html element
-     * @param type $id
-     * @param type $text
-     */
-    function text($id, $text) {
-        $this->setText($id, $text);
-        return $this;
-    }
-
-    /**
-     * Enable a html element
-     * @param type $id
-     */
-    function setEnable($id) {
-        $this->jquery($id, "removeAttr(\"disabled\")");
-        return $this;
-    }
-
-    function enable($id) {
-        $this->setEnable($id);
-        return $this;
-    }
-
-    function focus($id) {
-        $this->jquery($id, "focus()");
-        return $this;
-    }
-
-    /**
-     * Disable a html element
-     * @param type $id
-     */
-    function setDisable($id) {
-        $this->jquery($id, "attr(\"disabled\",\"true\")");
-        return $this;
-    }
-
-    function disable($id) {
-        $this->setDisable($id);
-        return $this;
-    }
-
-    function show($id) {
-        $this->jquery($id, "show()");
-        return $this;
-    }
-
-    function hide($id) {
-        $this->jquery($id, "hide()");
-        return $this;
-    }
-
-    /**
-     * Send focus
-     * @param type $id id 
-     * @return type this
-     */
-    function setFocus($id) {
-        return $this->jquery($id, "focus()");
-    }
-
-    function autocomplete($id, $values) {
-        $values = json_encode($values);
-        jquery($id, "attr('data-autocomplete','$values')");
-    }
-
-    function combo($id, $values, $names = []) {
-        $html = "";
-        if ($names === []) {
-            $names = $values;
-        }
-        for ($index = 0; $index < count($values); $index++) {
-            $v = $values[$index];
-            $n = $names[$index];
-            $html .= "<option value='$v'>$n</option>";
-        }
-        html($id, $html);
-    }
-
-    /**
-     * Force a jquery code
-     * @param type $id
-     * @param type $code
-     */
-    function jquery($id, $code) {
-        $page = "div[load-page='{$this->name}']";
-        if (startswith($id, "#")) {
-            $id = replace($id, "#", "");
-            ?>$("<?= $page ?>").find("*[id='<?= $id ?>'],*[input-id='<?= $id ?>']").<?= $code ?>;<?php
-        } else {
-            ?>$("<?= $page ?>").find("*[<?php echo $id ?>]").<?php echo $code ?>;<?php
-        }
-        return $this;
-    }
-
 }

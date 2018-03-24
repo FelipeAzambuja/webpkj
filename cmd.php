@@ -56,7 +56,7 @@ switch ($argv[1]) {
         $pessoa->saldo = 20.0;
         $pessoa->contatos[] = new Contatos("telefone", "13 33853390");
         $pessoa->contatos[] = new Contatos("internet", "felipe.nunes.azambuja");
-        sd($pessoa->insert());
+        ($pessoa->insert());
 //        $pessoas->insert();
 //        $pessoas->teste();
 //        s($pessoas);
@@ -214,6 +214,17 @@ REWRITE;
             orm2($argv[2]);
         }
         break;
+    case "model":
+        if (!isset($argv[2])) {
+            echo "Qual a tabela ?" . PHP_EOL;
+            $argv[2] = fgets(STDIN);
+        }
+        if (isset($argv[3])) {
+            model($argv[2], $argv[3]);
+        } else {
+            model($argv[2]);
+        }
+        break;
 
     case "debug":
 //        print_r(get_included_files());
@@ -313,14 +324,43 @@ function orm2($tabela, $pasta = "orm") {
     file_put_contents($pasta . "/{$classe}.php", $s);
 }
 
+function model($tabela, $pasta = "model") {
+    echo color("Model", Colors::$yellow) . PHP_EOL;
+    echo color("Tabela $tabela", Colors::$white) . PHP_EOL;
+    echo color("Pasta $pasta", Colors::$white) . PHP_EOL;
+    $classe = ucwords(str_replace("_", " ", $tabela));
+    $classe = str_replace(" ", "", $classe);
+    $con = conf::$pkj_bd_sis_conexao;
+    $campos = $con->table_fields($tabela);
+    $fields = col($campos, "name");
+    $s = "<?php " . PHP_EOL;
+    ob_start();
+    ?>
+    /**
+    * @table <?= $tabela . PHP_EOL ?>
+    <?php foreach ($campos as $campo): ?>
+        * @property <?= $campo->type ?> $<?= $campo->name ?> Gerado pelo pkj
+    <?php endforeach; ?>
+    */
+    class <?= $classe ?> extends Model {
+
+    }
+    <?php
+    $s .= ob_get_clean();
+    echo $s;
+    file_put_contents($pasta . "/{$classe}.php", $s);
+}
+
 function crud($tabela) {
     
 }
 
 function ajuda() {
     echo color("Ajuda", Colors::$yellow) . PHP_EOL;
-    echo color("orm tabela", "white");
-    echo " Cria a estrutura basica do orm com base na tabela informada" . PHP_EOL;
+//    echo color("orm tabela", "white");
+//    echo " Cria a estrutura basica do orm com base na tabela informada" . PHP_EOL;
+    echo color("model tabela", "white");
+    echo " Cria a estrutura basica do model com base na tabela informada" . PHP_EOL;
     echo color("table_info ou table tabela table \"tabela\" ", "white");
     echo " Mostra a info da tabela" . PHP_EOL;
     echo color("tables ", "white");

@@ -1,9 +1,9 @@
 {
     "name": "imperiums/server",
     "require": {
-        "php-ds/php-ds": "^1.2",
         "danielstjules/stringy": "^3.1",
         "kint-php/kint": "^2.2",
-        "smarty/smarty": "^3.1"
+        "smarty/smarty": "^3.1",
+        "intervention/image": "^2.4"
     }
 }

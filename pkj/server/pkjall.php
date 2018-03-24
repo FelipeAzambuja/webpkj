@@ -1,12 +1,12 @@
 <?php
 
 register_shutdown_function(function () {
-    if (function_exists('db') && conf::$endereco !== '') {
+    if (conf::$endereco !== '') {
         db()->db = null;
     }
 });
-ini_set('output_buffering', 0);
-ini_set('date.timezone', 'America/Sao_Paulo');
+//ini_set('output_buffering', 0);
+//ini_set('date.timezone', 'America/Sao_Paulo');
 //$notpkj = array("phpliteadmin.php");
 //if (in_array(basename($_SERVER["SCRIPT_NAME"]), $notpkj)) {
 //    return false;
@@ -44,6 +44,7 @@ function run_forever($v = true) {
 
 //show_errors();
 include 'Undefined.php';
+
 include 'pkjsession.php';
 //$useSmarty = false;
 //if ($useSmarty) {
@@ -62,7 +63,6 @@ include 'SQL.php';
 include 'pkjdb_2.php';
 //    conectar();
 //}
-
 //ainda não é urgência , porém precisa refatorar
 include 'pkjassets.php';
 
@@ -78,12 +78,15 @@ if (conf::$quick) {
 //  query ( 'SET character_set_results=utf8' );
 //}
 //include "pkjorm.php";
+//if (is_dir(realpath(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "orm"))) {
+//    include 'ORM.php';
+//    require_all(realpath(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "orm"));
+//}
 
-if (is_dir(realpath(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "orm"))) {
-    include 'ORM.php';
-    require_all(realpath(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "orm"));
+if (is_dir(realpath(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "model"))) {
+    include 'Model.php';
+    require_all(realpath(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "model"));
 }
-
 include 'Debug.php';
 //foreach (glob(__DIR__ . "/../../orm/*/*.php") as $db):
 //    include $db;

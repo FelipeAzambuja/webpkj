@@ -8,6 +8,10 @@ function sql($db = null) {
     return new SQL($db);
 }
 
+/**
+ * @todo implementar group by e order by 
+ * @property Db $db DB
+ */
 class SQL {
 
     /**
@@ -25,6 +29,8 @@ class SQL {
     public $limit = -1;
     public $offset = -1;
     public $sql = '';
+    public $alias = null;
+    public $class = null;
 
     private function is_multibyte($s) {
         $finfo = new finfo(FILEINFO_MIME_ENCODING);
@@ -49,8 +55,8 @@ class SQL {
             $t_f = $this->db->table_fields($this->table);
             foreach ($fields as $key => $value) {
                 if (!in_array($key, col($t_f, 'name'))) {
-                    $sql = 'alter table '.$this->table.' add column ' . $key . ' ' . $value;
-                    
+                    $sql = 'alter table ' . $this->table . ' add column ' . $key . ' ' . $value;
+
                     return $this->db->query($sql);
                 }
             }
@@ -84,11 +90,12 @@ class SQL {
      */
     function table($name) {
         $this->table = $name;
+        $this->alias = $name;
         return $this;
     }
 
-    function join($table, $tableField, $id = 'id') {
-        $this->join[] = [$table, $tableField, $id];
+    function join($table, $tableField, $id = 'id', $class = null) {
+        $this->join[] = [$table, $tableField, $id, $class];
         return $this;
     }
 
@@ -162,6 +169,11 @@ class SQL {
         return implode('', $wheres);
     }
 
+    /**
+     * 
+     * @param array $fields 
+     * @return $this
+     */
     function select($fields = []) {
         if ($fields === []) {
             $fields = ['*'];
@@ -197,7 +209,8 @@ class SQL {
             if ($count_commit === false) {
                 return true;
             } else {
-                return $this->where($data)->select()->first();
+                $this->where($data);
+                return one($this->db->query('SELECT * FROM '.$this->table.' WHERE '.$this->get_where().' order by id desc'));
             }
         }
     }
@@ -262,18 +275,22 @@ class SQL {
 
     /**
      * 
-     * @return array
+     * @return array|static
      */
-    function get() {
-        if($this->sql === ''){
+    function get($class = null) {
+        if ($this->sql === '') {
             $this->select();
         }
-        $data = $this->db->query($this->sql);
+        if ($this->class !== null && $class == null) {
+            $class = $this->class;
+        }
+        $data = $this->db->query($this->sql, [], $class);
         if (count($this->join) > 0) {
+
             for ($index = 0; $index < count($data); $index++) {
                 foreach ($this->join as $j) {
                     if ($j[0] instanceof SQL) {
-                        $data[$index]->{$j[0]->table} = $j[0]->where($j[1], $data[$index]->{$j[2]})->select()->get();
+                        $data[$index]->{$j[0]->alias} = $j[0]->where($j[1], $data[$index]->{$j[2]})->select()->get($j[3]);
                     } else {
                         $data[$index]->{$j[0]} = sql($this->db)->table($j[0])->where($j[1], $data[$index]->{$j[2]})->get();
                     }
