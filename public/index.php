@@ -18,7 +18,7 @@ function main() {
 <form init="main" >
     <?php
     label_text('Nome', 'nome', 12);
-    label_upload('Arquivo', 'arquivo',12);
+    label_upload('Arquivo', 'arquivo', 12);
     button('Mostrar Nome', 'click="mostrarNome" ', 12);
 
     function mostrarNome($form) {
@@ -28,7 +28,7 @@ function main() {
             exit();
         }
         $parser = new UploadParser('arquivo');
-        if($parser->is_ok()){
+        if ($parser->is_ok()) {
             c($parser->mime());
             c($parser->name());
             c($parser->size());
