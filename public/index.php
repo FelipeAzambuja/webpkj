@@ -2,6 +2,8 @@
 $template = 'templates/template.php';
 
 function main() {
+    $usuarios = model_usuarios()->get();
+    cd($usuarios);
 //    if (!true) {
 //        $contatos = new UsuarioContatos();
 //        $contatos->load('Usuarios', 'usuarios', 'id', 'pessoinhas');
@@ -18,7 +20,7 @@ function main() {
 <form init="main" >
     <?php
     label_text('Nome', 'nome', 12);
-    label_upload('Arquivo', 'arquivo', 12);
+    label_upload('Arquivo', 'arquivo[]','multiple="true"', 12);
     button('Mostrar Nome', 'click="mostrarNome" ', 12);
 
     function mostrarNome($form) {
@@ -27,6 +29,7 @@ function main() {
             notify('O Campo nome é obrigatório');
             exit();
         }
+        cd($_FILES['arquivo']);
         $parser = new UploadParser('arquivo');
         if ($parser->is_ok()) {
             c($parser->mime());
@@ -34,7 +37,7 @@ function main() {
             c($parser->size());
             c($parser->ext());
             c($parser->base64());
-            $parser->image()->resize(200, 200)->save('1.jpg');
+            
         }
         cd($_FILES['arquivo']);
     }

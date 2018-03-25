@@ -337,6 +337,13 @@ function model($tabela, $pasta = "model") {
     ob_start();
     ?>
     /**
+     *
+     * @return <?= $classe ?>
+     */
+    function model_<?=lcase($tabela) ?>(){
+        return new <?= $classe ?>();
+    }
+    /**
     * @table <?= $tabela . PHP_EOL ?>
     <?php foreach ($campos as $campo): ?>
         * @property <?= $campo->type ?> $<?= $campo->name ?> Gerado pelo pkj
