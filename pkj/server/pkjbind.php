@@ -428,7 +428,7 @@ class Bind {
      * @param string $type error,success,info,warn
      */
     function notify($message, $type = 'success') {
-        ?>$.notify("<?= JS::addslashes($message) ?>",'<?= $type ?>')<?php
+        ?>$.notify("<?= JS::addslashes($message) ?>",'<?= $type ?>');<?php
     }
 
 }

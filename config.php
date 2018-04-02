@@ -13,6 +13,6 @@ if ($_SERVER['SERVER_NAME'] === 'newbgp.com.br') {
     conf::$endereco = 'localhost';
     conf::$usuario = 'root';
     conf::$senha = 'root';
-    conf::$base = 'c2sistema';
+    conf::$base = 'bgpsistema';
     conf::$session = 'database';
 }

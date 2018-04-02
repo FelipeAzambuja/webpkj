@@ -16,7 +16,7 @@ bind.refresh = function () {
         if (el.attr('bind') === undefined) {
             router = el.attr('router');
             if (router === undefined) {
-                router = window.location.origin;
+                router = window.location.href;
             }
             page = el.attr('page');
             if (page === undefined) {
@@ -60,7 +60,7 @@ bind.exec = function (element, router, page, event) {
     });
     var data = {};
     data.GET = $_GET;
-    data.HOST = window.location.origin;
+    data.HOST = window.location.href;
     var cmd = el.attr(event);
     if (cmd.indexOf('(') > -1) {
         var real_cmd = cmd.split('(')[0];

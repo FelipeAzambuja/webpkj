@@ -65,9 +65,18 @@ class Model {
     function select($fields = []) {
         return $this->sql->select($fields);
     }
-
+    /**
+     * Add return 
+     *
+     * @param [type] $field
+     * @param [type] $operator
+     * @param [type] $value
+     * @param [type] $cond
+     * @return static|Model
+     */
     function where($field, $operator = null, $value = null, $cond = null) {
-        return $this->sql->where($field, $operator = null, $value = null, $cond = null);
+        $this->sql->where($field, $operator = null, $value = null, $cond = null);
+        return $this;
     }
 
     /**

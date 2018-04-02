@@ -94,6 +94,14 @@ class SQL {
         return $this;
     }
 
+    function group($field) {
+        $this->group[] = $field;
+    }
+
+    function having($hav) {
+        $this->group[] = $hav;
+    }
+
     function join($table, $tableField, $id = 'id', $class = null) {
         $this->join[] = [$table, $tableField, $id, $class];
         return $this;
@@ -210,7 +218,7 @@ class SQL {
                 return true;
             } else {
                 $this->where($data);
-                return one($this->db->query('SELECT * FROM '.$this->table.' WHERE '.$this->get_where().' order by id desc'));
+                return one($this->db->query('SELECT * FROM ' . $this->table . ' WHERE ' . $this->get_where() . ' order by id desc'));
             }
         }
     }

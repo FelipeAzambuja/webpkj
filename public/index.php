@@ -2,8 +2,10 @@
 $template = 'templates/template.php';
 
 function main() {
-    $usuarios = model_usuarios()->get();
-    cd($usuarios);
+    $usuarios = model_usuarios();
+    
+    $rs = $usuarios->get();
+    
 //    if (!true) {
 //        $contatos = new UsuarioContatos();
 //        $contatos->load('Usuarios', 'usuarios', 'id', 'pessoinhas');
@@ -16,6 +18,7 @@ function main() {
 //        c($u);
 //    }
 }
+
 ?>
 <form init="main" >
     <?php
@@ -29,17 +32,6 @@ function main() {
             notify('O Campo nome é obrigatório');
             exit();
         }
-        cd($_FILES['arquivo']);
-        $parser = new UploadParser('arquivo');
-        if ($parser->is_ok()) {
-            c($parser->mime());
-            c($parser->name());
-            c($parser->size());
-            c($parser->ext());
-            c($parser->base64());
-            
-        }
-        cd($_FILES['arquivo']);
     }
     ?>
 </form>
