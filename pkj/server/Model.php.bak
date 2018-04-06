@@ -1,14 +1,7 @@
 <?php
 
 class Model {
-
     private $doc;
-
-    /**
-     * SQL
-     *
-     * @var \SQL
-     */
     private $sql = null;
     private $data = [];
 
@@ -35,7 +28,7 @@ class Model {
 
     public function __set($name, $value) {
         $info = $this->doc['property'][$name];
-        if (is_array($value)) {
+        if(is_array($value)){
             return;
         }
         switch ($info[1]) {
@@ -48,39 +41,6 @@ class Model {
                 break;
         }
         $this->{$name} = $this->data[$name];
-    }
-
-    public function __get($name) {
-        return isset($this->data[$name]) ? $this->translate_get($name) : null;
-    }
-
-    private function translate_get($name) {
-        $info = $this->doc['property'][$name];
-        $value = $this->data[$name];
-        $tipo = $this->sql->db->translate_field($info[1]);
-        switch ($tipo) {
-            case 'integer':
-                return cint($value);
-                break;
-            case 'float':
-                return cfloat($value);
-                break;
-            case 'string':
-                return trim($value);
-                break;
-            case 'date':
-                return cdate($value);
-                break;
-            case 'blob':
-                if ($info[1] === 'image') {
-                    return 'data:image;base64,' . base64_encode($value);
-                } else {
-                    return $value;
-                }
-                break;
-            default:
-                return $value;
-        }
     }
 
     /**
@@ -105,7 +65,15 @@ class Model {
     function select($fields = []) {
         return $this->sql->select($fields);
     }
-
+    /**
+     * Add return 
+     *
+     * @param [type] $field
+     * @param [type] $operator
+     * @param [type] $value
+     * @param [type] $cond
+     * @return static|Model
+     */
     function where($field, $operator = null, $value = null, $cond = null) {
         $this->sql->where($field, $operator = null, $value = null, $cond = null);
         return $this;
@@ -113,7 +81,7 @@ class Model {
 
     /**
      * 
-     * @return static|array
+     * @return static
      */
     function get() {
         return $this->sql->get();
@@ -148,8 +116,7 @@ class Model {
             if (class_exists($value[1]) && !in_array($value[1], ['datetime'])) {
                 continue;
             }
-
-            $data[$key] = $this->sql->db->detranslate_field($value[1]);
+            $data[$key] = $value[1];
         }
         return $this->sql->create($data);
     }

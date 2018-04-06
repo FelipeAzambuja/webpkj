@@ -3,9 +3,9 @@ $template = 'templates/template.php';
 
 function main() {
     $usuarios = model_usuarios();
-    
+//    $usuarios->create();
     $rs = $usuarios->get();
-    
+    cd($rs);
 //    if (!true) {
 //        $contatos = new UsuarioContatos();
 //        $contatos->load('Usuarios', 'usuarios', 'id', 'pessoinhas');

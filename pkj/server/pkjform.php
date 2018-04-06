@@ -60,14 +60,6 @@ function radio($id, $texto, $plus = "", $size = 3) {
  * @return type
  */
 function check($id, $texto,  $plus = "", $size = 3) {
-//    if (startswith($grupo, "checked")) {
-//        $grupo = "";
-//        $plus = "checked = 'true'";
-//    }
-//    if (is_numeric($grupo)) {
-//        $size = $grupo;
-//        $grupo = "";
-//    }
     if (is_numeric($plus)) {
         $size = $plus;
         $plus = '';

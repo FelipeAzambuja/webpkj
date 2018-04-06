@@ -7,7 +7,7 @@
         <title>Crud Simples</title>
         {php}
         import('jquery');
-        import('bind');
+        import('bind2');
         import('pkj');
         import('bootstrap');
 //        import('ui');

@@ -9,7 +9,7 @@
     * @table usuarios
             * @property integer $id Gerado pelo pkj
             * @property string $nome Gerado pelo pkj
-            * @property blob $imagem Gerado pelo pkj
+            * @property image $imagem Gerado pelo pkj
             * @property string $nivel Gerado pelo pkj
             * @property string $frase Gerado pelo pkj
             * @property string $senha Gerado pelo pkj

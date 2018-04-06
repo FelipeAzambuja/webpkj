@@ -609,6 +609,12 @@ function oneCol($query, $col = "") {
     }
 }
 
+/**
+ * 
+ * @param type $query
+ * @param type $column
+ * @return array|static|self
+ */
 function col($query, $column) {
     $retorno = array();
     if (count($query) < 1) {

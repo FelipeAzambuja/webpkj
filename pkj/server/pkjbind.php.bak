@@ -450,7 +450,7 @@ class UploadParser {
         if ($array === null) {
             $array = $_FILES;
         }
-        $this->raw = isset($array[$name])?$array[$name]:null;
+        $this->raw = $array[$name];
     }
 
     /**
@@ -537,9 +537,6 @@ class UploadParser {
     }
 
     function error_code() {
-        if($this->raw === null){
-            return 99;
-        }
         return $this->raw['error'];
     }
 
