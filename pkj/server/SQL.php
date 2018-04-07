@@ -56,7 +56,6 @@ class SQL {
             foreach ($fields as $key => $value) {
                 if (!in_array($key, col($t_f, 'name'))) {
                     $sql = 'alter table ' . $this->table . ' add column ' . $key . ' ' . $value;
-
                     return $this->db->query($sql);
                 }
             }
@@ -102,8 +101,8 @@ class SQL {
         $this->group[] = $hav;
     }
 
-    function join($table, $tableField, $id = 'id', $class = null) {
-        $this->join[] = [$table, $tableField, $id, $class];
+    function join($table, $tableField, $id = 'id', $class = null, $count = 'many') {
+        $this->join[] = [$table, $tableField, $id, $class, $count];
         return $this;
     }
 
@@ -298,9 +297,19 @@ class SQL {
             for ($index = 0; $index < count($data); $index++) {
                 foreach ($this->join as $j) {
                     if ($j[0] instanceof SQL) {
-                        $data[$index]->{$j[0]->alias} = $j[0]->where($j[1], $data[$index]->{$j[2]})->select()->get($j[3]);
+                        if ($j[4] === 'one') {
+                            $data[$index]->{$j[0]->alias} = one($j[0]->where($j[1], $data[$index]->{$j[2]})->select()->get($j[3]));
+                        } else {
+                            $data[$index]->{$j[0]->alias} = $j[0]->where($j[1], $data[$index]->{$j[2]})->select()->get($j[3]);
+                        }
+                        
                     } else {
-                        $data[$index]->{$j[0]} = sql($this->db)->table($j[0])->where($j[1], $data[$index]->{$j[2]})->get();
+                        if ($j[4] === 'one') {
+                            $data[$index]->{$j[0]} = one(sql($this->db)->table($j[0])->where($j[1], $data[$index]->{$j[2]})->get());
+                        }else{
+                            $data[$index]->{$j[0]} = sql($this->db)->table($j[0])->where($j[1], $data[$index]->{$j[2]})->get();
+                        }
+                        
                     }
                 }
             }

@@ -495,8 +495,8 @@ class Db {
                 return "datetime";
                 break;
             default:
-                //varchar
-                return "string";
+                //object class
+                return $type;
                 break;
         }
     }

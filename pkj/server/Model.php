@@ -1,7 +1,9 @@
 <?php
 
 class Model {
+
     private $doc;
+
     /**
      * SQL
      *
@@ -27,35 +29,33 @@ class Model {
                 continue;
             }
             $fk = explode('=', $p[3]);
-            $this->load($p[1], $fk[0], $fk[1], substr($p[2], 1));
+            $exfk = explode(' ', $fk[1]);
+            $count = 'many';
+            if (count($exfk) > 1) {
+                $fk[1] = $exfk[0];
+                $count = $exfk[1];
+            }
+            $this->load($p[1], $fk[0], $fk[1], substr($p[2], 1),$count);
         }
     }
 
     public function __set($name, $value) {
         $info = $this->doc['property'][$name];
-        if(is_array($value)){
-            return;
-        }
-        switch ($info[1]) {
-            case 'integer':
-            case 'int':
-                $this->data[$name] = cint($value);
-                break;
-            default:
-                $this->data[$name] = trim($value);
-                break;
-        }
-        $this->{$name} = $this->data[$name];
+//        if (is_array($value)) {
+//            return;
+//        }
+        $this->data[$name] = $value;
     }
 
-    public function __get($name){
-        return isset($this->data[$name])?$this->translate_get($name):null;
+    public function __get($name) {
+        return isset($this->data[$name]) ? $this->translate_get($name) : null;
     }
-    private function translate_get($name){
+
+    private function translate_get($name) {
         $info = $this->doc['property'][$name];
         $value = $this->data[$name];
         $tipo = $this->sql->db->translate_field($info[1]);
-        switch($tipo){
+        switch ($tipo) {
             case 'integer':
                 return cint($value);
                 break;
@@ -69,9 +69,9 @@ class Model {
                 return cdate($value);
                 break;
             case 'blob':
-                if($info[1] === 'image'){
-                    return 'data:image;base64,'.base64_encode($value);
-                }else{
+                if ($info[1] === 'image') {
+                    return 'data://image;base64,' . base64_encode($value);
+                } else {
                     return $value;
                 }
                 break;
@@ -80,25 +80,24 @@ class Model {
         }
     }
 
-
-    public function fromArray($array){
-        $coluns = array_values(array_map(function($value){
-            return substr($value[2],1);
-        }, $this->doc['property']));
-        foreach($array as $key => $value){
-            if(in_array($key,$coluns)){
+    public function fromArray($array) {
+        $coluns = array_values(array_map(function($value) {
+                    return substr($value[2], 1);
+                }, $this->doc['property']));
+        foreach ($array as $key => $value) {
+            if (in_array($key, $coluns)) {
                 $this->{$key} = $array[$key];
             }
         }
         return $this;
     }
 
-    public function setValues(){
-        $coluns = array_values(array_map(function($value){
-            return substr($value[2],1);
-        }, $this->doc['property']));
-        foreach($coluns as $c){
-            setValue('name="'.$c.'"',$this->{$c});
+    public function setValues() {
+        $coluns = array_values(array_map(function($value) {
+                    return substr($value[2], 1);
+                }, $this->doc['property']));
+        foreach ($coluns as $c) {
+            setValue('name="' . $c . '"', $this->{$c});
         }
     }
 
@@ -107,7 +106,7 @@ class Model {
      * @param string $class
      * @param string $alias
      */
-    function load($class, $me, $fk, $alias = null) {
+    function load($class, $me, $fk, $alias = null,$count='many') {
         if (class_exists($class) && !in_array($class, ['datetime'])) {
             $objClass = (new ReflectionClass($class))->newInstance();
             $objSQL = new SQL(db());
@@ -117,7 +116,7 @@ class Model {
             if ($objSQL->alias === null) {
                 $objSQL->alias = $objSQL->table;
             }
-            $this->sql->join[] = [$objSQL, $fk, $me, $class];
+            $this->sql->join[] = [$objSQL, $fk, $me, $class,$count];
         }
     }
 
@@ -135,7 +134,7 @@ class Model {
      * @return static|array
      */
     function get() {
-        return $this->sql->get();
+        return $this->sql->get(get_class($this));
     }
 
     function insert($count_limit = -1) {
