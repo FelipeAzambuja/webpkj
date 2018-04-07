@@ -1,9 +1,7 @@
 <?php
 
 class Model {
-
     private $doc;
-
     /**
      * SQL
      *
@@ -35,7 +33,7 @@ class Model {
 
     public function __set($name, $value) {
         $info = $this->doc['property'][$name];
-        if (is_array($value)) {
+        if(is_array($value)){
             return;
         }
         switch ($info[1]) {
@@ -50,15 +48,14 @@ class Model {
         $this->{$name} = $this->data[$name];
     }
 
-    public function __get($name) {
-        return isset($this->data[$name]) ? $this->translate_get($name) : null;
+    public function __get($name){
+        return isset($this->data[$name])?$this->translate_get($name):null;
     }
-
-    private function translate_get($name) {
+    private function translate_get($name){
         $info = $this->doc['property'][$name];
         $value = $this->data[$name];
         $tipo = $this->sql->db->translate_field($info[1]);
-        switch ($tipo) {
+        switch($tipo){
             case 'integer':
                 return cint($value);
                 break;
@@ -72,14 +69,36 @@ class Model {
                 return cdate($value);
                 break;
             case 'blob':
-                if ($info[1] === 'image') {
-                    return 'data:image;base64,' . base64_encode($value);
-                } else {
+                if($info[1] === 'image'){
+                    return 'data:image;base64,'.base64_encode($value);
+                }else{
                     return $value;
                 }
                 break;
             default:
                 return $value;
+        }
+    }
+
+
+    public function fromArray($array){
+        $coluns = array_values(array_map(function($value){
+            return substr($value[2],1);
+        }, $this->doc['property']));
+        foreach($array as $key => $value){
+            if(in_array($key,$coluns)){
+                $this->{$key} = $array[$key];
+            }
+        }
+        return $this;
+    }
+
+    public function setValues(){
+        $coluns = array_values(array_map(function($value){
+            return substr($value[2],1);
+        }, $this->doc['property']));
+        foreach($coluns as $c){
+            setValue('name="'.$c.'"',$this->{$c});
         }
     }
 
