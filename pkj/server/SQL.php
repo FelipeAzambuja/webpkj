@@ -33,6 +33,12 @@ class SQL {
     public $class = null;
 
     private function is_multibyte($s) {
+        if ($s === '') {
+            return false;
+        }
+        if (is_numeric($s)) {
+            return false;
+        }
         $finfo = new finfo(FILEINFO_MIME_ENCODING);
         return $finfo->buffer($s) === 'binary';
     }
@@ -306,7 +312,7 @@ class SQL {
                     } else {
                         if ($j[4] === 'one') {
                             $data[$index]->{$j[0]} = one(sql($this->db)->table($j[0])->where($j[1], $data[$index]->{$j[2]})->get());
-                        }else{
+                        } else {
                             $data[$index]->{$j[0]} = sql($this->db)->table($j[0])->where($j[1], $data[$index]->{$j[2]})->get();
                         }
                         
@@ -355,7 +361,11 @@ class SQL {
             return null;
         }
         if ($this->is_multibyte($value)) {
-            return $this->db->pdo->quote($value, PDO::PARAM_LOB);
+            if ($this->db->driver === 'sqlite') {
+                return 'x\'' . bin2hex($value) . '\'';
+            } else {
+                return $this->db->pdo->quote($value, PDO::PARAM_LOB);
+            }
         } else if (is_date($value)) {
             return $this->db->pdo->quote(cdate($value)->format('Y-m-d H:i:s'), PDO::PARAM_STR);
         } else {

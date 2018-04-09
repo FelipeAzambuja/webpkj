@@ -344,7 +344,7 @@ class Db {
         if (strpos($type, "|")) {
             $type = explode("|", $type)[0];
         }
-        if (class_exists($type)) {
+        if (class_exists($type) && $type !== 'datetime') {
             return "integer";
         }
         switch ($type) {

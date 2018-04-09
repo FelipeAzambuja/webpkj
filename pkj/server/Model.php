@@ -2,6 +2,56 @@
 
 class Model {
 
+    //eventos
+    function after_insert() {
+        
+    }
+
+    function before_insert(&$return) {
+        
+    }
+
+    function after_update($where) {
+        
+    }
+
+    function before_update($where, &$return) {
+        
+    }
+
+    function after_delete($where) {
+        
+    }
+
+    function before_delete($where, &$return) {
+        
+    }
+
+    function on_error($error) {
+        
+    }
+
+    /**
+     * 
+     * @param type $event insert,update,delete,create,drop,error
+     * @param type $args
+     */
+    function on_event($event, $args = []) {
+        
+    }
+
+    function get_default($field) {
+        s('Não implementado');
+    }
+
+    function on_set(&$field, &$value) {
+        
+    }
+
+    function on_get(&$field, &$value) {
+        
+    }
+
     private $doc;
 
     /**
@@ -35,8 +85,13 @@ class Model {
                 $fk[1] = $exfk[0];
                 $count = $exfk[1];
             }
-            $this->load($p[1], $fk[0], $fk[1], substr($p[2], 1),$count);
+            $this->load($p[1], $fk[0], $fk[1], substr($p[2], 1), $count);
         }
+    }
+
+    function error() {
+        $this->on_event('error', ['error' => $this->sql->db->last_error]);
+        return $this->sql->db->last_error;
     }
 
     public function __set($name, $value) {
@@ -44,11 +99,19 @@ class Model {
 //        if (is_array($value)) {
 //            return;
 //        }
+        $this->on_set($name, $value);
         $this->data[$name] = $value;
     }
 
     public function __get($name) {
-        return isset($this->data[$name]) ? $this->translate_get($name) : null;
+        $return = null;
+        if (isset($this->data[$name])) {
+            $return = $this->translate_get($name);
+        } else {
+            $return = null;
+        }
+        $this->on_get($name, $return);
+        return $return;
     }
 
     private function translate_get($name) {
@@ -86,7 +149,9 @@ class Model {
                 }, $this->doc['property']));
         foreach ($array as $key => $value) {
             if (in_array($key, $coluns)) {
-                $this->{$key} = $array[$key];
+                if ($array[$key] !== null && $array[$key] !== '') {
+                    $this->{$key} = $array[$key];
+                }
             }
         }
         return $this;
@@ -106,7 +171,7 @@ class Model {
      * @param string $class
      * @param string $alias
      */
-    function load($class, $me, $fk, $alias = null,$count='many') {
+    function load($class, $me, $fk, $alias = null, $count = 'many') {
         if (class_exists($class) && !in_array($class, ['datetime'])) {
             $objClass = (new ReflectionClass($class))->newInstance();
             $objSQL = new SQL(db());
@@ -116,7 +181,7 @@ class Model {
             if ($objSQL->alias === null) {
                 $objSQL->alias = $objSQL->table;
             }
-            $this->sql->join[] = [$objSQL, $fk, $me, $class,$count];
+            $this->sql->join[] = [$objSQL, $fk, $me, $class, $count];
         }
     }
 
@@ -138,37 +203,76 @@ class Model {
     }
 
     function insert($count_limit = -1) {
-        return $this->sql->insert($this->data, $count_limit);
+        $this->on_event('insert', ['count_limit' => $count_limit]);
+        if ($this->after_insert() === false) {
+            return false;
+        }
+        $return = null;
+        $return = $this->sql->insert($this->data, $count_limit);
+        if ($return === false) {
+            $this->on_error($this->error());
+        }
+        $this->before_insert($return);
+        return $return;
     }
 
     function update() {
-        return $this->sql->update($this->data);
+        $this->on_event('update');
+        if ($this->after_update($this->sql->where) === false) {
+            return false;
+        }
+        $return = null;
+        $return = $this->sql->update($this->data);
+        if ($return === false) {
+            $this->on_error($this->error());
+        }
+        $this->after_update($this->sql->where, $return);
+        return $return;
     }
 
     function insert_or_update() {
-        return $this->sql->insert_or_update($this->data);
+        //implementar evento pode causar perda de desempenho
+        $this->on_event('insert_or_update');
+        $return = $this->sql->insert_or_update($this->data);
+        if ($return === false) {
+            $this->on_error($this->error());
+        }
+        return $return;
     }
 
     function delete() {
-        return $this->sql->delete();
+        $this->on_event('delete');
+        if ($this->after_delete($this->sql->where) === false) {
+            return false;
+        }
+        $return = null;
+        $return = $this->sql->delete();
+        if ($return === false) {
+            $this->on_error($this->error());
+        }
+        $this->before_delete($this->sql->where, $return);
+        return $return;
     }
 
     function drop() {
+        $this->on_event('drop');
         return $this->sql->drop();
     }
 
     function create() {
+        $this->on_event('create');
         $data = [];
         foreach ($this->doc['property'] as $key => $value) {
             if ($key === 'id') {
                 continue;
             }
-            if (class_exists($value[1]) && !in_array($value[1], ['datetime'])) {
-                continue;
-            }
+//            if (class_exists($value[1]) && !in_array($value[1], ['datetime'])) {
+//                continue;
+//            }
 
             $data[$key] = $this->sql->db->detranslate_field($value[1]);
         }
+
         return $this->sql->create($data);
     }
 
