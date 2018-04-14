@@ -86,6 +86,12 @@ class Model {
                 $count = $exfk[1];
             }
             $this->load($p[1], $fk[0], $fk[1], substr($p[2], 1), $count);
+            $obj = new ReflectionClass($p[1]);
+            if ($count === 'one') {
+                $this->{substr($p[2], 1)} = $obj->newInstance();
+            } else {
+                $this->{substr($p[2], 1)} = [];
+            }
         }
     }
 
@@ -101,6 +107,10 @@ class Model {
 //        }
         $this->on_set($name, $value);
         $this->data[$name] = $value;
+    }
+
+    public function __toString() {
+        return isset($this->data['id']) ? strval($this->data['id']) : '';
     }
 
     public function __get($name) {
@@ -150,7 +160,7 @@ class Model {
         foreach ($array as $key => $value) {
             if (in_array($key, $coluns)) {
                 if ($array[$key] !== null && $array[$key] !== '') {
-                    $this->{$key} = $array[$key];
+                    $this->{$key} = $value;
                 }
             }
         }
@@ -208,7 +218,17 @@ class Model {
             return false;
         }
         $return = null;
-        $return = $this->sql->insert($this->data, $count_limit);
+        $insertData = [];
+        foreach ($this->data as $k => $d) {
+            if ($d instanceof Model) {
+                if ($d->id !== null) {
+                    $insertData[$k] = $d->id;
+                }
+            } else {
+                $insertData[$k] = $d;
+            }
+        }
+        $return = $this->sql->insert($insertData, $count_limit);
         if ($return === false) {
             $this->on_error($this->error());
         }
@@ -222,7 +242,17 @@ class Model {
             return false;
         }
         $return = null;
-        $return = $this->sql->update($this->data);
+        $updateData = [];
+        foreach ($this->data as $k => $d) {
+            if ($d instanceof Model) {
+                if ($d->id !== null) {
+                    $updateData[$k] = $d->id;
+                }
+            } else {
+                $updateData[$k] = $d;
+            }
+        }
+        $return = $this->sql->update($updateData);
         if ($return === false) {
             $this->on_error($this->error());
         }
