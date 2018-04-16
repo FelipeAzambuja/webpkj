@@ -21,12 +21,7 @@ function main() {
         'email' => 'required|valid_email',
         'idade' => 'required|integer'
     ]);
-//    cd($validator);
     popup(@d($validator));
-//    model_usuarios()->first();
-//    $rs = model_usuarios()->last();
-//    $rs = sql()->table('usuarios')->group('nome')->orderby('id')->having('1 = 1')->get();
-//    cd($rs);
 }
 ?>
 <form init="main" >
@@ -44,5 +39,3 @@ function main() {
     }
     ?>
 </form>
-
-<?php

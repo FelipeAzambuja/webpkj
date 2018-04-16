@@ -54,11 +54,7 @@ class Model {
 
     private $doc;
 
-    /**
-     * SQL
-     *
-     * @var \SQL
-     */
+
     private $sql = null;
     private $data = [];
 
