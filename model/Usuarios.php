@@ -20,7 +20,9 @@ function model_usuarios() {
  * @property datetime $alterado Gerado pelo pkj
  */
 class Usuarios extends Model {
+
     public function __get($name) {
-        parent::__get($name);  
-        }
+        parent::__get($name);
+    }
+
 }

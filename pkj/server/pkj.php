@@ -1,6 +1,22 @@
 <?php
 
 /**
+ * @see GUMP
+ * @param array $form
+ * @param array $rules
+ * @return array
+ */
+function is_valid($form, $rules) {
+    $gump = new GUMP('pt-br');
+    $gump->validation_rules($rules);
+    if ($gump->run($form) === false) {
+        return $gump->get_readable_errors(false);
+    } else {
+        return true;
+    }
+}
+
+/**
  * 
  * @param type $v
  * @param type $enc

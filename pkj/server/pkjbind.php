@@ -6,40 +6,47 @@ if ($bindDebug) {
 }
 $noUse = get_defined_functions();
 if (isset($_POST["CMD"])) {
-    $cmd = $_POST["CMD"];
-    header('Content-Type: text/javascript; charset=UTF-8');
-    if (in_array($cmd, $noUse)) {
-        if ($bindDebug) {
-            echo "console.log(\"função proibida\");";
+    set_error_handler(function ($severity, $message, $filename, $lineno) {
+        if (error_reporting() === 0) {
+            return;
         }
-        exit();
-    }
-    if (isset($_POST["PAGE"])) {
-        if (len($_POST["PAGE"]) > 0) {
-            $home = replace(conf::$pkjHome, "/pkj", "");
-            if (startswith($_POST["PAGE"], $home)) {
-                $pagina = __DIR__ . "/../../" . replace($_POST["PAGE"], $home, "");
-            } else {
-                $pagina = __DIR__ . "/../../" . $_POST["PAGE"];
-            }
-
-            show_errors(true);
-            ob_start();
-            require_once $pagina;
-            ob_end_clean();
-        }
-    }
-    $tmp2 = $_POST;
-    addslashes_array($tmp2);
-    unset($tmp2["CMD"]);
-    unset($tmp2["PAGE"]);
-    unset($tmp2["HOST"]);
-    if (isset($tmp2['post0'])) {
-        if ($tmp2["post0"] === "") {
-            unset($tmp2["post0"]);
-        }
-    }
+        throw new ErrorException($message, 0, $severity, $filename, $lineno);
+    });
     try {
+        $cmd = $_POST["CMD"];
+        header('Content-Type: text/javascript; charset=UTF-8');
+        if (in_array($cmd, $noUse)) {
+            if ($bindDebug) {
+                echo "console.log(\"função proibida\");";
+            }
+            exit();
+        }
+        if (isset($_POST["PAGE"])) {
+            if (len($_POST["PAGE"]) > 0) {
+                $home = replace(conf::$pkjHome, "/pkj", "");
+                if (startswith($_POST["PAGE"], $home)) {
+                    $pagina = __DIR__ . "/../../" . replace($_POST["PAGE"], $home, "");
+                } else {
+                    $pagina = __DIR__ . "/../../" . $_POST["PAGE"];
+                }
+
+                show_errors(true);
+                ob_start();
+                require_once $pagina;
+                ob_end_clean();
+            }
+        }
+        $tmp2 = $_POST;
+        addslashes_array($tmp2);
+        unset($tmp2["CMD"]);
+        unset($tmp2["PAGE"]);
+        unset($tmp2["HOST"]);
+        if (isset($tmp2['post0'])) {
+            if ($tmp2["post0"] === "") {
+                unset($tmp2["post0"]);
+            }
+        }
+
         if (function_exists($cmd)) {
 //            if (isset($_POST["MUSTACHE"])) {
 //                call_user_func($cmd, $tmp2, $_POST["MUSTACHE"]);
@@ -104,6 +111,7 @@ class JS {
         if (is_array($mensagem)) {
             ?>console.log(<?php echo json_encode($mensagem) ?>);<?php
         } else {
+            echo strlen(strval($mensagem));
             ?>console.log("<?= JS::addslashes($mensagem) ?>");<?php
         }
     }
@@ -450,7 +458,7 @@ class UploadParser {
         if ($array === null) {
             $array = $_FILES;
         }
-        $this->raw = isset($array[$name])?$array[$name]:null;
+        $this->raw = isset($array[$name]) ? $array[$name] : null;
     }
 
     /**
@@ -537,7 +545,7 @@ class UploadParser {
     }
 
     function error_code() {
-        if($this->raw === null){
+        if ($this->raw === null) {
             return 99;
         }
         return $this->raw['error'];
@@ -598,6 +606,7 @@ class UploadParser {
         }
         file_put_contents($fileName, $this->data());
     }
+
     /**
      * 
      * @return \Intervention\Image\Image
@@ -605,6 +614,7 @@ class UploadParser {
     function image() {
         return image($this->data());
     }
+
 }
 
 function c($v) {

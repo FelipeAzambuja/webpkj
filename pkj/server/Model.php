@@ -95,6 +95,14 @@ class Model {
         }
     }
 
+    /**
+     * 
+     * @return \SQL
+     */
+    function sql() {
+        return $this->sql;
+    }
+
     function error() {
         $this->on_event('error', ['error' => $this->sql->db->last_error]);
         return $this->sql->db->last_error;
@@ -210,6 +218,16 @@ class Model {
      */
     function get() {
         return $this->sql->get(get_class($this));
+    }
+
+    function first() {
+        $this->sql->class = get_class($this);
+        return $this->sql->first();
+    }
+
+    function last() {
+        $this->sql->class = get_class($this);
+        return $this->sql->last();
     }
 
     function insert($count_limit = -1) {

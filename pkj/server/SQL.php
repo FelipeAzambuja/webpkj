@@ -23,8 +23,9 @@ class SQL {
     public $table = null;
     public $where = [];
     public $data = [];
-    public $group = [];
-    public $having = [];
+    public $group = []; //implementar
+    public $having = []; //implementar
+    public $orderby = []; //implementar
     public $join = [];
     public $limit = -1;
     public $offset = -1;
@@ -101,10 +102,17 @@ class SQL {
 
     function group($field) {
         $this->group[] = $field;
+        return $this;
     }
 
     function having($hav) {
-        $this->group[] = $hav;
+        $this->having[] = $hav;
+        return $this;
+    }
+
+    function orderby($field, $mode = 'DESC') {
+        $this->orderby[] = [$field, $mode];
+        return $this;
     }
 
     function join($table, $tableField, $id = 'id', $class = null, $count = 'many') {
@@ -297,6 +305,28 @@ class SQL {
         if ($this->class !== null && $class == null) {
             $class = $this->class;
         }
+        if (count($this->group) > 0) {
+            $this->sql .= ' GROUP BY ';
+            foreach ($this->group as $g) {
+                $this->sql .= $g . ' ';
+            }
+        }
+        $this->sql .= ' ';
+        if (count($this->having) > 0) {
+            $this->sql .= ' HAVING ';
+            foreach ($this->having as $h) {
+                $this->sql .= $h . ' ';
+            }
+        }
+        $this->sql .= ' ';
+        if (count($this->orderby) > 0) {
+            $this->sql .= ' ORDER BY ';
+            foreach ($this->orderby as $o) {
+                $this->sql .= $o[0] . ' ' . $o[1] . ' ';
+            }
+        }
+        $this->sql .= ' ';
+
         $data = $this->db->query($this->sql, [], $class);
         if (count($this->join) > 0) {
 
@@ -308,14 +338,12 @@ class SQL {
                         } else {
                             $data[$index]->{$j[0]->alias} = $j[0]->where($j[1], $data[$index]->{$j[2]})->select()->get($j[3]);
                         }
-                        
                     } else {
                         if ($j[4] === 'one') {
                             $data[$index]->{$j[0]} = one(sql($this->db)->table($j[0])->where($j[1], $data[$index]->{$j[2]})->get());
                         } else {
                             $data[$index]->{$j[0]} = sql($this->db)->table($j[0])->where($j[1], $data[$index]->{$j[2]})->get();
                         }
-                        
                     }
                 }
             }
