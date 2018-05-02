@@ -662,8 +662,13 @@ class Vue {
         global $url;
         if (stringy($vueFile)->endsWith('.php')) {
             $vueFile = stringy($vueFile)->replace('.php', '');
+            $component = str_get_html(file_get_contents($url . $vueFile), true, true, DEFAULT_TARGET_CHARSET, false);
+        } elseif (stringy($vueFile)->endsWith('.vue')) {
+            $component = str_get_html(file_get_contents('public/' . $vueFile), true, true, DEFAULT_TARGET_CHARSET, false);
+        } else {
+            $component = str_get_html(file_get_contents($vueFile), true, true, DEFAULT_TARGET_CHARSET, false);
         }
-        $component = str_get_html(file_get_contents($url . $vueFile), true, true, DEFAULT_TARGET_CHARSET, false);
+
         $template = $component->getElementByTagName('template')->innertext;
         $script = $component->getElementByTagName('script')->innertext;
         $style = $component->getElementByTagName('style')->innertext;
@@ -675,6 +680,9 @@ class Vue {
         }
         ?>
         Vue.component('<?= $slug ?>', {<?= $script ?>,template: "<?= JS::addslashes($template) ?>"});
+        var style = document.createElement('style');
+        style.innerText = "<?= stringy($style)->replace(PHP_EOL, ' ')?>";
+        $('head').append(style);
         <?php
     }
 

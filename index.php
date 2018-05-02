@@ -33,7 +33,7 @@ try {
 
     if ($path === 'public/pkj.vue.component.php') {
         include "pkj/server/pkjbind.php";
-        vue()->load($_GET['page'],$_GET['name']);
+        vue()->load($_GET['page'], $_GET['name']);
         exit();
     }
 
@@ -45,6 +45,8 @@ try {
         $html = replace($html, 'src="', 'src="' . $url . dirname($path) . '/');
         echo $html;
         exit();
+    } elseif (file_exists(replace($path, '.php', '.vue'))) {
+        echo file_get_contents(replace($path, '.php', '.vue'));
     } elseif (file_exists(replace($path, '.php', '.tpl'))) {
         if (file_exists($path)) {
             include $path;

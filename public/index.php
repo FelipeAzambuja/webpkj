@@ -30,14 +30,7 @@ function main() {
 ?>
 <script>
     $(function () {
-//        Vue.component('item-lista', {
-//            name: 'item-lista',
-//            props: [
-//                'item'
-//            ],
-//            template: "" + "\n<li>{{item.texto}}<\/li>\n" + ""
-//        });
-        Vue.load('vue/itemLista','item-lista');
+        Vue.load('vue/itemLista.vue','item-lista');
         vue = new Vue({
             el: '#main',
             data: {
