@@ -22,7 +22,7 @@ function is_valid($form, $rules) {
  * @param type $enc
  * @return Stringy\Stringy
  */
-function str($v, $enc = null) {
+function stringy($v, $enc = null) {
     return Stringy\Stringy::create($v, $enc);
 }
 

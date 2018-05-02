@@ -627,3 +627,55 @@ function cd($v) {
     c($v);
     exit();
 }
+
+/**
+ * 
+ * @param type $varname
+ * @return \Vue
+ */
+function vue($varname = null) {
+    return new Vue($varname);
+}
+
+class Vue {
+
+    var $varname = '';
+    var $data = [];
+
+    function __construct($varname) {
+        $this->varname = $varname;
+        $this->data = @$_POST['vue'][$varname];
+    }
+
+    function data($data = null) {
+        if ($data === null) {
+            return $this->data;
+        } else {
+            foreach ($data as $key => $value) {
+                $value = json_encode($value);
+                echo "{$this->varname}.{$key} = {$value};";
+            }
+        }
+    }
+
+    function load($vueFile, $slug = null) {
+        global $url;
+        if (stringy($vueFile)->endsWith('.php')) {
+            $vueFile = stringy($vueFile)->replace('.php', '');
+        }
+        $component = str_get_html(file_get_contents($url . $vueFile), true, true, DEFAULT_TARGET_CHARSET, false);
+        $template = $component->getElementByTagName('template')->innertext;
+        $script = $component->getElementByTagName('script')->innertext;
+        $style = $component->getElementByTagName('style')->innertext;
+        $script = explode("\n", trim($script));
+        $script = implode(PHP_EOL . ' ', array_splice($script, 1, -1));
+        if ($slug === null) {
+            $slug = explode('/', $vueFile);
+            $slug = $slug[count($slug) - 1];
+        }
+        ?>
+        Vue.component('<?= $slug ?>', {<?= $script ?>,template: "<?= JS::addslashes($template) ?>"});
+        <?php
+    }
+
+}

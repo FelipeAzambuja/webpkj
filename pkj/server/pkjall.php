@@ -44,7 +44,7 @@ function run_forever($v = true) {
 
 //show_errors();
 include 'Undefined.php';
-
+include 'simple_html_dom.php';
 include 'pkjsession.php';
 //$useSmarty = false;
 //if ($useSmarty) {

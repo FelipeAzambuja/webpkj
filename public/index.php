@@ -1,63 +1,7 @@
 <?php
 $template = 'templates/template.php';
 
-/**
- * 
- * @param type $varname
- * @return \Vue
- */
-function vue($varname) {
-    return new Vue($varname);
-}
 
-class Vue {
-
-    var $varname = '';
-    var $data = [];
-
-    function __construct($varname) {
-        $this->varname = $varname;
-        $this->data = $_POST['vue'][$varname];
-    }
-
-    function data($data = null) {
-        if ($data === null) {
-            return $this->data;
-        } else {
-            foreach ($data as $key => $value) {
-                $value = json_encode($value);
-                echo "{$this->varname}.{$key} = {$value};";
-            }
-        }
-    }
-
-    function load($vueFile, $slug = null) {
-        global $url;
-        if (stringy($vueFile)->endsWith('.php')) {
-            $vueFile = stringy($vueFile)->replace('.php', '');
-        }
-        $component = file_get_html($url . $vueFile);
-
-        $dom = new DOMDocument;
-        $dom->loadHTML($component);
-        $xpath = new DOMXPath($dom);
-        libxml_use_internal_errors(false);
-
-        $template = $dom->saveHTML($dom->getElementsByTagName('template')->item(0));
-        $script = $dom->getElementsByTagName('script')->item(0)->textContent;
-        $style = $dom->getElementsByTagName('style')->item(0)->textContent;
-
-        $script = implode(PHP_EOL . ' ', array_splice(explode(PHP_EOL, trim($script)), 1, -1));
-        if ($slug === null) {
-            $slug = explode('/', $vueFile);
-            $slug = $slug[count($slug) - 1];
-        }
-        ?>
-        Vue.component('<?= $slug ?>', {<?= $script ?>,template: "<?= JS::addslashes($template) ?>"});
-        <?php
-    }
-
-}
 
 function main() {
 
@@ -80,18 +24,32 @@ function main() {
         'email' => 'required|valid_email',
         'idade' => 'required|integer'
     ]);
-    vue('vue')->load('vue/itemLista.php');
+//    vue('vue')->load('vue/itemLista.php');
 //    popup(@d());
 }
 ?>
 <script>
     $(function () {
+//        Vue.component('item-lista', {
+//            name: 'item-lista',
+//            props: [
+//                'item'
+//            ],
+//            template: "" + "\n<li>{{item.texto}}<\/li>\n" + ""
+//        });
+        Vue.load('vue/itemLista','item-lista');
         vue = new Vue({
             el: '#main',
             data: {
                 itens: [
                     {
-                        texto: ''
+                        texto: 'teste'
+                    },
+                    {
+                        texto: 'teste'
+                    },
+                    {
+                        texto: 'teste'
                     }
                 ]
             }
@@ -100,7 +58,7 @@ function main() {
 </script>
 <form init="main" id="main" >
     <ul>
-        <itemLista></itemLista>
+        <item-lista v-for="item in itens" v-bind:item="item"></item-lista>
     </ul>
     <?php
     label_text('Nome', 'nome', 12);

@@ -73,6 +73,14 @@ bind.exec = function (element, router, page, event) {
         cmd = real_cmd;
     }
     data.CMD = cmd;
+    data.vue = {};
+    for (var i in window) {
+        if (window[i] !== null) {
+            if (window[i].$data !== undefined) {
+                data.vue[i] = JSON.parse(JSON.stringify(window[i].$data));
+            }
+        }
+    }
     $(form).ajaxSubmit({
         url: router,
         type: 'POST',
@@ -81,5 +89,5 @@ bind.exec = function (element, router, page, event) {
     });
 };
 bind.call = function (router, page, function_name, args) {
-    
+    //preguiçaaaa
 };

@@ -13,6 +13,7 @@
         import('bpopup');
         import('bootstrap');
         import('mask');
+        import('vuejs');
        ?>
     </head>
     <body>
