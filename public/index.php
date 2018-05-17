@@ -28,31 +28,9 @@ function main() {
 //    popup(@d());
 }
 ?>
-<script>
-    $(function () {
-        Vue.load('vue/itemLista.vue','item-lista');
-        vue = new Vue({
-            el: '#main',
-            data: {
-                itens: [
-                    {
-                        texto: 'teste'
-                    },
-                    {
-                        texto: 'teste'
-                    },
-                    {
-                        texto: 'teste'
-                    }
-                ]
-            }
-        });
-    });
-</script>
+
 <form init="main" id="main" >
-    <ul>
-        <item-lista v-for="item in itens" v-bind:item="item"></item-lista>
-    </ul>
+  
     <?php
     label_text('Nome', 'nome', 12);
     label_upload('Arquivo', 'arquivo[]', 'multiple="true"', 12);
