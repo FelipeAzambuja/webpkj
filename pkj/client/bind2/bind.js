@@ -76,8 +76,14 @@ bind.exec = function (element, router, page, event) {
     data.vue = {};
     for (var i in window) {
         if (window[i] !== null) {
-            if (window[i].$data !== undefined) {
-                data.vue[i] = JSON.parse(JSON.stringify(window[i].$data));
+            try {
+                if (window[i].$data !== undefined) {
+                    data.vue[i] = JSON.parse(JSON.stringify(window[i].$data));
+                }
+            } catch (e) {
+
+            } finally {
+
             }
         }
     }
