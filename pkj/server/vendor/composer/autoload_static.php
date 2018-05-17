@@ -12,6 +12,7 @@ class ComposerStaticInita78a23c1ef6e4a3d941b04eebe772db3
         '65fec9ebcfbb3cbb4fd0d519687aea01' => __DIR__ . '/..' . '/danielstjules/stringy/src/Create.php',
         '3917c79c5052b270641b5a200963dbc2' => __DIR__ . '/..' . '/kint-php/kint/init.php',
         'f084d01b0a599f67676cffef638aa95b' => __DIR__ . '/..' . '/smarty/smarty/libs/bootstrap.php',
+        'da253f61703e9c22a5a34f228526f05a' => __DIR__ . '/..' . '/wixel/gump/gump.class.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -32,10 +33,6 @@ class ComposerStaticInita78a23c1ef6e4a3d941b04eebe772db3
         'G' => 
         array (
             'GuzzleHttp\\Psr7\\' => 16,
-        ),
-        'C' => 
-        array (
-            'Carbon\\' => 7,
         ),
     );
 
@@ -64,10 +61,10 @@ class ComposerStaticInita78a23c1ef6e4a3d941b04eebe772db3
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
         ),
-        'Carbon\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
-        ),
+    );
+
+    public static $fallbackDirsPsr4 = array (
+        0 => __DIR__ . '/..' . '/nesbot/carbon/src',
     );
 
     public static $classMap = array (
@@ -155,6 +152,7 @@ class ComposerStaticInita78a23c1ef6e4a3d941b04eebe772db3
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInita78a23c1ef6e4a3d941b04eebe772db3::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInita78a23c1ef6e4a3d941b04eebe772db3::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInita78a23c1ef6e4a3d941b04eebe772db3::$fallbackDirsPsr4;
             $loader->classMap = ComposerStaticInita78a23c1ef6e4a3d941b04eebe772db3::$classMap;
 
         }, null, ClassLoader::class);
