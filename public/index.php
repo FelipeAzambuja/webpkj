@@ -1,8 +1,6 @@
 <?php
 $template = 'templates/template.php';
 
-
-
 function main() {
 
     $data = [
@@ -28,9 +26,28 @@ function main() {
 //    popup(@d());
 }
 ?>
-
+<script>
+    var lista = null;
+    $(function () {
+        lista = new Vue({
+            el: '#main',
+            data: {
+                itens: [
+                    {
+                        id: 1,
+                        texto: 'teste'
+                    },
+                    {
+                        id: 2,
+                        texto: 'teste teste'
+                    }
+                ]
+            }
+        });
+    });
+</script>
 <form init="main" id="main" >
-  
+    
     <?php
     label_text('Nome', 'nome', 12);
     label_upload('Arquivo', 'arquivo[]', 'multiple="true"', 12);

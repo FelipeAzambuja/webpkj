@@ -633,7 +633,7 @@ function cd($v) {
  * @param type $varname
  * @return \Vue
  */
-function vue($varname = null) {
+function vue($varname) {
     return new Vue($varname);
 }
 
@@ -656,34 +656,6 @@ class Vue {
                 echo "{$this->varname}.{$key} = {$value};";
             }
         }
-    }
-
-    function load($vueFile, $slug = null) {
-        global $url;
-        if (stringy($vueFile)->endsWith('.php')) {
-            $vueFile = stringy($vueFile)->replace('.php', '');
-            $component = str_get_html(file_get_contents($url . $vueFile), true, true, DEFAULT_TARGET_CHARSET, false);
-        } elseif (stringy($vueFile)->endsWith('.vue')) {
-            $component = str_get_html(file_get_contents('public/' . $vueFile), true, true, DEFAULT_TARGET_CHARSET, false);
-        } else {
-            $component = str_get_html(file_get_contents($vueFile), true, true, DEFAULT_TARGET_CHARSET, false);
-        }
-
-        $template = $component->getElementByTagName('template')->innertext;
-        $script = $component->getElementByTagName('script')->innertext;
-        $style = $component->getElementByTagName('style')->innertext;
-        $script = explode("\n", trim($script));
-        $script = implode(PHP_EOL . ' ', array_splice($script, 1, -1));
-        if ($slug === null) {
-            $slug = explode('/', $vueFile);
-            $slug = $slug[count($slug) - 1];
-        }
-        ?>
-        Vue.component('<?= $slug ?>', {<?= $script ?>,template: "<?= JS::addslashes($template) ?>"});
-        var style = document.createElement('style');
-        style.innerText = "<?= stringy($style)->replace(PHP_EOL, ' ')?>";
-        $('head').append(style);
-        <?php
     }
 
 }

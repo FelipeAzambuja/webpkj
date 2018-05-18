@@ -31,11 +31,11 @@ try {
     }
     $url = "{$protocol}://{$_SERVER['HTTP_HOST']}" . $url;
 
-    if ($path === 'public/pkj.vue.component.php') {
-        include "pkj/server/pkjbind.php";
-        vue()->load($_GET['page'], $_GET['name']);
-        exit();
-    }
+//    if ($path === 'public/pkj.vue.component.php') {
+//        include "pkj/server/pkjbind.php";
+//        vue()->load($_GET['page'], $_GET['name']);
+//        exit();
+//    }
 
 
 //if ( !file_exists( $path ) ) {

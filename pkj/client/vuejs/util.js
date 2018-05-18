@@ -1,13 +1,11 @@
-Vue.load = function (page,name) {
-    $.ajax('./pkj.vue.component', {
-        data: {
-            name: name,
-            page: page
-        },
-        async: false,
-        cache: true,
-        complete: function (component) {
-            eval(component.responseText);
-        }
-    });
-};
+//Vue.load = function (page,name) {
+//    $.ajax('./'+page, {
+//        async: false,
+//        cache: true,
+//        complete: function (component) {
+//            var html = component.responseText;
+//            var c = $(html);
+//            debugger;
+//        }
+//    });
+//};
