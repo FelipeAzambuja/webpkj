@@ -51,10 +51,10 @@ include 'pkjsession.php';
 //    include 'smarty/Smarty.class.php';
 //}
 include 'pkjstring.php';
-include 'pkjconf.php'; //
-
+include 'pkjconf.php'; 
 
 include 'vendor/autoload.php';
+include 'gump/gump.class.php';
 
 include 'pkj.php';
 //if (conf::$endereco !== "") {

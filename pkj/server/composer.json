@@ -1,11 +1,9 @@
 {
-    "name": "imperiums/server",
+    "name": "NewBGP/server",
     "require": {
         "danielstjules/stringy": "^3.1",
         "kint-php/kint": "^2.2",
-        "smarty/smarty": "^3.1",
         "intervention/image": "^2.4",
-        "nesbot/carbon": "^1.25",
-        "wixel/gump": "dev-master"
+        "nesbot/carbon": "^1.25"
     }
 }
