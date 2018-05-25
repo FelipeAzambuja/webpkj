@@ -44,8 +44,8 @@ bind.refresh = function () {
                     });
                 }
             }
+            el.attr('bind', 'true');
         }
-        el.attr('bind', 'true');
     });
     bind.loading = false;
 };

@@ -152,14 +152,24 @@ function bindRefresh() {
         }
     });
     $('select').each(function (i, pai) {
-        var value = $(pai).attr('value');
-        if (value !== undefined) {
-            $(pai).find('option').each(function (i, e) {
-                if ($(e).val() === value) {
-                    $(e).attr('selected', true);
-                    $(pai).trigger("chosen:updated").chosen({"width": "100%"});
-                }
-            })
+        pai = $(pai);
+        if(pai.attr('valueok') !== undefined){
+            var value = pai.attr('value');
+            if (value !== undefined) {
+                pai.find('option').each(function (i, e) {
+                    if ($(e).val() === value) {
+                        //$(e).attr('selected', true);
+                        pai.attr('valueok',true);
+                        try {
+                            pai.trigger("chosen:updated").chosen({"width": "100%"});    
+                        } catch (error) {
+                            
+                        }finally{
+
+                        }
+                    }
+                })
+            }
         }
     });
     $('form').on('keyup keypress', function (e) {

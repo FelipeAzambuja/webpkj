@@ -10,7 +10,7 @@
         import('bind2');
         import('pkj');
         import('bootstrap');
-//        import('ui');
+        import('ui');
         import('mask');
         import('datatables');
         {/php}
