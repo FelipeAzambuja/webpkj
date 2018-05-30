@@ -1,4 +1,5 @@
 var bind = new Object();
+var eventos = new Object();
 $(function () {
     setInterval(function () {
         bind.refresh();
@@ -97,3 +98,21 @@ bind.exec = function (element, router, page, event) {
 bind.call = function (router, page, function_name, args) {
     //preguiçaaaa
 };
+function bindCall(page,fnc,data){
+    data.HOST = window.location.href;
+    data.CMD = fnc;
+    if(page === ""){
+        page = data.HOST;
+    }
+    
+    $.ajaxSetup({
+        xhrFields: {
+            withCredentials: true
+        },
+        cache: false
+    });
+    $.post(page,data,function(response){
+        eval(response);
+    });
+
+}

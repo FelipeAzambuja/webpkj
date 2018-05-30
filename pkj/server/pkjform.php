@@ -19,7 +19,7 @@ function button($texto, $plus = "", $size = 3) {
         $plus = '';
     }
     if (indexof($plus, 'class="') === -1) {
-        $plus .= 'class="btn btn-primary form-control"';
+        $plus .= ' class="btn btn-primary form-control" ';
     }
     conf::$pkj_uid_comp++;
     $html = "<input type='button' data-button='true' value='$texto' $plus />";

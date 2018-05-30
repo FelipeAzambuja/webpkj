@@ -1,6 +1,5 @@
 {
     "name": "pkj",
-    "files": ["pkj.js","pkj.css"],
-    "onload":"$(\"body\").show()",
+    "files": ["pkj.min.js","pkj.css"],
     "author": "Felipe VL TEam"
 }

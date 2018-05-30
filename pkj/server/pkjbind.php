@@ -111,7 +111,6 @@ class JS {
         if (is_array($mensagem)) {
             ?>console.log(<?php echo json_encode($mensagem) ?>);<?php
         } else {
-            echo strlen(strval($mensagem));
             ?>console.log("<?= JS::addslashes($mensagem) ?>");<?php
         }
     }

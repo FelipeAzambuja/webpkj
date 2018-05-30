@@ -10,11 +10,12 @@
         {label_mask( "CPF" , "cpf" , "999.999.999-99" , 3 )}
         {label_money( "Saldo" , "saldo" , 3 )}
         {label_number( "Idade" , "idade" , 3 )}
-        {check( "estado" , "Vivo" , "" , 3 )}
+        {check( "operadoras" , "Vivo" , "" , 1 )}
+        {check( "operadoras" , "Claro" , "" , 1 )}
         {radio( "sexo" , "Masculino" , "sexo" , 3 )}
         {radio( "sexo" , "Feminino" , "sexo" , 3 )}
-        {button( "Teste" , "click='teste()'  lock" , 2 )}
-        {button( "Teste" , "click='teste2()'  lock" , 1 )}
+        {button( "Teste" , "click='teste()'  lock" ,1  )}
+        {button( " &#f41f Teste 2" , "click='teste2()' lock" , 2 )}
         {php}
 
         function teste( $form ) {

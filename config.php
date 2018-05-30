@@ -3,14 +3,14 @@ if ($_SERVER['SERVER_NAME'] === 'newbgp.com.br') {
     conf::$dateFormat = 'd/m/Y';
     conf::$servidor = 'mysql';
     conf::$endereco = 'localhost';
-    conf::$usuario = 'newbgp_test';
-    conf::$senha = 'naosouumasenha';
-    conf::$base = 'newbgp_test';
+    conf::$usuario = 'newbgp_webpkj';
+    conf::$senha = '123';
+    conf::$base = 'newbgp_webpkj';
     conf::$session = 'database';
 } else {
     conf::$dateFormat = 'd/m/Y';
     conf::$servidor = 'sqlite';
-    conf::$endereco = '../../banco';
+    conf::$endereco = '../../banco.sqlite';
     conf::$usuario = 'root';
     conf::$senha = '';
     conf::$base = '';

@@ -7,7 +7,6 @@
         <title><?=@$title?></title>
         <?php
         import('jquery');
-        
         import('bind2');
         import('pkj');
         import('notify');
@@ -15,7 +14,7 @@
         import('bootstrap');
         import('mask');
         import('vuejs');
-        
+        import('icheck');
        ?>
     </head>
     <body>

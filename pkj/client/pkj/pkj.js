@@ -351,13 +351,13 @@ function tagUpdate() {
         }
         contador++;
     });
-    setTimeout(function () {
-        $('body').show();
-    },100);
+//    setTimeout(function () {
+//        $('body').show();
+//    },100);
     
 }
 $(function () {
-    $('body').hide();
+//    $('body').hide();
 //    if(typeof page.go == "undefined"){
     tagUpdate();
 //    }
