@@ -12,3 +12,7 @@ div.dt-buttons{
 .dataTables_filter{
     padding-top: 4px;
 }
+div.dataTables_wrapper div.dataTables_length select{
+    margin-top:1px;
+    height: 37px;
+}
