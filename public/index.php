@@ -51,7 +51,8 @@ function main() {
     <?php
     label_text('Nome', 'nome', 12);
     label_upload('Arquivo', 'arquivo[]', 'multiple="true"', 12);
-    button('Mostrar Nome', 'click="mostrarNome(feliz)" ', 12);
+    //falta implementar icon 
+    button('<i class="fa fa-save"></i> Mostrar Nome', 'click="mostrarNome(feliz)" ', 12);
 
     function mostrarNome($form) {
         if (is_empty($form['nome'])) {

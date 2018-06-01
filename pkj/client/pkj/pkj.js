@@ -228,6 +228,7 @@ function tagUpdate() {
                         ],
                         responsive: responsive,
                         ajax: $(e).attr("ajax"),
+                        deferRender:true,
                         select: true,
                         keys: true,
                         "language": {
