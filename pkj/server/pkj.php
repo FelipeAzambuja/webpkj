@@ -455,6 +455,9 @@ function is_date($value) {
     } else {
         return false;
     }
+    if(count($v) < 3){
+        return false;
+    }
     $v = checkdate($v[1], $v[2], $v[0]);
     if ($v === false) {
         $v = explode('/', $value);

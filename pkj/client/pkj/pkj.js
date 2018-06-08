@@ -61,8 +61,10 @@ function in_array(texto, array) {
     }
     return false;
 }
+
 PKJ = {};
 PKJ.refresh = function (load) {
+    return false;
     ["bootstrap", "bind", "icheck"].forEach(function (e) {
         switch (e) {
             case "icheck":
@@ -107,8 +109,8 @@ PKJ.refresh = function (load) {
         }
     });
 };
-
 PKJ.loadLibrary = function (name, ok) {
+    return false;
     var load = true;
     PKJ.loadedLibrarys.forEach(function (e) {
         if (e === name) {
@@ -193,7 +195,7 @@ function tagUpdate() {
         } finally {
 
         }
-    }, 0);
+    }, 1);
 
     setTimeout(function () {
         $("a[pref],span[pref],button[pref]").off("click").on("click", function (e) {
@@ -209,7 +211,7 @@ function tagUpdate() {
             }
             tagUpdate();
         });
-    }, 0);
+    }, 1);
     setTimeout(function () {
         if (typeof ($.fn.dataTableExt) !== "undefined") {
             $(".datatables").each(function (i, e) {
@@ -228,7 +230,7 @@ function tagUpdate() {
                         ],
                         responsive: responsive,
                         ajax: $(e).attr("ajax"),
-                        deferRender:true,
+                        deferRender: true,
                         select: true,
                         keys: true,
                         "language": {
@@ -267,17 +269,18 @@ function tagUpdate() {
 //            });
             });
         }
-    }, 0);
+    }, 1);
     //datatables
 
 
     $("select").each(function (i, e) {
-        if ($(e).val() == '') {
+        if ($(e).val() !== $(e).attr("value")) {
             if ($(e).attr("value") != undefined) {
                 $(e).val($(e).attr("value"));
             }
         }
     });
+
     /*
      $("input[type='checkbox']").each(function (i, e) {
      if ($(e).attr("value") != undefined) {
@@ -352,10 +355,8 @@ function tagUpdate() {
         }
         contador++;
     });
-//    setTimeout(function () {
-//        $('body').show();
-//    },100);
-    
+
+
 }
 $(function () {
 //    $('body').hide();
