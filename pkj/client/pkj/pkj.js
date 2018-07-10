@@ -279,7 +279,9 @@ function tagUpdate() {
                 $(e).val($(e).attr("value"));
             }
         }
-    });
+    }).change(function(){
+        $(this).attr('value',$(this).val());
+    });;
 
     /*
      $("input[type='checkbox']").each(function (i, e) {
