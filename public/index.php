@@ -3,27 +3,18 @@ $template = 'templates/template.php';
 
 function main() {
 
-    $data = [
-        'nome' => 'Felipe',
-        'nascimento' => '26/08/1989',
-        'idade' => '28',
-        'email' => 'felipe@newbgp.com.br'
+//    $validator = is_valid($data, [
+//        'nome' => 'required',
+//        'nascimento' => 'required|date,d/m/Y',
+//        'email' => 'required|valid_email',
+//        'idade' => 'required|integer'
+//    ]);
+    $data = vue('lista')->data();
+    $data['itens'][] = [
+        'id' => 3,
+        'texto' => 'PHP é legal'
     ];
-    $data = [
-        'nome' => '',
-        'nascimento' => '26/08/1989',
-        'idade' => '28',
-        'email' => 'felipe@a.com'
-    ];
-
-    $validator = is_valid($data, [
-        'nome' => 'required',
-        'nascimento' => 'required|date,d/m/Y',
-        'email' => 'required|valid_email',
-        'idade' => 'required|integer'
-    ]);
-//    vue('vue')->load('vue/itemLista.php');
-//    popup(@d());
+    vue('lista')->data($data);
 }
 ?>
 <script>
@@ -47,11 +38,13 @@ function main() {
     });
 </script>
 <form init="main" id="main" >
-    
+    <ul>
+        <li v-for="item in itens">{{item.id}} {{item.texto}}</li>
+    </ul>
     <?php
     label_text('Nome', 'nome', 12);
     label_upload('Arquivo', 'arquivo[]', 'multiple="true"', 12);
-    //falta implementar icon 
+    
     button('<i class="fa fa-save"></i> Mostrar Nome', 'click="mostrarNome(feliz)" ', 12);
 
     function mostrarNome($form) {
