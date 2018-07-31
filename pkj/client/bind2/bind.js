@@ -15,6 +15,18 @@ bind.refresh = function () {
         var router = '';
         var page = '';
         if (el.attr('bind') === undefined) {
+            if (el.prop('tagName') === 'FORM') {
+                el.keydown(function (event) {
+                    if (event.keyCode === 13) {
+                        event.preventDefault();
+                        var elemento = $(event.target);
+                        if (elemento.prop('tagName') === 'INPUT' || elemento.prop('tagName') === 'SELECT') {
+                            $(elemento.parents('form')).find('*[submit]').trigger('click');
+                        }
+                        return false;
+                    }
+                });
+            }            
             router = el.attr('router');
             if (router === undefined) {
                 router = window.location.href;
