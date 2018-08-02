@@ -333,6 +333,7 @@ class SQL {
             for ($index = 0; $index < count($data); $index++) {
                 foreach ($this->join as $j) {
                     if ($j[0] instanceof SQL) {
+                        $j[0] = clone $j[0];
                         if ($j[4] === 'one') {
                             $data[$index]->{$j[0]->alias} = one($j[0]->where($j[1], $data[$index]->{$j[2]})->select()->get($j[3]));
                         } else {
