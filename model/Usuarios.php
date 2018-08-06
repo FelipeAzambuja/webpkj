@@ -21,8 +21,5 @@ function model_usuarios() {
  */
 class Usuarios extends Model {
 
-    public function __get($name) {
-        parent::__get($name);
-    }
 
 }

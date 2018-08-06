@@ -23,9 +23,9 @@ class SQL {
     public $table = null;
     public $where = [];
     public $data = [];
-    public $group = []; //implementar
-    public $having = []; //implementar
-    public $orderby = []; //implementar
+    public $group = [];
+    public $having = [];
+    public $orderby = [];
     public $join = [];
     public $limit = -1;
     public $offset = -1;
@@ -97,6 +97,15 @@ class SQL {
     function table($name) {
         $this->table = $name;
         $this->alias = $name;
+        return $this;
+    }
+
+    /**
+     * 
+     * @param int $value
+     */
+    function limit($value) {
+        $this->limit = $value;
         return $this;
     }
 
@@ -269,6 +278,7 @@ class SQL {
         $sql = 'update ' . $this->table . ' set ';
         $p = [];
         foreach ($prepared as $key => $value) {
+             $value = (is_null($value)) ? 'null' : $value;
             $p[] = " {$key} = {$value} ";
         }
         $sql .= implode(',', $p);
@@ -325,7 +335,7 @@ class SQL {
                 $this->sql .= $o[0] . ' ' . $o[1] . ' ';
             }
         }
-        $this->sql .= ' ';
+        $this->sql .= ' ' . ($this->limit > 0) ? ' limit ' . $this->limit : '';
 
         $data = $this->db->query($this->sql, [], $class);
         if (count($this->join) > 0) {

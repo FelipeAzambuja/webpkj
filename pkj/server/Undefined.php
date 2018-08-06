@@ -26,6 +26,6 @@ class Undefined {
 function set_undefined(&$var) {
     $var = undefined();
 }
-function is_undefined(&$var) {
+function is_undefined($var) {
     return $var instanceof Undefined;
 }

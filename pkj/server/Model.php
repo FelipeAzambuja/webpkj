@@ -54,7 +54,10 @@ class Model {
 
     private $doc;
 
-
+    /**
+     *
+     * @var SQL  
+     */
     private $sql = null;
     private $data = [];
 
@@ -163,9 +166,9 @@ class Model {
                 }, $this->doc['property']));
         foreach ($array as $key => $value) {
             if (in_array($key, $coluns)) {
-                if ($array[$key] !== null && $array[$key] !== '') {
-                    $this->{$key} = $value;
-                }
+//                if ($array[$key] !== null && $array[$key] !== '') {
+                $this->{$key} = $value;
+//                }
             }
         }
         return $this;
@@ -208,6 +211,27 @@ class Model {
         return $this;
     }
 
+    function byId($id) {
+        return $this->where([
+                    'id' => $id
+                ])->first();
+    }
+
+    function orderby($field, $mode = 'DESC') {
+        $this->sql->orderby($field, $mode);
+        return $this;
+    }
+
+    function group($field) {
+        $this->sql->group($field);
+        return $this;
+    }
+
+    function having($hav) {
+        $this->sql->having($hav);
+        return $this;
+    }
+
     /**
      * 
      * @return static|array
@@ -216,11 +240,19 @@ class Model {
         return $this->sql->get(get_class($this));
     }
 
+    /**
+     * 
+     * @return static
+     */
     function first() {
         $this->sql->class = get_class($this);
         return $this->sql->first();
     }
 
+    /**
+     * 
+     * @return static
+     */
     function last() {
         $this->sql->class = get_class($this);
         return $this->sql->last();
