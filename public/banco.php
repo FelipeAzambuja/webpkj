@@ -9,5 +9,5 @@ if (count(model_usuarios()->get()) < 1) {
     }
 }
 foreach (model_usuarios()->get( ) as $value) {
-    s($value->nome);
+    s($value->senha);
 }
