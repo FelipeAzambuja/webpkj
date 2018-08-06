@@ -335,7 +335,7 @@ class SQL {
                 $this->sql .= $o[0] . ' ' . $o[1] . ' ';
             }
         }
-        $this->sql .= ' ' . ($this->limit > 0) ? ' limit ' . $this->limit : '';
+        $this->sql .= ' ' . (($this->limit > 0) ? ' limit ' . $this->limit : '');
 
         $data = $this->db->query($this->sql, [], $class);
         if (count($this->join) > 0) {
