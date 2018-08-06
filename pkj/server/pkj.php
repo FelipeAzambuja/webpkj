@@ -275,7 +275,22 @@ class Calendar {
         }
         return ($zeros . "" . $valor);
     }
-
+    /**
+     * 
+     * @return \Carbon\Carbon
+     */
+    function toCarbon() {
+        return new \Carbon\Carbon($this->format('Y-m-d H:i:s'));
+    }
+    
+    /**
+     * 
+     * @return DateTime
+     */
+    function toDateTime() {
+//        return DateTime::createFromFormat('Y-m-d H:i:s', $this->format('Y-m-d H:i:s'));
+        return new DateTime($this->format('Y-m-d H:i:s'));
+    }
 }
 
 function get($campo) {
