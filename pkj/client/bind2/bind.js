@@ -100,11 +100,20 @@ bind.exec = function (element, router, page, event) {
             }
         }
     }
+    if (el.attr('lock') !== undefined) {
+        el.addClass('disabled');
+    }
+    var handler = function (response) {
+        if (el.attr('lock') !== undefined) {
+            el.removeClass('disabled');
+        }
+    };
     $(form).ajaxSubmit({
         url: router,
         type: 'POST',
         data: data,
-        dataType: 'script'
+        dataType: 'script',
+        success: handler
     });
 };
 bind.call = function (router, page, function_name, args) {
