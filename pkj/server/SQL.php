@@ -132,13 +132,17 @@ class SQL {
     function where($field, $operator = null, $value = null, $cond = null) {
         if (is_array($field)) {
             foreach ($field as $key => $value) {
-                if (count($value) === 2) {
+                if (!is_array($value)) {
                     $this->where($key, $value);
-                } else if (count($value) === 3) {
-                    $this->where($value[0], $value[1], $value[2]);
                 } else {
-                    //?
-                    $this->where($key, $value);
+                    if (count($value) === 2) {
+                        $this->where($key, $value);
+                    } else if (count($value) === 3) {
+                        $this->where($value[0], $value[1], $value[2]);
+                    } else {
+                        //?
+                        $this->where($key, $value);
+                    }
                 }
             }
             return $this;
