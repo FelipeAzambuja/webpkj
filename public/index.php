@@ -46,7 +46,8 @@ function main() {
     label_upload('Arquivo', 'arquivo[]', 'multiple="true"', 12);
     
     button('<i class="fa fa-save"></i> Mostrar Nome', 'click="mostrarNome(feliz)" ', 12);
-
+echo numfmt_parse("12,25");
+//cfloat($value);
     function mostrarNome($form) {
         if (is_empty($form['nome'])) {
             focus('#nome');

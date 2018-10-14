@@ -254,6 +254,14 @@ function tagUpdate() {
                             "oAria": {
                                 "sSortAscending": ": Ordenar colunas de forma ascendente",
                                 "sSortDescending": ": Ordenar colunas de forma descendente"
+                            },
+                            buttons: {
+                                copyTitle: 'Copiado',
+                                copyKeys: '',
+                                copySuccess: {
+                                    _: '%d linhas copiadas',
+                                    1: '1 linha copiada'
+                                }
                             }
                         }
                     });
@@ -279,9 +287,10 @@ function tagUpdate() {
                 $(e).val($(e).attr("value"));
             }
         }
-    }).change(function(){
-        $(this).attr('value',$(this).val());
-    });;
+    }).change(function () {
+        $(this).attr('value', $(this).val());
+    });
+    ;
 
     /*
      $("input[type='checkbox']").each(function (i, e) {

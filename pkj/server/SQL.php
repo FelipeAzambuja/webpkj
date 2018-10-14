@@ -132,7 +132,14 @@ class SQL {
     function where($field, $operator = null, $value = null, $cond = null) {
         if (is_array($field)) {
             foreach ($field as $key => $value) {
-                $this->where($key, $value);
+                if (count($value) === 2) {
+                    $this->where($key, $value);
+                } else if (count($value) === 3) {
+                    $this->where($value[0], $value[1], $value[2]);
+                } else {
+                    //?
+                    $this->where($key, $value);
+                }
             }
             return $this;
         }
@@ -278,7 +285,7 @@ class SQL {
         $sql = 'update ' . $this->table . ' set ';
         $p = [];
         foreach ($prepared as $key => $value) {
-             $value = (is_null($value)) ? 'null' : $value;
+            $value = (is_null($value)) ? 'null' : $value;
             $p[] = " {$key} = {$value} ";
         }
         $sql .= implode(',', $p);

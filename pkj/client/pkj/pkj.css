@@ -10,3 +10,9 @@
     padding-left: 5px !important;
     padding-right: 0 !important;    
 }
+
+.label_button{
+    height: 32px !important;
+    margin-top: 25px !important;
+    line-height: 100% !important;
+}

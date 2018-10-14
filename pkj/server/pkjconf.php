@@ -3,6 +3,7 @@
 class conf {
 
     public static $dateFormat = "d/m/Y";
+    public static $local = "pt_BR";
 // mysql pgsql mssql odbc oledb sqlite
     public static $servidor = "sqlite";
 //    public static $servidor = "mysql";

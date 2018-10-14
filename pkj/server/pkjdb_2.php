@@ -199,7 +199,7 @@ class Db {
         }
         if (is_array($where)) {
             if (count($where) > 0) {
-                if (is_array(array_keys($where))) {
+                if (is_string(array_keys($where)[0])) {
                     //["nome"=>"a"],["senha"=>"123"]
                     $list = [];
                     foreach ($where as $key => $value) {
@@ -225,7 +225,7 @@ class Db {
                         }
                     }
                     return implode(" AND ", $list);
-                } elseif (is_int(array_keys($where))) {
+                } elseif (is_int(array_keys($where)[0])) {
                     //0=>["nome","=","a"],1 = ["senha","=","123"]
                     $list = [];
                     for ($index = 0; $index < count($where); $index++) {
@@ -235,7 +235,7 @@ class Db {
                         } else {
                             $jesse[2] = $this->pdo->quote($jesse[2], PDO::PARAM_STR);
                         }
-                        $list[] = $where[0] . "" . $where[1] . "" . $where[2];
+                        $list[] = $jesse[0] . "" . $jesse[1] . "" . $jesse[2];
                     }
                     return implode(" AND ", $list);
                 } else {

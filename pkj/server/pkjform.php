@@ -12,6 +12,25 @@ function row($class = "row", $id = "") {
     }
 }
 
+function label_button($texto, $plus = "", $size = 3) {
+    if (is_numeric($plus)) {
+        $size = $plus;
+        $plus = '';
+    }
+    if (indexof($plus, 'class="') === -1) {
+        $plus .= ' class="btn btn-primary form-control mt-3" ';
+    }
+    conf::$pkj_uid_comp++;
+    ob_start();
+    ?>
+    <button data-button="true" type="button" <?= $plus ?> ><?= $texto ?></button>
+    <?php
+    $html = ob_get_contents();
+    ob_end_clean();
+//    $html = "<input type='button' data-button='true' value='$texto' $plus />";
+    echo div($html, $size);
+}
+
 function button($texto, $plus = "", $size = 3) {
     if (is_numeric($plus)) {
         $size = $plus;

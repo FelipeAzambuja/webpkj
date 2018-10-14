@@ -1,6 +1,7 @@
 <?php
 if ($_SERVER['SERVER_NAME'] === 'newbgp.com.br') {
     conf::$dateFormat = 'd/m/Y';
+    conf::$local = 'pt_BR';
     conf::$servidor = 'mysql';
     conf::$endereco = 'localhost';
     conf::$usuario = 'newbgp_webpkj';
@@ -8,6 +9,7 @@ if ($_SERVER['SERVER_NAME'] === 'newbgp.com.br') {
     conf::$base = 'newbgp_webpkj';
     conf::$session = 'database';
 } else {
+    conf::$local = 'pt_BR';
     conf::$dateFormat = 'd/m/Y';
     conf::$servidor = 'sqlite';
     conf::$endereco = '../../banco.sqlite';
