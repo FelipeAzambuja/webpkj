@@ -216,17 +216,32 @@ function tagUpdate() {
         if (typeof ($.fn.dataTableExt) !== "undefined") {
             $(".datatables").each(function (i, e) {
 //            $(function () {
+                if(!$(e).hasClass("table")){
+                    $(e).addClass('table','table-striped','table-hover','table-bordered');
+                }
                 var responsive = $(e).hasClass("datatables-responsive");
                 if (!$.fn.dataTable.isDataTable(e)) {
-
+                    
                     var tabela = $(e).DataTable({
-//                    dom: 'Blfrtip',
-                        dom: 'lBfrtip',
+                        dom: "<'row'<'col-sm-12 col-md-6'lB><'col-sm-12 col-md-6'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
+                        lengthChange: false,
                         buttons: [
-                            'copyHtml5',
-                            'excelHtml5',
-                            'csvHtml5',
-                            'pdfHtml5'
+                            {
+                                extend: 'copy',
+                                text: 'Copiar'
+                            },
+                            {
+                                extend: 'excel',
+                                text: 'Excel'
+                            },
+                            {
+                                extend: 'print',
+                                text: 'Imprimir'
+                            },
+                            {
+                                extend: 'colvis',
+                                text: 'Colunas'
+                            }
                         ],
                         responsive: responsive,
                         ajax: $(e).attr("ajax"),
@@ -254,14 +269,6 @@ function tagUpdate() {
                             "oAria": {
                                 "sSortAscending": ": Ordenar colunas de forma ascendente",
                                 "sSortDescending": ": Ordenar colunas de forma descendente"
-                            },
-                            buttons: {
-                                copyTitle: 'Copiado',
-                                copyKeys: '',
-                                copySuccess: {
-                                    _: '%d linhas copiadas',
-                                    1: '1 linha copiada'
-                                }
                             }
                         }
                     });

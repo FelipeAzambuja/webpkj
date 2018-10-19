@@ -1,5 +1,5 @@
 {
     "name": "pkj",
-    "files": ["pkj.min.js","pkj.css"],
+    "files": ["pkj.js","pkj.css"],
     "author": "Felipe VL TEam"
 }

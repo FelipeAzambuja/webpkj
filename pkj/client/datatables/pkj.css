@@ -1,3 +1,4 @@
+/*
 div.dt-buttons{
     margin-top:1px;
     padding-left:6px;
@@ -6,13 +7,22 @@ div.dt-buttons{
     padding:0 !important;
     height:auto !important;
 }
-.datatables td{
-    vertical-align: middle !important;
-}
+*/
+
+/*
 .dataTables_filter{
     padding-top: 4px;
 }
 div.dataTables_wrapper div.dataTables_length select{
     margin-top:1px;
     height: 37px;
+}*/
+.dt-button-collection{
+    padding:0px !important;
+}
+.dt-button-collection-title{
+    display: none !important;
+}
+.datatables td{
+    vertical-align: middle !important;
 }
