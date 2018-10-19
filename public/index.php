@@ -1,20 +1,35 @@
 <?php
 $template = 'templates/template.php';
 
-function main() {
+function main()
+{
 
 //    $validator = is_valid($data, [
-//        'nome' => 'required',
-//        'nascimento' => 'required|date,d/m/Y',
-//        'email' => 'required|valid_email',
-//        'idade' => 'required|integer'
-//    ]);
+    //        'nome' => 'required',
+    //        'nascimento' => 'required|date,d/m/Y',
+    //        'email' => 'required|valid_email',
+    //        'idade' => 'required|integer'
+    //    ]);
+
     $data = vue('lista')->data();
     $data['itens'][] = [
         'id' => 3,
-        'texto' => 'PHP é legal'
+        'texto' => 'PHP é legal',
     ];
     vue('lista')->data($data);
+    if (false) {
+        alert('Olar', 'teste', [
+            'nome' => 'felipe',
+        ]);
+    }
+    confirm('Deseja continuar ?','teste',[
+        ['Ok','default',['enter']],
+        ['Cancelar','danger',['esc']]
+    ]);
+}
+
+function teste($form){
+    console($form);
 }
 ?>
 <script>
@@ -42,18 +57,18 @@ function main() {
         <li v-for="item in itens">{{item.id}} {{item.texto}}</li>
     </ul>
     <?php
-    label_text('Nome', 'nome', 12);
-    label_upload('Arquivo', 'arquivo[]', 'multiple="true"', 12);
-    
-    button('<i class="fa fa-save"></i> Mostrar Nome', 'click="mostrarNome(feliz)" ', 12);
-echo numfmt_parse("12,25");
-//cfloat($value);
-    function mostrarNome($form) {
-        if (is_empty($form['nome'])) {
-            focus('#nome');
-            notify('O Campo nome é obrigatório');
-            exit();
-        }
+label_text('Nome', 'nome', 12);
+label_upload('Arquivo', 'arquivo[]', 'multiple="true"', 12);
+
+button('<i class="fa fa-save"></i> Mostrar Nome', 'click="mostrarNome(feliz)" ', 12);
+
+function mostrarNome($form)
+{
+    if (is_empty($form['nome'])) {
+        focus('#nome');
+        notify('O Campo nome é obrigatório');
+        exit();
     }
-    ?>
+}
+?>
 </form>

@@ -15,6 +15,7 @@
         import('mask');
         import('vuejs');
         import('icheck');
+        import('alerts');
        ?>
     </head>
     <body>

@@ -1,0 +1,5 @@
+{
+    "name": "alerts",
+    "files": ["jquery-confirm.min.js","jquery-confirm.min.css","wrap.js"],
+    "author": "jquery confirm"
+}

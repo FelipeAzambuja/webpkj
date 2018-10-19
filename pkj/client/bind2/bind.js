@@ -133,7 +133,8 @@ function bindCall(page,fnc,data){
         cache: false
     });
     $.post(page,data,function(response){
-        eval(response);
+        //talvez pelo header ele já execute o eval
+        //eval(response);
     });
 
 }

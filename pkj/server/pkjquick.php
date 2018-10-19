@@ -16,8 +16,12 @@ function attr($id, $name, $value) {
     bind()->attr($id, $name, $value);
 }
 
-function alert($msg) {
-    JS::alert($msg);
+function alert($msg,$done='',$args=[]) {
+    ?>alert("<?php echo JS::addslashes($msg) ?>","<?php echo JS::addslashes($done) ?>",<?php echo json_encode($args,JSON_FORCE_OBJECT) ?>);<?php
+}
+
+function confirm($msg,$funcao,$btns) {
+    ?>confirm("<?php echo JS::addslashes($msg) ?>","<?php echo JS::addslashes($funcao) ?>",<?php echo json_encode($btns,JSON_FORCE_OBJECT) ?>);<?php
 }
 
 function console($msg) {
