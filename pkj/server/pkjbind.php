@@ -658,3 +658,15 @@ class Vue {
     }
 
 }
+
+function js_set($name, $value) {
+   $value = json_encode($value,JSON_NUMERIC_CHECK);
+    echo "{$name} = {$value};";
+}
+
+function js_call($function, $params = []) {
+    $params = implode(',', array_map(function($value) {
+                return json_encode($value);
+            }, $params));
+    echo "{$function}({$params});";
+}
