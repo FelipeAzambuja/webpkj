@@ -51,6 +51,9 @@ if (isset($_POST["CMD"])) {
 //            if (isset($_POST["MUSTACHE"])) {
 //                call_user_func($cmd, $tmp2, $_POST["MUSTACHE"]);
 //            } else {
+            array_walk_recursive($tmp2, function(&$v, $k) {
+                $v = ($v === '') ? null : $v;
+            });
             call_user_func($cmd, $tmp2);
 //            }
         } else {
@@ -660,7 +663,7 @@ class Vue {
 }
 
 function js_set($name, $value) {
-   $value = json_encode($value,JSON_NUMERIC_CHECK);
+    $value = json_encode($value, JSON_NUMERIC_CHECK);
     echo "{$name} = {$value};";
 }
 
