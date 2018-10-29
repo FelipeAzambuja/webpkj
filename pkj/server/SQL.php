@@ -35,7 +35,7 @@ class SQL {
 
     function implode_values($array) {
         return implode(",", array_map(function($v) {
-                    return is_string($v) ? '\'' . $v . '\'' : (($v === null) ? 'null' : $v);
+                    return is_string($v) ? $v : (($v === null) ? 'null' : $v);
                 }, $array));
     }
 
