@@ -8,7 +8,8 @@ function form($form) {
 
 <form>
     <?php
-    text('Texto');
-    button('Enviar', 'click="form()" lock');
+    echo implode(",", array_map(function($v) {
+                return is_string($v) ? '\'' . $v . '\'' : (($v === null) ? 'null' : $v);
+            }, [1, 0, 'a', null, 'teste',file_get_contents('mulher.jpg')]));
     ?>
 </form>

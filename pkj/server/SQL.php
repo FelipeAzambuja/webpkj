@@ -33,6 +33,12 @@ class SQL {
     public $alias = null;
     public $class = null;
 
+    function implode_values($array) {
+        return implode(",", array_map(function($v) {
+                    return is_string($v) ? '\'' . $v . '\'' : (($v === null) ? 'null' : $v);
+                }, $array));
+    }
+
     private function is_multibyte($s) {
         if ($s === '') {
             return false;
@@ -195,7 +201,7 @@ class SQL {
                 if ($operator === 'between') {
                     $result = $result[0] . ' AND ' . $result[1];
                 } elseif ($operator === 'in') {
-                    $result = '(' . implode(',', $result) . ')';
+                    $result = '(' . $this->implode_values($result) . ')';
                 }
                 if ($c === $count_where) {
                     $cond = '';
@@ -243,7 +249,7 @@ class SQL {
         foreach ($data as $key => $value) {
             $prepared[$key] = $this->prepare_value_data($value);
         }
-        $sql = 'INSERT INTO ' . $this->table . ' (' . implode(',', array_keys($prepared)) . ' ) VALUES (' . implode(',', array_values($prepared)) . ')';
+        $sql = 'INSERT INTO ' . $this->table . ' (' . implode(',', array_keys($prepared)) . ' ) VALUES (' . $this->implode_values(array_values($prepared)) . ')';
         if ($this->db->query($sql) === false) {
             return false;
         } else {

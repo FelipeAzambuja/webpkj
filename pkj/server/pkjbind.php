@@ -53,6 +53,7 @@ if (isset($_POST["CMD"])) {
 //            } else {
             array_walk_recursive($tmp2, function(&$v, $k) {
                 $v = ($v === '') ? null : $v;
+                $v = (is_numeric(str_replace(['.', ','], '', $v)) ) ? cdbl($v) : $v;
             });
             call_user_func($cmd, $tmp2);
 //            }
