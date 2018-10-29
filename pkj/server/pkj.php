@@ -344,7 +344,7 @@ function cdouble($num) {
     $sep = (($dotPos > $commaPos) && $dotPos) ? $dotPos :
             ((($commaPos > $dotPos) && $commaPos) ? $commaPos : false);
     if (!$sep) {
-        $v = floatval(preg_replace("/[^0-9]/", "", $num));
+        $v = intval(preg_replace("/[^0-9]/", "", $num));
         if ($num[0] === '-') {
             $v *= -1;
         }
