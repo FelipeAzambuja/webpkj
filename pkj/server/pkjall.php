@@ -51,9 +51,11 @@ include 'pkjsession.php';
 //    include 'smarty/Smarty.class.php';
 //}
 include 'pkjstring.php';
-include 'pkjconf.php'; 
-
+include 'pkjconf.php';
+setlocale(LC_ALL, conf::$local . '.utf-8');
 include 'vendor/autoload.php';
+Kint::$aliases[] = 'c';
+Kint::$aliases[] = 'cd';
 include 'gump/gump.class.php';
 
 include 'pkj.php';

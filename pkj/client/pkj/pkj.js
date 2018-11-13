@@ -216,12 +216,12 @@ function tagUpdate() {
         if (typeof ($.fn.dataTableExt) !== "undefined") {
             $(".datatables").each(function (i, e) {
 //            $(function () {
-                if(!$(e).hasClass("table")){
-                    $(e).addClass('table','table-striped','table-hover','table-bordered');
+                if (!$(e).hasClass("table")) {
+                    $(e).addClass('table', 'table-striped', 'table-hover', 'table-bordered');
                 }
                 var responsive = $(e).hasClass("datatables-responsive");
                 if (!$.fn.dataTable.isDataTable(e)) {
-                    
+
                     var tabela = $(e).DataTable({
                         dom: "<'row'<'col-sm-12 col-md-6'lB><'col-sm-12 col-md-6'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
                         lengthChange: false,
@@ -347,7 +347,10 @@ function tagUpdate() {
             $(e).maskMoney({'precision': '0'}).removeAttr("data-number");
         }
         if ($(e).attr("data-money") != undefined) {
-            $(e).maskMoney({'decimal': '.'}).removeAttr("data-money");
+            var decimal_point = $(e).attr('data-decimal_point');
+            var thousands_sep = $(e).attr('data-thousands_sep');
+            var frac_digits = parseInt($(e).attr('data-frac_digits'));
+            $(e).maskMoney({'thousands': thousands_sep, 'decimal': decimal_point, 'precision': frac_digits}).removeAttr("data-money");
         }
         if ($(e).attr("data-autocomplete") != undefined) {
             $(e).autocomplete({source: $(e).data("autocomplete")}).removeAttr("data-autocomplete");

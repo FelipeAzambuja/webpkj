@@ -218,7 +218,8 @@ function money($id, $plus = "", $size = 3) {
         $plus .= 'class="form-control"';
     }
     conf::$pkj_uid_comp++;
-    $html = "<input type='tel' name='{$id}' data-money='true' {$plus} />";
+    $info = localeconv();
+    $html = "<input type='tel' name='{$id}' data-frac_digits='".$info['frac_digits']."' data-decimal_point='".$info['decimal_point']."' data-thousands_sep='".$info['thousands_sep']."' data-money='true' {$plus} />";
     echo div($html, $size);
 }
 

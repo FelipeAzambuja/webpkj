@@ -234,6 +234,9 @@ class Calendar {
         }
         return $retorno;
     }
+    public function __toString() {
+        return $this->format(conf::$dateFormat);
+    }
 
     public function fromString($data) {
         $separador = "";

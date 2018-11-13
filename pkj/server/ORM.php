@@ -6,7 +6,7 @@ class ORM implements JsonSerializable {
     /**
      * @internal description
      * @access private
-     * @var string
+     * @var string 
      */
     public $table_name;
     //name   | type    | dbtype   | detype

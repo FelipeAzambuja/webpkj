@@ -63,7 +63,8 @@ if (isset($_POST["CMD"])) {
     } catch (Throwable $t) {
         ?>
         console.error("<?php echo JS::addslashes($t->getFile() . ":" . $t->getLine() . "\n" . $t->getMessage()) ?>");
-        console.error("<?php echo JS::addslashes($t->getTraceAsString()) ?>");
+
+        console.error("<?php echo JS::addslashes(jTraceEx($t)) ?>");
         <?php
         exit();
     } catch (Exception $exc) {
@@ -158,7 +159,10 @@ class JS {
         if (is_array($s)) {
             $s = json_encode($s);
         }
-        return '"+' . str_replace(PHP_EOL, '\n', json_encode($s)) . '+"';
+        $s = strval($s);
+        $s = str_replace(PHP_EOL, '\n', json_encode($s));
+        $s = (strlen($s) > 0) ? $s : '""';
+        return '"+' . $s . '+"';
 //        $s = str_replace('*/', '* /', $s);//buaaa
         return '"+_heredoc(function(){/* ' . $s . ' */})+"';
 //        $a = array('<','>','\'','\\','"','\n','\r',PHP_EOL);
@@ -620,14 +624,16 @@ class UploadParser {
 
 }
 
-function c($v) {
-    ob_start();
-    ~d($v);
-    console(ob_get_clean());
+function c(...$vars) {
+    Kint::$mode_default = Kint::MODE_TEXT;
+    Kint::$return = true;
+    console(Kint::dump(...$vars));
 }
 
-function cd($v) {
-    c($v);
+function cd(...$vars) {
+    Kint::$mode_default = Kint::MODE_TEXT;
+    Kint::$return = true;
+    console(Kint::dump(...$vars));
     exit();
 }
 

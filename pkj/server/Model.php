@@ -383,4 +383,21 @@ class Model {
         $this->doc = $doc;
     }
 
+    public function toArray() {
+        $data = [];
+        foreach ($this->doc['property'] as $key => $value) {
+            $data[$key] = $this->{$key} . '';
+        }
+        return $data;
+    }
+
+    public function toJson() {
+        $json = [];
+        foreach ($this->doc['property'] as $key => $value) {
+            $valor = $this->{$key};
+            $json[] = '"' . $key . '":"' . $valor . '"';
+        }
+        return '{' . implode(',', $json) . '}';
+    }
+
 }
