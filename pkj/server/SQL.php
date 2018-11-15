@@ -422,6 +422,8 @@ class SQL {
             } else {
                 return $this->db->pdo->quote($value, PDO::PARAM_LOB);
             }
+        } else if (is_numeric($value)) {
+            return format_number($value);
         } else if (is_date($value)) {
             return $this->db->pdo->quote(cdate($value)->format('Y-m-d H:i:s'), PDO::PARAM_STR);
         } else {
@@ -435,6 +437,8 @@ class SQL {
         }
         if (is_string($value)) {
             return $this->db->pdo->quote($value, PDO::PARAM_STR);
+        } else if (is_numeric($value)) {
+            return format_number($value);
         } else if (is_date($value)) {
             return $this->db->pdo->quote(cdate($value)->format('Y-m-d H:i:s'), PDO::PARAM_STR);
         } else {

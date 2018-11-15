@@ -340,7 +340,14 @@ function cdbl($value) {
 function cfloat($value) {
     return round(cdouble($value), 2);
 }
+function format_number($number, $decimal = '.', $thousands = '') {
+    $dotPos = strrpos(strrev($number), '.');
+    $commaPos = strrpos(strrev($number), ',');
+    $sep = (($dotPos > $commaPos) && $dotPos) ? $dotPos :
+            ((($commaPos > $dotPos) && $commaPos) ? $commaPos : false);
 
+    return number_format($number,  $sep, $decimal, $thousands);
+}
 function cdouble($num) {
     $dotPos = strrpos($num, '.');
     $commaPos = strrpos($num, ',');
