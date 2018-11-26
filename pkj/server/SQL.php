@@ -416,6 +416,15 @@ class SQL {
         if (is_null($value)) {
             return null;
         }
+        $is_date = false;
+        try {
+            Carbon\Carbon::createFromFormat(conf::$dateFormat, explode(' ',$value)[0]);
+            $is_date = true;
+        } catch (Exception $exc) {
+            $is_date = false;
+        } finally {
+            
+        }
         if ($this->is_multibyte($value)) {
             if ($this->db->driver === 'sqlite') {
                 return 'x\'' . bin2hex($value) . '\'';
@@ -424,7 +433,7 @@ class SQL {
             }
         } else if (is_numeric($value)) {
             return format_number($value);
-        } else if (is_date($value)) {
+        } else if ($is_date) {
             return $this->db->pdo->quote(cdate($value)->format('Y-m-d H:i:s'), PDO::PARAM_STR);
         } else {
             return $this->db->pdo->quote($value, PDO::PARAM_STR);
@@ -435,11 +444,20 @@ class SQL {
         if (is_null($value)) {
             return null;
         }
+        $is_date = false;
+        try {
+            Carbon\Carbon::createFromFormat(conf::$dateFormat, explode(' ',$value)[0]);
+            $is_date = true;
+        } catch (Exception $exc) {
+            $is_date = false;
+        } finally {
+            
+        }
         if (is_string($value)) {
             return $this->db->pdo->quote($value, PDO::PARAM_STR);
         } else if (is_numeric($value)) {
             return format_number($value);
-        } else if (is_date($value)) {
+        } else if ($is_date) {
             return $this->db->pdo->quote(cdate($value)->format('Y-m-d H:i:s'), PDO::PARAM_STR);
         } else {
             return $this->db->pdo->quote($value, PDO::PARAM_STR);

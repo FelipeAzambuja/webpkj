@@ -62,14 +62,12 @@ if (isset($_POST["CMD"])) {
         }
     } catch (Throwable $t) {
         ?>
-        console.error("<?php echo JS::addslashes($t->getFile() . ":" . $t->getLine() . "\n" . $t->getMessage()) ?>");
-
         console.error("<?php echo JS::addslashes(jTraceEx($t)) ?>");
         <?php
         exit();
     } catch (Exception $exc) {
         ?>
-        console.log("<?php echo JS::addslashes($exc->getTraceAsString()) ?>");
+        console.error("<?php echo JS::addslashes(jTraceEx($exc)) ?>");
         <?php
     } finally {
         

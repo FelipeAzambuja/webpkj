@@ -1,7 +1,35 @@
 <?php
-
+function jTraceEx($e, $seen = null) {
+    $result = array();
+    $seen = !$seen ? array() : array();
+    $trace = $e->getTrace();
+    $prev = $e->getPrevious();
+    $file = $e->getFile();
+    $line = $e->getLine();
+    $result[] = sprintf('%s: %s', get_class($e), $e->getMessage() . " (" . $e->getCode() . ")");
+    while (true) {
+        $current = "{$file}:{$line}";
+        $result[] = sprintf('   at %s%s%s(%s%s%s)', count($trace) && array_key_exists('class', $trace[0]) ? str_replace('\\', '.', $trace[0]['class']) : '', count($trace) && array_key_exists('class', $trace[0]) && array_key_exists('function', $trace[0]) ? '.' : '', count($trace) && array_key_exists('function', $trace[0]) ? str_replace('\\', '.', $trace[0]['function']) : '(main)', str_replace('ALT_PATH', '', $file), $line === null ? '' : ':', $line === null ? '' : $line);
+        if (is_array($seen)) {
+            $seen[] = "{$file}:{$line}";
+        }
+        if (!count($trace)) {
+            break;
+        }
+        $file = array_key_exists('file', $trace[0]) ? $trace[0]['file'] : 'Unknown Source';
+        $line = array_key_exists('file', $trace[0]) && array_key_exists('line', $trace[0]) && $trace[0]['line'] ? $trace[0]['line'] : null;
+        array_shift($trace);
+    }
+    $result = join("\n", $result);
+    if ($prev) {
+        $result .= "\n" . jTraceEx($prev, $seen);
+    }
+    return $result;
+}
 /**
  * @see GUMP
+ * @example is_valid($form,['vencimento' => 'required|date,d/m/Y','valor'=> 'float']);
+ * 
  * @param array $form
  * @param array $rules
  * @return array
@@ -234,6 +262,7 @@ class Calendar {
         }
         return $retorno;
     }
+
     public function __toString() {
         return $this->format(conf::$dateFormat);
     }
@@ -278,6 +307,7 @@ class Calendar {
         }
         return ($zeros . "" . $valor);
     }
+
     /**
      * 
      * @return \Carbon\Carbon
@@ -285,7 +315,7 @@ class Calendar {
     function toCarbon() {
         return new \Carbon\Carbon($this->format('Y-m-d H:i:s'));
     }
-    
+
     /**
      * 
      * @return DateTime
@@ -294,6 +324,7 @@ class Calendar {
 //        return DateTime::createFromFormat('Y-m-d H:i:s', $this->format('Y-m-d H:i:s'));
         return new DateTime($this->format('Y-m-d H:i:s'));
     }
+
 }
 
 function get($campo) {
@@ -340,6 +371,7 @@ function cdbl($value) {
 function cfloat($value) {
     return round(cdouble($value), 2);
 }
+
 function format_number($number, $decimal = '.', $thousands = '') {
     $dotPos = strrpos(strrev($number), '.');
     $commaPos = strrpos(strrev($number), ',');
@@ -348,6 +380,7 @@ function format_number($number, $decimal = '.', $thousands = '') {
 
     return number_format($number,  $sep, $decimal, $thousands);
 }
+
 function cdouble($num) {
     $dotPos = strrpos($num, '.');
     $commaPos = strrpos($num, ',');

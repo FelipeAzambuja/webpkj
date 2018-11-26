@@ -205,7 +205,7 @@ function number($id, $plus = "", $size = 3) {
         $plus .= 'class="form-control"';
     }
     conf::$pkj_uid_comp++;
-    $html = "<input type='tel' id='{$id}' data-number='true' {$plus} />";
+    $html = "<input type='tel'  name='{$id}' data-number='true' {$plus} />";
     echo div($html, $size);
 }
 

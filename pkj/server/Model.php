@@ -212,6 +212,9 @@ class Model {
     }
 
     function byId($id) {
+        if(strlen($id) === 0){
+            return $this->fromArray([]);
+        }
         return $this->where([
                     'id' => $id
                 ])->first();
@@ -266,6 +269,9 @@ class Model {
         $return = null;
         $insertData = [];
         foreach ($this->data as $k => $d) {
+            if (is_array($d)) { // para elementos com autoload
+                continue;
+            }
             if ($d instanceof Model) {
                 if ($d->id !== null) {
                     $insertData[$k] = $d->id;
@@ -290,6 +296,9 @@ class Model {
         $return = null;
         $updateData = [];
         foreach ($this->data as $k => $d) {
+            if (is_array($d)) { // para elementos com autoload
+                continue;
+            }
             if ($d instanceof Model) {
                 if ($d->id !== null) {
                     $updateData[$k] = $d->id;
