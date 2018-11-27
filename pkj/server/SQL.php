@@ -155,9 +155,9 @@ class SQL {
         }
         if ($operator === null) {
             $this->where[] = [$field];
-        } else if ($value === null) {
+        } else if ($value === null && substr(trim($operator), 0, 2) !== 'is') {
             $this->where[] = [$field, $operator];
-        } else if ($cond === null) {
+        } else if ($cond === null && substr(trim($operator), 0, 2) === 'is') {
             $this->where[] = [$field, $operator, $value];
         } else {
             $this->where[] = [$field, $operator, $value, $cond];
@@ -206,10 +206,10 @@ class SQL {
                 if ($c === $count_where) {
                     $cond = '';
                 }
-                if (is_null($result)) {
+                if (is_null($result) && substr($operator, 0, 2) !== 'is') {
                     $wheres[] = ' ' . $field . ' is null ' . $cond . ' ';
                 } else {
-                    $wheres[] = ' ' . $field . ' ' . $operator . ' ' . $result . ' ' . $cond . ' ';
+                    $wheres[] = ' ' . $field . ' ' . $operator . ' ' . (($result === null) ? 'null' : $result) . ' ' . $cond . ' ';
                 }
             }
         }
@@ -302,7 +302,7 @@ class SQL {
         if (count($this->where) > 0) {
             $sql .= ' where ' . $this->get_where();
         }
-        return $this->db->query($sql) === false;
+        return ($this->db->query($sql) === false) ? false : true;
     }
 
     function delete() {
@@ -310,7 +310,7 @@ class SQL {
         if (count($this->where) > 0) {
             $sql .= ' where ' . $this->get_where();
         }
-        return $this->db->query($sql) === false;
+        return ($this->db->query($sql) === false) ? false : true;
     }
 
     function insert_or_update($data) {
@@ -418,7 +418,7 @@ class SQL {
         }
         $is_date = false;
         try {
-            Carbon\Carbon::createFromFormat(conf::$dateFormat, explode(' ',$value)[0]);
+            Carbon\Carbon::createFromFormat(conf::$dateFormat, explode(' ', $value)[0]);
             $is_date = true;
         } catch (Exception $exc) {
             $is_date = false;
@@ -446,7 +446,7 @@ class SQL {
         }
         $is_date = false;
         try {
-            Carbon\Carbon::createFromFormat(conf::$dateFormat, explode(' ',$value)[0]);
+            Carbon\Carbon::createFromFormat(conf::$dateFormat, explode(' ', $value)[0]);
             $is_date = true;
         } catch (Exception $exc) {
             $is_date = false;

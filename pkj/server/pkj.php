@@ -1,4 +1,5 @@
 <?php
+
 function jTraceEx($e, $seen = null) {
     $result = array();
     $seen = !$seen ? array() : array();
@@ -26,17 +27,20 @@ function jTraceEx($e, $seen = null) {
     }
     return $result;
 }
+
 /**
  * @see GUMP
  * @example is_valid($form,['vencimento' => 'required|date,d/m/Y','valor'=> 'float']);
  * 
  * @param array $form
  * @param array $rules
+ * @param array $names []
  * @return array
  */
-function is_valid($form, $rules) {
+function is_valid($form, $rules,$names=[]) {
     $gump = new GUMP('pt-br');
     $gump->validation_rules($rules);
+    $gump->set_field_names($names);
     if ($gump->run($form) === false) {
         return $gump->get_readable_errors(false);
     } else {
@@ -378,7 +382,7 @@ function format_number($number, $decimal = '.', $thousands = '') {
     $sep = (($dotPos > $commaPos) && $dotPos) ? $dotPos :
             ((($commaPos > $dotPos) && $commaPos) ? $commaPos : false);
 
-    return number_format($number,  $sep, $decimal, $thousands);
+    return number_format($number, $sep, $decimal, $thousands);
 }
 
 function cdouble($num) {

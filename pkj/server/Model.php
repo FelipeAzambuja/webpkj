@@ -207,12 +207,12 @@ class Model {
     }
 
     function where($field, $operator = null, $value = null, $cond = null) {
-        $this->sql->where($field, $operator = null, $value = null, $cond = null);
+        $this->sql->where($field, $operator, $value, $cond);
         return $this;
     }
 
     function byId($id) {
-        if(strlen($id) === 0){
+        if (strlen($id) === 0) {
             return $this->fromArray([]);
         }
         return $this->where([
