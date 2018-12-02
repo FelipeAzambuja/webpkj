@@ -145,6 +145,8 @@ class SQL {
                         $this->where($key, $value);
                     } else if (count($value) === 3) {
                         $this->where($value[0], $value[1], $value[2]);
+                    } else if (count($value) === 4) {
+                        $this->where($value[0], $value[1], $value[2],$value[3]);
                     } else {
                         //?
                         $this->where($key, $value);
@@ -425,7 +427,7 @@ class SQL {
         } finally {
             
         }
-        if ($this->is_multibyte($value)) {
+        if ($this->is_multibyte($value) && !$is_date) {
             if ($this->db->driver === 'sqlite') {
                 return 'x\'' . bin2hex($value) . '\'';
             } else {
@@ -453,7 +455,8 @@ class SQL {
         } finally {
             
         }
-        if (is_string($value)) {
+
+        if (is_string($value) && !$is_date) {
             return $this->db->pdo->quote($value, PDO::PARAM_STR);
         } else if (is_numeric($value)) {
             return format_number($value);

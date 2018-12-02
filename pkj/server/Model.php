@@ -145,6 +145,7 @@ class Model {
             case 'string':
                 return trim($value);
                 break;
+            case 'datetime':
             case 'date':
                 return cdate($value);
                 break;
