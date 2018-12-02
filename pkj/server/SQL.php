@@ -180,7 +180,7 @@ class SQL {
                 if (count($value) > 3) {
                     $operator = $value[1];
                     $result = $value[2];
-                    $cond = $value[3];
+                    $cond = len($value[3]) === 0 ? $cond : $value[3];
                 } elseif (count($value) === 3) {
                     $operator = $value[1];
                     $result = $value[2];
