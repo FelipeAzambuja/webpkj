@@ -1,7 +1,6 @@
 <?php
 
-ini_set('display_errors', 1);
-//usando set
+show_errors(true);
 
 if (false) {
     //insert
@@ -12,6 +11,14 @@ if (false) {
     $usuario->insert();
 }
 if (true) {
+    //insert
+    model_usuarios()->fromArray([
+        'nome' => 'Felipe',
+        'email' => 'felipe@newbgp.com.br',
+        'alterado' => '26/08/1989'
+    ])->insert();
+}
+if (false) {
     //select
     $t1 = model_usuarios()->where('nome', 'Felipe')->get();
     s($t1);
@@ -43,6 +50,34 @@ if (true) {
             ])->get();
     s($t8);
 }
+
 //update
-//select
+if (false) {
+    echo 'testando o update';
+    $usuario = model_usuarios()->where('id', 102)->first();
+    $usuario->email = 'gatinho2@gmail.com.br';
+    if (!$usuario->update()) {
+        echo db()->last_error;
+    }
+}
+if (false) {
+    $usuario = model_usuarios()->where('id', 102)->fromArray([
+                'email' => 'felipe@gmail.com.br3'
+            ])->update();
+    $usuario = model_usuarios()->fromArray([
+                'email' => 'felipe@gmail.com.br4'
+            ])->where('id', 102)->update();
+}
+
+
+
+if (false) {
+    $usuario = model_usuarios()->byId(102);
+    $usuario->email = 'gatinho@gmail.com.br2';
+    $usuario->update();
+}
+
 //delete
+if (true) {
+    model_usuarios()->where('id',104)->delete();
+}

@@ -212,9 +212,14 @@ class Model {
         return $this;
     }
 
-    function byId($id) {
+    /**
+     * 
+     * @param integer $id
+     * @return static
+     */
+    function byId($id,$default = []) {
         if (strlen($id) === 0) {
-            return $this->fromArray([]);
+            return $this->fromArray($default);
         }
         return $this->where([
                     'id' => $id

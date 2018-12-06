@@ -18,7 +18,7 @@ function label_button($texto, $plus = "", $size = 3) {
         $plus = '';
     }
     if (indexof($plus, 'class="') === -1) {
-        $plus .= ' class="btn btn-primary form-control mt-3 label_button" ';
+        $plus .= ' class="btn btn-primary form-control label_button" ';
     }
     conf::$pkj_uid_comp++;
     ob_start();

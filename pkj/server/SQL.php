@@ -146,7 +146,7 @@ class SQL {
                     } else if (count($value) === 3) {
                         $this->where($value[0], $value[1], $value[2]);
                     } else if (count($value) === 4) {
-                        $this->where($value[0], $value[1], $value[2],$value[3]);
+                        $this->where($value[0], $value[1], $value[2], $value[3]);
                     } else {
                         //?
                         $this->where($key, $value);
@@ -297,6 +297,10 @@ class SQL {
         $sql = 'update ' . $this->table . ' set ';
         $p = [];
         foreach ($prepared as $key => $value) {
+            if ($key === 'id') {
+                $this->where('id', $value);
+                continue;
+            }
             $value = (is_null($value)) ? 'null' : $value;
             $p[] = " {$key} = {$value} ";
         }
@@ -311,6 +315,13 @@ class SQL {
         $sql = 'delete from ' . $this->table;
         if (count($this->where) > 0) {
             $sql .= ' where ' . $this->get_where();
+        } else {
+            if (!empty($this->id)) {
+                s('aqui');
+                exit();
+                $this->where('id', $this->id);
+                $sql .= ' where ' . $this->get_where();
+            }
         }
         return ($this->db->query($sql) === false) ? false : true;
     }
