@@ -154,6 +154,32 @@ function text($id, $plus = "", $size = 3) {
     echo div($html, $size);
 }
 
+function _form_parse_attr($attr = '') {
+    $retorno = [];
+    foreach (explode(' ', $attr) as $attr) {
+        $value = explode('=', $attr);
+        $retorno[$value[0]] = $value[$value[1]];
+    }
+    if(!isset($retorno['value'])){
+        $retorno['value'] = '';
+    }
+    return $retorno;
+}
+
+function textarea($id, $plus = "", $size = 3) {
+    if (is_numeric($plus)) {
+        $size = $plus;
+        $plus = "";
+    }
+    if (indexof($plus, 'class="') === -1) {
+        $plus .= 'class="form-control"';
+    }
+    $parse = _form_parse_attr($plus);
+    $html = "<textarea name='{$id}' $plus >{$parse['value']}</textarea>";
+    conf::$pkj_uid_comp++;
+    echo div($html, $size);
+}
+
 /**
  * Inicia uma mascara 
  * @param type $id Indetifica����o do componente
@@ -209,7 +235,7 @@ function number($id, $plus = "", $size = 3) {
     echo div($html, $size);
 }
 
-function money($id, $plus = "", $size = 3) {
+function money($id, $digits = 2, $plus = "", $size = 3) {
     if (is_numeric($plus)) {
         $size = $plus;
         $plus = "";
@@ -219,7 +245,8 @@ function money($id, $plus = "", $size = 3) {
     }
     conf::$pkj_uid_comp++;
     $info = localeconv();
-    $html = "<input type='tel' name='{$id}' data-frac_digits='".$info['frac_digits']."' data-decimal_point='".$info['decimal_point']."' data-thousands_sep='".$info['thousands_sep']."' data-money='true' {$plus} />";
+    $info['frac_digits'] = $digits;
+    $html = "<input type='tel' name='{$id}' data-frac_digits='" . $info['frac_digits'] . "' data-decimal_point='" . $info['decimal_point'] . "' data-thousands_sep='" . $info['thousands_sep'] . "' data-money='true' {$plus} />";
     echo div($html, $size);
 }
 
@@ -275,8 +302,24 @@ function label_text($label, $id, $plus = "", $size = 3) {
         $plus = "";
     }
     ob_start();
-    label($label, 12);
+    if ($label !== '') {
+        label($label, 12);
+    }
     text($id, $plus, 12);
+    $html = ob_get_clean();
+    echo div($html, $size, "form-group");
+}
+
+function label_textarea($label, $id, $plus = "", $size = 3) {
+    if (is_numeric($plus)) {
+        $size = $plus;
+        $plus = "";
+    }
+    ob_start();
+    if ($label !== '') {
+        label($label, 12);
+    }
+    textarea($id, $plus, 12);
     $html = ob_get_clean();
     echo div($html, $size, "form-group");
 }
@@ -287,7 +330,9 @@ function label_combo($label, $id, $itens = [], $valoresItens = [], $plus = "", $
         $plus = "";
     }
     ob_start();
-    label($label, 12);
+    if ($label !== '') {
+        label($label, 12);
+    }
     combo($id, $itens, $valoresItens, $plus, 12);
     $html = ob_get_clean();
     echo div($html, $size, "form-group");
@@ -299,7 +344,9 @@ function label_upload($label, $id, $plus = "", $size = 3) {
         $plus = "";
     }
     ob_start();
-    label($label, 12);
+    if ($label !== '') {
+        label($label, 12);
+    }
     upload($id, $plus, 12);
     $html = ob_get_clean();
     echo div($html, $size, "form-group");
@@ -311,7 +358,9 @@ function label_password($label, $id, $plus = "", $size = 3) {
         $plus = "";
     }
     ob_start();
-    label($label, 12);
+    if ($label !== '') {
+        label($label, 12);
+    }
     password($id, $plus, 12);
     $html = ob_get_clean();
     echo div($html, $size, "form-group");
@@ -323,7 +372,9 @@ function label_money($label, $id, $plus = "", $size = 3) {
         $plus = "";
     }
     ob_start();
-    label($label, 12);
+    if ($label !== '') {
+        label($label, 12);
+    }
     money($id, $plus, 12);
     $html = ob_get_clean();
     echo div($html, $size, "form-group");
@@ -335,7 +386,9 @@ function label_calendar($label, $id, $plus = "", $size = 3) {
         $plus = "";
     }
     ob_start();
-    label($label, 12);
+    if ($label !== '') {
+        label($label, 12);
+    }
     calendar($id, $plus, 12);
     $html = ob_get_clean();
     echo div($html, $size, "form-group");
@@ -347,7 +400,9 @@ function label_mask($label, $id, $mask = "9999", $plus = "", $size = 3) {
         $plus = "";
     }
     ob_start();
-    label($label, 12);
+    if ($label !== '') {
+        label($label, 12);
+    }
     mask($id, $mask, $plus, 12);
     $html = ob_get_clean();
     echo div($html, $size, "form-group");
@@ -359,7 +414,9 @@ function label_number($label, $id, $plus = "", $size = 3) {
         $plus = "";
     }
     ob_start();
-    label($label, 12);
+    if ($label !== '') {
+        label($label, 12);
+    }
     number($id, $plus, 12);
     $html = ob_get_clean();
     echo div($html, $size, "form-group");

@@ -16,3 +16,13 @@
     margin-top: 25px !important;
     line-height: 100% !important;
 }
+.no-gutters > .pkjdiv.form-group{
+    margin-bottom: 8px !important;
+}
+.no-gutters > .pkjdiv > button.btn.form-control{
+    width:calc(100% - 2px) !important;
+    margin-left:2px !important;
+}
+select.form-control:not([size]):not([multiple]) {
+    height: auto !important;
+}

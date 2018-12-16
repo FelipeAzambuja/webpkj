@@ -1,6 +1,6 @@
 div[id^="pkjpopup"]{ 
     background-color:#fff;
-    border-radius:15px;
+    border-radius:5px;
     color:#000;
     display:none; 
     padding:20px;
@@ -24,5 +24,7 @@ div[id^="pkjpopup"]{
     cursor:pointer;
     position:absolute;
     right:10px;
-    top:5px;
+    top:2px;
+    font-weight: bolder;
+    color:#585858 !important;
 }

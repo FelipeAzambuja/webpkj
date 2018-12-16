@@ -1,74 +1,31 @@
 <?php
 $template = 'templates/template.php';
-
-function main()
-{
-
-//    $validator = is_valid($data, [
-    //        'nome' => 'required',
-    //        'nascimento' => 'required|date,d/m/Y',
-    //        'email' => 'required|valid_email',
-    //        'idade' => 'required|integer'
-    //    ]);
-
-    $data = vue('lista')->data();
-    $data['itens'][] = [
-        'id' => 3,
-        'texto' => 'PHP é legal',
-    ];
-    vue('lista')->data($data);
-    if (false) {
-        alert('Olar', 'teste', [
-            'nome' => 'felipe',
-        ]);
-    }
-    confirm('Deseja continuar ?','teste',[
-        ['Ok','default',['enter']],
-        ['Cancelar','danger',['esc']]
-    ]);
-}
-
-function teste($form){
-    console($form);
-}
-?>
-<script>
-    var lista = null;
-    $(function () {
-        lista = new Vue({
-            el: '#main',
-            data: {
-                itens: [
-                    {
-                        id: 1,
-                        texto: 'teste'
-                    },
-                    {
-                        id: 2,
-                        texto: 'teste teste'
-                    }
-                ]
-            }
-        });
-    });
-</script>
-<form init="main" id="main" >
-    <ul>
-        <li v-for="item in itens">{{item.id}} {{item.texto}}</li>
-    </ul>
+?> 
+<form class="row no-gutters  mt-4">
     <?php
-label_text('Nome', 'nome', 12);
-label_upload('Arquivo', 'arquivo[]', 'multiple="true"', 12);
-
-button('<i class="fa fa-save"></i> Mostrar Nome', 'click="mostrarNome(feliz)" ', 12);
-
-function mostrarNome($form)
-{
-    if (is_empty($form['nome'])) {
-        focus('#nome');
-        notify('O Campo nome é obrigatório');
-        exit();
+    foreach (range(1, 12) as $value) {
+        label_text('Campo ' . $value, 'campo', 1);
     }
-}
-?>
+    foreach (range(1, 6) as $value) {
+        label_text('Campo ' . $value, 'campo', 2);
+    }
+    foreach (range(1, 6) as $value) {
+        label_textarea('', 'campo', 2);
+    }
+    foreach (range(1, 6) as $value) {
+        label_textarea('AAAAA', 'campo', 2);
+    }
+    foreach (range(1, 3) as $value) {
+        label_combo('AAAAA', 'campo', [], [], 2);
+    }
+    foreach (range(1, 3) as $value) {
+        label_button('AAAAA', 'campo', 2);
+    }
+    foreach (range(1, 3) as $value) {
+        label_text('AAAAA', 'campo', 2);
+    }
+    foreach (range(1, 3) as $value) {
+        label_button('AAAAA', 'campo', 2);
+    }
+    ?>
 </form>

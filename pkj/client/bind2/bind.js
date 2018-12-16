@@ -17,7 +17,7 @@ bind.refresh = function () {
         if (el.attr('bind') === undefined) {
             if (el.prop('tagName') === 'FORM') {
                 el.keydown(function (event) {
-                    if (event.keyCode === 13) {
+                    if (event.keyCode === 13 && event.target.tagName !== 'TEXTAREA') {
                         event.preventDefault();
                         var elemento = $(event.target);
                         if (elemento.prop('tagName') === 'INPUT' || elemento.prop('tagName') === 'SELECT') {
