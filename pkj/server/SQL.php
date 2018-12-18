@@ -317,8 +317,6 @@ class SQL {
             $sql .= ' where ' . $this->get_where();
         } else {
             if (!empty($this->id)) {
-                s('aqui');
-                exit();
                 $this->where('id', $this->id);
                 $sql .= ' where ' . $this->get_where();
             }

@@ -160,7 +160,7 @@ function _form_parse_attr($attr = '') {
         $value = explode('=', $attr);
         $retorno[$value[0]] = $value[$value[1]];
     }
-    if(!isset($retorno['value'])){
+    if (!isset($retorno['value'])) {
         $retorno['value'] = '';
     }
     return $retorno;
@@ -366,7 +366,7 @@ function label_password($label, $id, $plus = "", $size = 3) {
     echo div($html, $size, "form-group");
 }
 
-function label_money($label, $id, $plus = "", $size = 3) {
+function label_money($label, $id, $digits = 2, $plus = "", $size = 3) {
     if (is_numeric($plus)) {
         $size = $plus;
         $plus = "";
@@ -375,7 +375,7 @@ function label_money($label, $id, $plus = "", $size = 3) {
     if ($label !== '') {
         label($label, 12);
     }
-    money($id, $plus, 12);
+    money($id, $digits, $plus, 12);
     $html = ob_get_clean();
     echo div($html, $size, "form-group");
 }

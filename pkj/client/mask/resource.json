@@ -1,5 +1,5 @@
 {
     "name": "mask",
-    "files": ["mask.js","maskMoney.js"],
+    "files": ["mask.js","numeral.min.js","priceFormat.js","maskMoney.js"],
     "author": "Josh Bush ,Aurélio Saraiva, Diego Plentz"
 }

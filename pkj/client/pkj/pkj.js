@@ -350,7 +350,49 @@ function tagUpdate() {
             var decimal_point = $(e).attr('data-decimal_point');
             var thousands_sep = $(e).attr('data-thousands_sep');
             var frac_digits = parseInt($(e).attr('data-frac_digits'));
-            $(e).maskMoney({'thousands': thousands_sep, 'decimal': decimal_point, 'precision': frac_digits}).removeAttr("data-money");
+            if (frac_digits > 100) {
+                frac_digits = 2;
+            }
+            numeral.locales.en.delimiters.thousands = thousands_sep;
+            numeral.locales.en.delimiters.decimal = decimal_point;
+            var v = numeral($(e).val()).value();
+            $(e).on('paste', function (event) {
+                event.preventDefault();
+                var paste_value = event.originalEvent.clipboardData.getData('Text');
+                var frac_digits = parseInt($(event.target).attr('data-frac_digits'));
+                if (frac_digits > 100) {
+                    frac_digits = 2;
+                }
+                var v = parseFloat(paste_value);
+                v = v.toFixed(frac_digits);
+                $(e).val(v);
+            });
+            $(e).on('copy', function (event) {
+                event.preventDefault();
+                var v = $(event.target).val();
+                var decimal_point = $(event.target).attr('data-decimal_point');
+                var thousands_sep = $(event.target).attr('data-thousands_sep');
+                var frac_digits = parseInt($(event.target).attr('data-frac_digits'));
+                if (frac_digits > 100) {
+                    frac_digits = 2;
+                }
+                numeral.locales.en.delimiters.thousands = thousands_sep;
+                numeral.locales.en.delimiters.decimal = decimal_point;
+                var v = numeral(v).value();
+                v = v.toFixed(frac_digits);
+                event.originalEvent.clipboardData.setData('text/plain', v);
+            });
+            v = v.toFixed(frac_digits);
+            $(e).val(v);
+            $(e).priceFormat({
+                prefix: '',
+                centsLimit: frac_digits,
+                centsSeparator: decimal_point,
+                thousandsSeparator: thousands_sep,
+                leadingZero: false,
+                clearPrefix: true,
+                clearSufix: true
+            });
         }
         if ($(e).attr("data-autocomplete") != undefined) {
             $(e).autocomplete({source: $(e).data("autocomplete")}).removeAttr("data-autocomplete");
