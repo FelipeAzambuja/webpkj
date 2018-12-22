@@ -184,7 +184,12 @@ PKJ.loadLibrary = function (name, ok) {
             console.error("Library not found");
     }
 };
-
+function _pkj_postfix(e){
+    if(e.attr('data-frac_digits') !== undefined){
+        var digits = e.attr('data-frac_digits');
+        e.val(numeral(e.val()).value().toFixed(digits));
+    }
+}
 function tagUpdate() {
     setTimeout(function () {
         try {
@@ -304,7 +309,6 @@ function tagUpdate() {
     }).change(function () {
         $(this).attr('value', $(this).val());
     });
-    ;
 
     /*
      $("input[type='checkbox']").each(function (i, e) {
@@ -362,6 +366,7 @@ function tagUpdate() {
             }
             numeral.locales.en.delimiters.thousands = thousands_sep;
             numeral.locales.en.delimiters.decimal = decimal_point;
+
             var v = numeral($(e).val()).value();
             $(e).on('paste', function (event) {
                 event.preventDefault();
@@ -396,9 +401,9 @@ function tagUpdate() {
                 centsLimit: frac_digits,
                 centsSeparator: decimal_point,
                 thousandsSeparator: thousands_sep,
-                leadingZero: false,
-                clearPrefix: true,
-                clearSufix: true
+                leadingZero: true,
+                clearPrefix: false,
+                clearSufix: false
             }).removeAttr("data-money");
         }
         if ($(e).attr("data-autocomplete") != undefined) {

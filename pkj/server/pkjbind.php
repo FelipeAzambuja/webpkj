@@ -429,9 +429,12 @@ class Bind {
         if (startswith($id, "#")) {
             $id = replace($id, "#", "");
             ?>$("*[id='<?php echo $id ?>'],*[input-id='<?php echo $id ?>']").<?php echo $code ?>;<?php
+            ?>_pkj_postfix($("*[id='<?php echo $id ?>'],*[input-id='<?php echo $id ?>']"));<?php
         } else {
             ?>$("*[<?php echo $id ?>]").<?php echo $code ?>;<?php
+            ?>_pkj_postfix($("*[<?php echo $id ?>]"));<?php
         }
+        
         return $this;
     }
 
