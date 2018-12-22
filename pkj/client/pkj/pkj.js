@@ -269,6 +269,13 @@ function tagUpdate() {
                             "oAria": {
                                 "sSortAscending": ": Ordenar colunas de forma ascendente",
                                 "sSortDescending": ": Ordenar colunas de forma descendente"
+                            },
+                            "buttons": {
+                                "copyTitle": "Copiado com sucesso",
+                                "copySuccess": {
+                                    _: 'Copiado %d linhas para sua área de transferência',
+                                    1: 'Copiado 1 linha para sua área de transferência'
+                                }
                             }
                         }
                     });
@@ -392,7 +399,7 @@ function tagUpdate() {
                 leadingZero: false,
                 clearPrefix: true,
                 clearSufix: true
-            });
+            }).removeAttr("data-money");
         }
         if ($(e).attr("data-autocomplete") != undefined) {
             $(e).autocomplete({source: $(e).data("autocomplete")}).removeAttr("data-autocomplete");
