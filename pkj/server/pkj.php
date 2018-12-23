@@ -179,6 +179,9 @@ class Calendar {
     public $data = null;
 
     function __construct($data = "") {
+        if($data instanceof Calendar){
+            $data = $data->format('Y-m-d H:i:s');
+        }
         $this->data = $data;
         if ($data == "") {
             $this->fromString(date('Y-m-d H:i:s'));
