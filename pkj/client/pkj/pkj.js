@@ -191,6 +191,7 @@ function _pkj_postfix(e){
     }
 }
 function tagUpdate() {
+
     setTimeout(function () {
         try {
             $('select').chosen();
@@ -366,8 +367,11 @@ function tagUpdate() {
             }
             numeral.locales.en.delimiters.thousands = thousands_sep;
             numeral.locales.en.delimiters.decimal = decimal_point;
-
-            var v = numeral($(e).val()).value();
+            var v = $(e).val();
+            if(v === ''){
+                v = 0;
+            }
+            v = numeral(v).format('0,000.00');
             $(e).on('paste', function (event) {
                 event.preventDefault();
                 var paste_value = event.originalEvent.clipboardData.getData('Text');
@@ -394,7 +398,6 @@ function tagUpdate() {
                 v = v.toFixed(frac_digits);
                 event.originalEvent.clipboardData.setData('text/plain', v);
             });
-            v = v.toFixed(frac_digits);
             $(e).val(v);
             $(e).priceFormat({
                 prefix: '',
@@ -405,6 +408,7 @@ function tagUpdate() {
                 clearPrefix: false,
                 clearSufix: false
             }).removeAttr("data-money");
+            
         }
         if ($(e).attr("data-autocomplete") != undefined) {
             $(e).autocomplete({source: $(e).data("autocomplete")}).removeAttr("data-autocomplete");

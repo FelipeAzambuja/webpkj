@@ -111,7 +111,7 @@ function combo($id, $itens, $valoresItens = array(), $plus = "", $size = 3) {
         $plus = '';
     }
     if (indexof($plus, 'class="') === -1) {
-        $plus .= 'class="form-control"';
+        $plus .= ' class="form-control"';
     }
     conf::$pkj_uid_comp++;
     $retorno = "";
@@ -143,7 +143,7 @@ function text($id, $plus = "", $size = 3) {
         $plus = "";
     }
     if (indexof($plus, 'class="') === -1) {
-        $plus .= 'class="form-control"';
+        $plus .= ' class="form-control"';
     }
     if (indexof($plus, "type") == -1) {
         $html = "<input name='{$id}' type='text' $plus />";
@@ -172,7 +172,7 @@ function textarea($id, $plus = "", $size = 3) {
         $plus = "";
     }
     if (indexof($plus, 'class="') === -1) {
-        $plus .= 'class="form-control"';
+        $plus .= ' class="form-control"';
     }
     $parse = _form_parse_attr($plus);
     $html = "<textarea name='{$id}' $plus >{$parse['value']}</textarea>";
@@ -192,7 +192,7 @@ function mask($id, $mask = "999999", $plus = "", $size = 3) {
         $plus = "";
     }
     if (indexof($plus, 'class="') === -1) {
-        $plus .= 'class="form-control"';
+        $plus .= ' class="form-control"';
     }
     if (indexof($plus, "type") == -1) {
         $html = "<input type='text' name='{$id}' data-mask='{$mask}' {$plus} />";
@@ -215,7 +215,7 @@ function calendar($id, $plus = "", $size = 3) {
         $plus = "";
     }
     if (indexof($plus, 'class="') === -1) {
-        $plus .= 'class="form-control"';
+        $plus .= ' class="form-control"';
     }
     conf::$pkj_uid_comp++;
     $html = "<input type='text' name='{$id}'  data-calendar='true' {$plus} />";
@@ -228,10 +228,10 @@ function number($id, $plus = "", $size = 3) {
         $plus = "";
     }
     if (indexof($plus, 'class="') === -1) {
-        $plus .= 'class="form-control"';
+        $plus .= ' class="form-control"';
     }
     conf::$pkj_uid_comp++;
-    $html = "<input type='tel'  name='{$id}' data-number='true' {$plus} />";
+    $html = "<input type='text' name='{$id}' data-number='true' {$plus} />";
     echo div($html, $size);
 }
 
@@ -241,7 +241,7 @@ function money($id, $digits = 2, $plus = "", $size = 3) {
         $plus = "";
     }
     if (indexof($plus, 'class="') === -1) {
-        $plus .= 'class="form-control"';
+        $plus .= ' class="form-control"';
     }
     conf::$pkj_uid_comp++;
     $info = localeconv();
@@ -256,7 +256,7 @@ function password($id, $plus = "", $size = 3) {
         $plus = "";
     }
     if (indexof($plus, 'class="') === -1) {
-        $plus .= 'class="form-control"';
+        $plus .= ' class="form-control"';
     }
     conf::$pkj_uid_comp++;
     $html = "<input name='{$id}' type='password' data-text='true' $plus />";
@@ -269,7 +269,7 @@ function auto($id, $autocomplete = array('Voce esqueceu de passar o array animal
         $plus = "";
     }
     if (indexof($plus, 'class="') === -1) {
-        $plus .= 'class="form-control"';
+        $plus .= ' class="form-control"';
     }
     conf::$pkj_uid_comp++;
     $json = json_encode($autocomplete);
@@ -284,7 +284,7 @@ function upload($id, $plus = "", $size = 3) {
         $plus = "";
     }
     if (indexof($plus, 'class="') === -1) {
-        $plus .= 'class="form-control"';
+        $plus .= ' class="form-control"';
     }
     conf::$pkj_uid_comp++;
     $r = "<input $plus type='file' name='{$id}' $plus />";
