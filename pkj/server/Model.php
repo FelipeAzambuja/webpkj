@@ -140,7 +140,7 @@ class Model {
                 return cint($value);
                 break;
             case 'float':
-                return cfloat($value);
+                return cdouble($value);
                 break;
             case 'string':
                 return trim($value);
