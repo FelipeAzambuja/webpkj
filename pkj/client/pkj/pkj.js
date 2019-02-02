@@ -229,8 +229,9 @@ function tagUpdate() {
                 if (!$.fn.dataTable.isDataTable(e)) {
 
                     var tabela = $(e).DataTable({
-                        dom: "<'row'<'col-sm-12 col-md-6'lB><'col-sm-12 col-md-6'f>>" + "<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7'p>>",
-                        lengthChange: false,
+                        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Todos"]],
+                        dom: "<'row'<'col-md-1 dt-l-fix'l><'col-sm-12 col-md-5 dt-buttons-main'B><'col-sm-12 col-md-6'f>>" + "<'row'<'col-sm-12't>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dt-buttons-main'p>>",
+//                        lengthChange: false,
                         buttons: [
                             {
                                 extend: 'copy',
@@ -252,8 +253,8 @@ function tagUpdate() {
                         responsive: responsive,
                         ajax: $(e).attr("ajax"),
                         deferRender: true,
-                        select: true,
-                        keys: true,
+                        select: false,
+                        keys: false,
                         "language": {
                             "sEmptyTable": "Nenhum registro encontrado",
                             "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registros",

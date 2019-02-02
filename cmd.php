@@ -51,17 +51,6 @@ function loadht($file) {
 
 conectar();
 switch ($argv[1]) {
-    case "teste":
-        $pessoa = new Pessoas();
-        $pessoa->saldo = 20.0;
-        $pessoa->contatos[] = new Contatos("telefone", "13 33853390");
-        $pessoa->contatos[] = new Contatos("internet", "felipe.nunes.azambuja");
-        ($pessoa->insert());
-//        $pessoas->insert();
-//        $pessoas->teste();
-//        s($pessoas);
-//        $pessoas->teste();
-        break;
     case "update":
         echo "Fazendo download" . PHP_EOL;
         file_put_contents("tmp.zip", file_get_contents($repo));

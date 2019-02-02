@@ -13,7 +13,7 @@
 
 .label_button {
     height: 32px !important;
-    margin-top: 25px !important;
+    margin-top: 29px !important;
     line-height: 100% !important;
 }
 .no-gutters > .pkjdiv.form-group{
@@ -25,4 +25,43 @@
 }
 select.form-control:not([size]):not([multiple]) {
     height: auto !important;
+}
+
+@media only screen and (max-width:768px) { 
+    .pagination {
+        justify-content: center;
+        display:inline-flex !important;
+    }
+    .dt-buttons-main{
+        text-align: center;
+    }
+}
+@media only screen and (min-width:768px) { 
+    .dt-buttons-main{
+        text-align: left;
+    }
+}
+.dtr-data:before{
+    content:'\A';
+    white-space: pre;
+    width: 100%;
+}
+.dt-buttons{
+    width: auto !important;
+}
+.dt-l-fix > div > label > select{
+/*    width:100% !important;
+    padding-left:20px !important;*/
+}
+.dt-l-fix{
+    padding: 2px;
+    padding-top:3px;
+/*    padding-left: 0 !important;
+    padding-right: 0 !important;*/
+}
+.dataTables_filter>label>input{
+    margin-top:5px !important;
+}
+td{
+    vertical-align: middle 
 }

@@ -156,9 +156,11 @@ function text($id, $plus = "", $size = 3) {
 
 function _form_parse_attr($attr = '') {
     $retorno = [];
-    foreach (explode(' ', $attr) as $attr) {
-        $value = explode('=', $attr);
-        $retorno[$value[0]] = $value[$value[1]];
+    foreach (explode(' ', $attr) as $a) {
+        $value = explode('=', $a);
+        if (count($value) > 1) {
+            $retorno[$value[0]] = $value[1];
+        }
     }
     if (!isset($retorno['value'])) {
         $retorno['value'] = '';

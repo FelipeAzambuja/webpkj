@@ -34,3 +34,23 @@ $template = 'templates/template.php';
     }
     ?>
 </form>
+<table class="table datatables datatables-responsive">
+    <thead>
+        <tr>
+            <th>Header</th>
+            <th>Header2</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Cell</td>
+            <td>Cell</td>
+        </tr>
+    </tbody>
+</table>
+<hr>
+<hr><hr><hr><hr><hr><hr>
+
+
+
+
