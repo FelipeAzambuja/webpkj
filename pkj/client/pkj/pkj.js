@@ -228,7 +228,7 @@ function tagUpdate() {
                 var responsive = $(e).hasClass("datatables-responsive");
                 if (!$.fn.dataTable.isDataTable(e)) {
 
-                    var tabela = $(e).DataTable({
+                    var tabela = $(e).attr('width','100%').DataTable({
                         lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Todos"]],
                         dom: "<'row'<'col-md-1 dt-l-fix'l><'col-sm-12 col-md-5 dt-buttons-main'B><'col-sm-12 col-md-6'f>>" + "<'row'<'col-sm-12't>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dt-buttons-main'p>>",
 //                        lengthChange: false,
