@@ -1,6 +1,6 @@
 <?php
 
-class Model {
+class Model implements arrayaccess  {
 
     //eventos
     function after_insert() {
@@ -248,7 +248,14 @@ class Model {
     function get() {
         return $this->sql->get(get_class($this));
     }
-
+    function col($name) {
+        return $this->column($name);
+    }
+    function column($name) {
+        return $this->get()->map(function ($l) use($name) {
+            return $l->{$name};
+        });
+    }
     /**
      * 
      * @return static
@@ -413,6 +420,22 @@ class Model {
             $json[] = '"' . $key . '":"' . $valor . '"';
         }
         return '{' . implode(',', $json) . '}';
+    }
+
+    public function offsetExists($offset): bool {
+        return isset($this->data[$offset]);
+    }
+
+    public function offsetGet($offset) {
+        return $this->{$offset};
+    }
+
+    public function offsetSet($offset, $value): void {
+        $this->{$offset} = $value;
+    }
+
+    public function offsetUnset($offset): void {
+        $this->{$offset} = null;
     }
 
 }

@@ -22,7 +22,7 @@ function tabela_aleatoria($form) {
                     <td><?= random_int(0, 999) ?></td>
                 </tr>
             <?php endforeach; ?>
-            </tbody>
+        </tbody>
     </table>
     <?php
     $html = ob_get_clean();

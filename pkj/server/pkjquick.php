@@ -40,9 +40,9 @@ function popup_close($id = "") {
     JS::popup_close($id);
 }
 
-function value($id, $value) {
-    setValue($id, $value);
-}
+//function value($id, $value) {
+//    setValue($id, $value);
+//}
 
 function setValue($id, $value) {
     bind()->setValue($id, $value);

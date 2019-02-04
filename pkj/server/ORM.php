@@ -112,9 +112,9 @@ class ORM implements JsonSerializable {
      */
     function byId($id) {
         $id = intval(trim($id));
-        return $this->select([
+        return collect($this->select([
                     "id" => $id
-                ])[0];
+                ])[0]);
     }
 
     /**

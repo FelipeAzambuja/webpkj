@@ -158,7 +158,11 @@ class SQL {
         if ($operator === null) {
             $this->where[] = [$field];
         } else if ($value === null && substr(trim($operator), 0, 2) !== 'is') {
-            $this->where[] = [$field, $operator];
+            if ($operator instanceof ArrayAccess) {
+                $this->where[] = [$field, 'in', $operator];
+            } else {
+                $this->where[] = [$field, $operator];
+            }
         } else if ($cond === null && substr(trim($operator), 0, 2) === 'is') {
             $this->where[] = [$field, $operator, $value];
         } else {
@@ -169,11 +173,15 @@ class SQL {
 
     private function get_where() {
         $wheres = [];
-        $count_where = count($this->where);
+        $where = collect($this->where)->filter(function($line){
+            return strpos($line[0],'.') < 0;
+        });
+        $count_where = count($where);
+        
         if ($count_where > 0) {
 
             $c = 0;
-            foreach ($this->where as $key => $value) {
+            foreach ($where as $key => $value) {
                 $c ++;
                 $field = $value[0];
                 $operator = '=';
@@ -203,7 +211,10 @@ class SQL {
                 if ($operator === 'between') {
                     $result = $result[0] . ' AND ' . $result[1];
                 } elseif ($operator === 'in') {
-                    $result = '(' . $this->implode_values($result) . ')';
+                    if ($value[2] instanceof Tightenco\Collect\Support\Collection) {
+                        $value[2] = $value[2]->all();
+                    }
+                    $result = '(' . $this->implode_values($value[2]) . ')';
                 }
                 if ($c === $count_where) {
                     $cond = '';
@@ -214,6 +225,8 @@ class SQL {
                     $wheres[] = ' ' . $field . ' ' . $operator . ' ' . (($result === null) ? 'null' : $result) . ' ' . $cond . ' ';
                 }
             }
+        }else{
+            $wheres[] = '1=1';
         }
         return implode('', $wheres);
     }
@@ -334,7 +347,7 @@ class SQL {
 
     /**
      * 
-     * @return array|static
+     * @return array|Tightenco\Collect\Support\Collection|static
      */
     function get($class = null) {
         if ($this->sql === '') {
@@ -364,7 +377,7 @@ class SQL {
             }
         }
         $this->sql .= ' ' . (($this->limit > 0) ? ' limit ' . $this->limit : '');
-
+        dd($this->sql);
         $data = $this->db->query($this->sql, [], $class);
         if (count($this->join) > 0) {
 
@@ -387,7 +400,10 @@ class SQL {
                 }
             }
         }
-        return $data;
+        if($data === false){
+            return false;
+        }
+        return collect($data);
     }
 
     /**

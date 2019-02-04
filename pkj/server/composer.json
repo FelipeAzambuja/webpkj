@@ -4,6 +4,7 @@
         "danielstjules/stringy": "^3.1",
         "kint-php/kint": "^2.2",
         "intervention/image": "^2.4",
-        "nesbot/carbon": "^1.25"
+        "nesbot/carbon": "^1.25",
+        "tightenco/collect": "^5.7"
     }
 }
