@@ -1,6 +1,7 @@
 <?php
 $template = 'templates/template.php';
-
+$usuarios = model_usuarios()->where('qasdASD',2)->get();
+dd($usuarios,db()->querys);
 function tabela_aleatoria($form) {
     ob_start();
     ?>

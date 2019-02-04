@@ -173,9 +173,7 @@ class SQL {
 
     private function get_where() {
         $wheres = [];
-        $where = collect($this->where)->filter(function($line){
-            return strpos($line[0],'.') < 0;
-        });
+        $where = $this->where;
         $count_where = count($where);
         
         if ($count_where > 0) {
@@ -377,7 +375,6 @@ class SQL {
             }
         }
         $this->sql .= ' ' . (($this->limit > 0) ? ' limit ' . $this->limit : '');
-        dd($this->sql);
         $data = $this->db->query($this->sql, [], $class);
         if (count($this->join) > 0) {
 
