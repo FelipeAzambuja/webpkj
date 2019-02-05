@@ -1,7 +1,5 @@
 <?php
 $template = 'templates/template.php';
-$usuarios = model_usuarios()->where('qasdASD',2)->get();
-dd($usuarios,db()->querys);
 function tabela_aleatoria($form) {
     ob_start();
     ?>
@@ -28,7 +26,7 @@ function tabela_aleatoria($form) {
     <?php
     $html = ob_get_clean();
     html('#tabela', $html);
-    setTimeout('tabela_aleatoria', 1000 * 0.2);
+    setTimeout('tabela_aleatoria', 1000 * 5);
 }
 ?> 
 

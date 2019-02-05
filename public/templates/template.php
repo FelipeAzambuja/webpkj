@@ -12,7 +12,7 @@
         import('notify');
         import('bpopup');
         import('bootstrap');
-//        import('datatables');
+        import('datatables');
         import('mask');
         import('vuejs');
         import('icheck');
