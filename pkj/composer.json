@@ -1,0 +1,12 @@
+{
+    "name": "NewBGP/server",
+    "require": {
+        "danielstjules/stringy": "^3.1",
+        "kint-php/kint": "^2.2",
+        "intervention/image": "^2.4",
+        "nesbot/carbon": "^1.25",
+        "tightenco/collect": "^5.7",
+        "mpdf/mpdf": "^7.1",
+        "phpmailer/phpmailer": "^6.0"
+    }
+}

@@ -184,10 +184,12 @@ PKJ.loadLibrary = function (name, ok) {
             console.error("Library not found");
     }
 };
-function _pkj_postfix(e){
-    if(e.attr('data-frac_digits') !== undefined){
+function _pkj_postfix(e) {
+    if (e.attr('data-frac_digits') !== undefined) {
+
         var digits = e.attr('data-frac_digits');
-        e.val(numeral(e.val()).value().toFixed(digits));
+//        e.val(numeral(e.val()).value().toFixed(digits));
+
     }
 }
 function tagUpdate() {
@@ -228,7 +230,7 @@ function tagUpdate() {
                 var responsive = $(e).hasClass("datatables-responsive");
                 if (!$.fn.dataTable.isDataTable(e)) {
 
-                    var tabela = $(e).attr('width','100%').DataTable({
+                    var tabela = $(e).attr('width', '100%').DataTable({
                         lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Todos"]],
                         dom: "<'row'<'col-md-1 dt-l-fix'l><'col-sm-12 col-md-5 dt-buttons-main'B><'col-sm-12 col-md-6'f>>" + "<'row'<'col-sm-12't>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dt-buttons-main'p>>",
 //                        lengthChange: false,
@@ -368,11 +370,11 @@ function tagUpdate() {
             }
             numeral.locales.en.delimiters.thousands = thousands_sep;
             numeral.locales.en.delimiters.decimal = decimal_point;
-            var v = $(e).val();
-            if(v === ''){
+            var v = $(e).val().replace('.', '').replace(',', '.');
+            if (v === '') {
                 v = 0;
             }
-            v = numeral(v).format('0,000.00');
+            v = parseFloat(v).toFixed(frac_digits);
             $(e).on('paste', function (event) {
                 event.preventDefault();
                 var paste_value = event.originalEvent.clipboardData.getData('Text');
@@ -409,7 +411,7 @@ function tagUpdate() {
                 clearPrefix: false,
                 clearSufix: false
             }).removeAttr("data-money");
-            
+
         }
         if ($(e).attr("data-autocomplete") != undefined) {
             $(e).autocomplete({source: $(e).data("autocomplete")}).removeAttr("data-autocomplete");

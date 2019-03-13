@@ -239,9 +239,9 @@ class SQL {
             $fields = ['*'];
         }
         $sql = 'SELECT ' . implode(',', $fields) . ' FROM ' . $this->table;
-        if (count($this->where) > 0) {
+//        if (count($this->where) > 0) {
             $sql .= ' WHERE ';
-        }
+//        }
         $sql .= $this->get_where();
         $this->sql = $sql;
         return $this;
@@ -269,8 +269,14 @@ class SQL {
             if ($count_commit === false) {
                 return true;
             } else {
-                $this->where($data);
-                return one($this->db->query('SELECT * FROM ' . $this->table . ' WHERE ' . $this->get_where() . ' order by id desc'));
+                //                $this->where($data);
+//                return one($this->db->query('SELECT * FROM ' . $this->table . ' WHERE ' . $this->get_where() . ' order by id desc'));
+                if ($this->db->driver === 'sqlserver') {
+                    //order by id offset 1 rows fetch next 1 rows only
+                    return one($this->db->query('SELECT * FROM ' . $this->table . '  order by id offset 1 rows fetch next 1 rows only'));
+                } else {
+                    return one($this->db->query('SELECT * FROM ' . $this->table . ' order by id desc limit 1'));
+                }
             }
         }
     }
@@ -416,7 +422,7 @@ class SQL {
      * @return object
      */
     function first() {
-        return one($this->get());
+        return $this->get()->first();
     }
 
     /**
@@ -424,8 +430,8 @@ class SQL {
      * @return object
      */
     function end() {
-        $d = $this->get();
-        return end($d);
+        $d = $this->get()->last();
+        return $d;
     }
 
     /**

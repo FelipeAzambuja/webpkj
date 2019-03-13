@@ -2,7 +2,8 @@
 
 /**
  *
- * @return Usuarios     */
+ * @return Usuarios
+ */
 function model_usuarios() {
     return new Usuarios();
 }
@@ -29,6 +30,7 @@ class Usuarios extends Model {
         }
         
     }
+
     public function on_get(&$field, &$value) {
         if($field === 'permissoes'){
             $value = model_permissoes()->where('id',model_usuarios_permissoes()->where('usuario', $this->id)->get()->pluck('permissao'))->get();

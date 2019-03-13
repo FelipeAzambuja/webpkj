@@ -119,7 +119,9 @@ class Model implements arrayaccess  {
     public function __toString() {
         return isset($this->data['id']) ? strval($this->data['id']) : '';
     }
-
+    public function raw($key){
+        return $this->data[$key];
+    }
     public function __get($name) {
         $return = null;
         if (isset($this->data[$name])) {
@@ -275,6 +277,10 @@ class Model implements arrayaccess  {
     }
 
     function insert($count_limit = -1) {
+        if(is_array($count_limit)){
+            $this->data += $count_limit;
+            $count_limit = -1;
+        }
         $this->on_event('insert', ['count_limit' => $count_limit]);
         if ($this->after_insert() === false) {
             return false;
@@ -329,7 +335,6 @@ class Model implements arrayaccess  {
     }
 
     function insert_or_update() {
-        //implementar evento pode causar perda de desempenho
         $this->on_event('insert_or_update');
         $return = $this->sql->insert_or_update($this->data);
         if ($return === false) {

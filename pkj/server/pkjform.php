@@ -248,7 +248,7 @@ function money($id, $digits = 2, $plus = "", $size = 3) {
     conf::$pkj_uid_comp++;
     $info = localeconv();
     $info['frac_digits'] = $digits;
-    $html = "<input type='tel' name='{$id}' data-frac_digits='" . $info['frac_digits'] . "' data-decimal_point='" . $info['decimal_point'] . "' data-thousands_sep='" . $info['thousands_sep'] . "' data-money='true' {$plus} />";
+    $html = "<input type='text' name='{$id}' data-frac_digits='" . $info['frac_digits'] . "' data-decimal_point='" . $info['decimal_point'] . "' data-thousands_sep='" . $info['thousands_sep'] . "' data-money='true' {$plus} />";
     echo div($html, $size);
 }
 

@@ -591,6 +591,9 @@ function db_get_error() {
 }
 
 function one($query) {
+    if ($query instanceof Tightenco\Collect\Support\Collection) {
+        return $query->first();
+    }
     if (is_object($query)) {
         return $query;
     }

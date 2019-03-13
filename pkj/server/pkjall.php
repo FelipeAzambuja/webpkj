@@ -52,8 +52,12 @@ include 'pkjsession.php';
 //}
 include 'pkjstring.php';
 include 'pkjconf.php';
-setlocale(LC_ALL, conf::$local . '.utf-8');
-include 'vendor/autoload.php';
+if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+    setlocale(LC_ALL, conf::$local);
+} else {
+    setlocale(LC_ALL, conf::$local . '.utf-8');
+}
+include realpath(__DIR__ . '/../vendor/autoload.php');
 Kint::$aliases[] = 'c';
 Kint::$aliases[] = 'cd';
 include 'gump/gump.class.php';
