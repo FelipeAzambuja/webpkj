@@ -188,7 +188,7 @@ function _pkj_postfix(e) {
     if (e.attr('data-frac_digits') !== undefined) {
 
         var digits = e.attr('data-frac_digits');
-        e.val(numeral(e.val()).value().toFixed(digits));
+//        e.val(numeral(e.val()).value().toFixed(digits));
 
     }
 }
