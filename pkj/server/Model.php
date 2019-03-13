@@ -1,6 +1,25 @@
 <?php
 
-class Model implements arrayaccess  {
+class Model implements arrayaccess {
+
+    function relation($table, $field, $id, $count = 'many') {
+        $models = collect(get_defined_functions()['user'])->filter(function($f) {
+            return stringy($f)->startsWith('model');
+        });
+        $models->filter(function($m) use ($table) {
+            return $m->doc()['table'] === $table;
+        });
+        $model = $models->first();
+        if ($model !== null) {
+            if($count === 'one'){
+                return $model->where($field, $id)->first();
+            }else{
+                return $model->where($field, $id)->get();
+            }
+        } else {
+            return null;
+        }
+    }
 
     //eventos
     function after_insert() {
@@ -119,9 +138,23 @@ class Model implements arrayaccess  {
     public function __toString() {
         return isset($this->data['id']) ? strval($this->data['id']) : '';
     }
-    public function raw($key){
-        return $this->data[$key];
+
+    function doc() {
+        return $this->doc;
     }
+
+    public function raw($key = null) {
+        if ($key === null) {
+            return $this->data;
+        } else {
+            if (array_key_exists($key, $this->data)) {
+                return $this->data[$key];
+            } else {
+                return null;
+            }
+        }
+    }
+
     public function __get($name) {
         $return = null;
         if (isset($this->data[$name])) {
@@ -219,7 +252,7 @@ class Model implements arrayaccess  {
      * @param integer $id
      * @return static
      */
-    function byId($id,$default = []) {
+    function byId($id, $default = []) {
         if (strlen($id) === 0) {
             return $this->fromArray($default);
         }
@@ -250,14 +283,17 @@ class Model implements arrayaccess  {
     function get() {
         return $this->sql->get(get_class($this));
     }
+
     function col($name) {
         return $this->column($name);
     }
+
     function column($name) {
         return $this->get()->map(function ($l) use($name) {
-            return $l->{$name};
-        });
+                    return $l->{$name};
+                });
     }
+
     /**
      * 
      * @return static
@@ -349,6 +385,9 @@ class Model implements arrayaccess  {
             return false;
         }
         $return = null;
+        if($this->id !== null && count($this->sql->where) < 1){
+            $this->where('id',$this->id);
+        }
         $return = $this->sql->delete();
         if ($return === false) {
             $this->on_error($this->error());

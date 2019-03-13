@@ -427,8 +427,8 @@ class Bind {
      */
     function jquery($id, $code) {
         if (startswith($id, "#")) {
-            $id = replace($id, "#", "");
-            ?>$("*[id='<?php echo $id ?>'],*[input-id='<?php echo $id ?>']").<?php echo $code ?>;<?php
+            //$id = replace($id, "#", "");
+            ?>$("<?php echo $id ?>").<?php echo $code ?>;<?php
             ?>_pkj_postfix($("*[id='<?php echo $id ?>'],*[input-id='<?php echo $id ?>']"));<?php
         } else {
             ?>$("*[<?php echo $id ?>]").<?php echo $code ?>;<?php

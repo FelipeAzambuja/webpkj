@@ -37,7 +37,7 @@ function jTraceEx($e, $seen = null) {
  * @param array $names []
  * @return array
  */
-function is_valid($form, $rules,$names=[]) {
+function is_valid($form, $rules, $names = []) {
     $gump = new GUMP('pt-br');
     $gump->validation_rules($rules);
     $gump->set_field_names($names);
@@ -45,6 +45,13 @@ function is_valid($form, $rules,$names=[]) {
         return $gump->get_readable_errors(false);
     } else {
         return true;
+    }
+}
+
+function msg_valid($valid) {
+    if ($valid !== true) {
+        alert(implode('<br>', $valid));
+        exit;
     }
 }
 
@@ -179,7 +186,7 @@ class Calendar {
     public $data = null;
 
     function __construct($data = "") {
-        if($data instanceof Calendar){
+        if ($data instanceof Calendar) {
             $data = $data->format('Y-m-d H:i:s');
         }
         $this->data = $data;

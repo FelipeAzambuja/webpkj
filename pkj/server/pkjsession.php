@@ -49,7 +49,7 @@ function session_set($campo, $valor) {
         session_create_table();
         $ip = $_SERVER["REMOTE_ADDR"];
         $id = session_id();
-        if(empty($id)){
+        if (empty($id)) {
             session_start();
         }
         $id = session_id();
@@ -81,4 +81,5 @@ function session_info() {
     error_reporting(-1);
     return $retorno;
 }
+
 ?>

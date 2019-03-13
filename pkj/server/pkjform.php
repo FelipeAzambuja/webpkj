@@ -12,6 +12,7 @@ function row($class = "row", $id = "") {
     }
 }
 
+
 function label_button($texto, $plus = "", $size = 3) {
     if (is_numeric($plus)) {
         $size = $plus;

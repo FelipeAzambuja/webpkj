@@ -93,6 +93,17 @@ if (is_dir(realpath(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR .
     include 'Model.php';
     require_all(realpath(__DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "model"));
 }
+function debug($msg = '') {
+    if(is_array( $msg) || is_object($msg)){
+        $msg = print_r($msg, true);
+    }
+    $debug = collect(debug_backtrace())->last();
+    $msg = basename($debug['file']) . ':' . $debug['line'] . ' = ' . $msg . PHP_EOL;
+    if (file_exists('debug.txt')) {
+        $msg = file_get_contents('debug.txt') . $msg;
+    }
+    file_put_contents('debug.txt',$msg);
+}
 include 'Debug.php';
 //foreach (glob(__DIR__ . "/../../orm/*/*.php") as $db):
 //    include $db;
