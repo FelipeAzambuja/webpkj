@@ -9,7 +9,7 @@ $(function () {
 bind.loading = false;
 bind.refresh = function () {
     bind.loading = true;
-    $('input,select,a,button,img,textarea,form').each(function (i, e) {
+    $('input,select,a,button,img,textarea,form,li').each(function (i, e) {
         var el = $(e);
         var event = '';
         var router = '';

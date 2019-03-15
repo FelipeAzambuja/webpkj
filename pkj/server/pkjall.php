@@ -48,7 +48,7 @@ include 'simple_html_dom.php';
 include 'pkjsession.php';
 //$useSmarty = false;
 //if ($useSmarty) {
-//    include 'smarty/Smarty.class.php';
+    include 'smarty/Smarty.class.php';
 //}
 include 'pkjstring.php';
 include 'pkjconf.php';
@@ -105,6 +105,7 @@ function debug($msg = '') {
     file_put_contents('debug.txt',$msg);
 }
 include 'Debug.php';
+include 'Mail.php';
 //foreach (glob(__DIR__ . "/../../orm/*/*.php") as $db):
 //    include $db;
 //endforeach;
