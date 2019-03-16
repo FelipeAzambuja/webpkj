@@ -1,4 +1,5 @@
 <?php
+
 if ($_SERVER['SERVER_NAME'] === 'newbgp.com.br') {
     conf::$dateFormat = 'd/m/Y';
     conf::$local = 'pt_BR';
@@ -18,9 +19,12 @@ if ($_SERVER['SERVER_NAME'] === 'newbgp.com.br') {
     conf::$base = '';
     conf::$session = 'database';
 }
-conf::$mail_host = '';
+//https://toolheap.com/test-mail-server-tool/users-manual.html
+conf::$mail_host = 'localhost';
 conf::$mail_username = 'felipe@newbgp.com.br';
+conf::$mail_from = 'felipe@newbgp.com.br';
+conf::$mail_name = 'Felipe';
 conf::$mail_password = '';
 conf::$mail_secure = '';
-conf::$mail_port = 587;
-conf::$mail_auth = true;
+conf::$mail_port = 25;
+conf::$mail_auth = false;
