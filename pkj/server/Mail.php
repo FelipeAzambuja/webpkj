@@ -24,7 +24,7 @@ class Mail extends \PHPMailer\PHPMailer\PHPMailer {
             foreach ($email_data->EmbeddedImage as $ei) {
                 $mail->addEmbeddedImage($ei[0], $ei[1],$ei[2],$ei[3],$ei[4],$ei[5]);
             }
-            foreach ($email_data->attachment as $a) {
+            foreach ($email_data->Attachment as $a) {
                 $mail->addAttachment($a[0], $a[1],$a[2],$a[3],$a[4]);
             }
             $mail->SMTPDebug = 4;
@@ -46,6 +46,7 @@ class Mail extends \PHPMailer\PHPMailer\PHPMailer {
         $this->SMTPSecure = conf::$mail_secure;
         $this->Port = conf::$mail_port;
         $this->CharSet = 'UTF-8';
+        $this->setFrom(conf::$mail_from, conf::$mail_name);
         $this->isHTML(true);
     }
 
@@ -84,8 +85,6 @@ class Mail extends \PHPMailer\PHPMailer\PHPMailer {
             mkdir('pkj/storage/mail');
         }
         $this->SMTPDebug = 4;
-        $array = $this;
-        $array->address = $this->getToAddresses();
         file_put_contents('pkj/storage/mail/' . uniqueID() . '.json', json_encode($this));
         $curl = curl_init($url . 'mail');
         curl_setopt_array($curl, [

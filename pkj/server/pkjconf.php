@@ -18,6 +18,8 @@ class conf {
     
     public static $mail_host = '';
     public static $mail_username = '';
+    public static $mail_from = '';
+    public static $mail_name = '';
     public static $mail_password = '';
     public static $mail_secure = true;
     public static $mail_port = 587;

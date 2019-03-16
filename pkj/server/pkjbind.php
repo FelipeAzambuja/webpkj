@@ -230,6 +230,7 @@ class Bind {
 //        $value = JS::addslashes($value);
         $value = str_replace('*/', '* /', $value); //buaaa
         $this->jquery($id, "val( _heredoc(function(){/* {$value} */}) )");
+        $this->jquery($id, "attr('value', _heredoc(function(){/* {$value} */}) )");
         return $this;
     }
 

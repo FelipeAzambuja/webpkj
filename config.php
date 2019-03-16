@@ -18,3 +18,9 @@ if ($_SERVER['SERVER_NAME'] === 'newbgp.com.br') {
     conf::$base = '';
     conf::$session = 'database';
 }
+conf::$mail_host = '';
+conf::$mail_username = 'felipe@newbgp.com.br';
+conf::$mail_password = '';
+conf::$mail_secure = '';
+conf::$mail_port = 587;
+conf::$mail_auth = true;

@@ -321,7 +321,7 @@ class Model implements arrayaccess {
     }
 
     function insert($count_limit = -1) {
-        if(is_array($count_limit)){
+        if (is_array($count_limit)) {
             $this->data += $count_limit;
             $count_limit = -1;
         }
@@ -393,8 +393,8 @@ class Model implements arrayaccess {
             return false;
         }
         $return = null;
-        if($this->id !== null && count($this->sql->where) < 1){
-            $this->where('id',$this->id);
+        if ($this->id !== null && count($this->sql->where) < 1) {
+            $this->where('id', $this->id);
         }
         $return = $this->sql->delete();
         if ($return === false) {
