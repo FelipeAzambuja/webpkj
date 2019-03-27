@@ -2,22 +2,30 @@
 
 class Model implements arrayaccess {
 
-    function relation($table, $field, $id, $count = 'many') {
-        $models = collect(get_defined_functions()['user'])->filter(function($f) {
-            return stringy($f)->startsWith('model');
-        });
-        $models->filter(function($m) use ($table) {
-            return $m->doc()['table'] === $table;
-        });
-        $model = $models->first();
-        if ($model !== null) {
-            if($count === 'one'){
-                return $model->where($field, $id)->first();
-            }else{
-                return $model->where($field, $id)->get();
-            }
+    function relationOne($table, $field, $id = 'id') {
+        return $this->relation($table, $field, $id, 'one');
+    }
+
+    function relationMany($table, $field, $id = 'id') {
+        return $this->relation($table, $field, $id, 'many');
+    }
+
+    /**
+     * 
+     * @param type $table model name from table
+     * @param type $field 
+     * @param type $id
+     * @param type $count
+     * @return type
+     */
+    function relation($table, $field, $id = 'id', $count = 'many') {
+        if (is_string($table)) {
+            $table = db()->table($table);
+        }
+        if ($count === 'one') {
+            return $table->where($id, $this->raw($field))->first();
         } else {
-            return null;
+            return $table->where($id, $this->raw($field))->get();
         }
     }
 
