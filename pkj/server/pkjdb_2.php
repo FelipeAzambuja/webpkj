@@ -468,7 +468,7 @@ class Db {
             case "double"://nunca usado ??? 
             case "double precision"://pg
             case "number"://sqlite
-            case "numberic"://sqlite 
+            case "numeric"://sqlite 
                 return "float";
                 break;
             case "string":

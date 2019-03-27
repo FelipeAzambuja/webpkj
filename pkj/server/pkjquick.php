@@ -32,7 +32,7 @@ function redirect($page, $data = "") {
     JS::redirect($page, $data);
 }
 
-function popup($msg, $id = "") {
+function popup($msg, $id = "Mensagem") {
     JS::popup($msg, $id);
 }
 

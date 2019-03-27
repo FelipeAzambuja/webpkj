@@ -120,7 +120,7 @@ class JS {
 
     //trocar 
     public static function popup($mensagem, $id = "") {
-        ?>popup("<?php echo JS::addslashes($mensagem) ?>");<?php
+        ?>popup("<?php echo JS::addslashes($mensagem) ?>","<?php echo JS::addslashes($id) ?>");<?php
     }
 
     public static function popup_close($id = "") {

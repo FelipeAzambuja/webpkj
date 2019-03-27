@@ -4,20 +4,21 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title><?=@$title?></title>
+        <title><?= @$title ?></title>
         <?php
-        import('jquery');
-        import('bind2');
-        import('pkj');
-        import('notify');
-        import('bpopup');
-        import('bootstrap');
-        import('datatables');
-        import('mask');
-        import('vuejs');
-        import('icheck');
-        import('alerts');
-       ?>
+        import ( 'jquery' );
+        import ( 'bind2' );
+        import ( 'pkj' );
+        import ( 'notify' );
+
+        import ( 'izimodal' );
+        import ( 'bootstrap' );
+        import ( 'datatables' );
+        import ( 'mask' );
+        import ( 'vuejs' );
+        import ( 'icheck' );
+        import ( 'alerts' );
+        ?>
     </head>
     <body>
         <div class="container-fluid">
