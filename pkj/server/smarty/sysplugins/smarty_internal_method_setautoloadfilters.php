@@ -9,8 +9,8 @@
  * @subpackage PluginsInternal
  * @author     Uwe Tews
  */
-class Smarty_Internal_Method_SetAutoloadFilters
-{
+class Smarty_Internal_Method_SetAutoloadFilters {
+
     /**
      * Valid for Smarty and template object
      *
@@ -23,7 +23,7 @@ class Smarty_Internal_Method_SetAutoloadFilters
      *
      * @var array
      */
-    private $filterTypes = array('pre' => true, 'post' => true, 'output' => true, 'variable' => true);
+    private $filterTypes = array ('pre' => true , 'post' => true , 'output' => true , 'variable' => true);
 
     /**
      * Set autoload filters
@@ -39,17 +39,16 @@ class Smarty_Internal_Method_SetAutoloadFilters
      *
      * @return \Smarty|\Smarty_Internal_Template
      */
-    public function setAutoloadFilters(Smarty_Internal_TemplateBase $obj, $filters, $type = null)
-    {
-        $smarty = $obj->_getSmartyObj();
-        if ($type !== null) {
-            $this->_checkFilterType($type);
-            $smarty->autoload_filters[ $type ] = (array) $filters;
+    public function setAutoloadFilters ( Smarty_Internal_TemplateBase $obj , $filters , $type = null ) {
+        $smarty = $obj->_getSmartyObj ();
+        if ( $type !== null ) {
+            $this->_checkFilterType ( $type );
+            $smarty->autoload_filters[$type] = ( array ) $filters;
         } else {
-            foreach ((array) $filters as $type => $value) {
-                $this->_checkFilterType($type);
+            foreach ( ( array ) $filters as $type => $value ) {
+                $this->_checkFilterType ( $type );
             }
-            $smarty->autoload_filters = (array) $filters;
+            $smarty->autoload_filters = ( array ) $filters;
         }
         return $obj;
     }
@@ -61,10 +60,10 @@ class Smarty_Internal_Method_SetAutoloadFilters
      *
      * @throws \SmartyException
      */
-    public function _checkFilterType($type)
-    {
-        if (!isset($this->filterTypes[ $type ])) {
-            throw new SmartyException("Illegal filter type \"{$type}\"");
+    public function _checkFilterType ( $type ) {
+        if ( ! isset ( $this->filterTypes[$type] ) ) {
+            throw new SmartyException ( "Illegal filter type \"{$type}\"" );
         }
     }
+
 }

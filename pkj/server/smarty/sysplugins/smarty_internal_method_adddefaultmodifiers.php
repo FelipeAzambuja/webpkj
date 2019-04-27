@@ -9,8 +9,8 @@
  * @subpackage PluginsInternal
  * @author     Uwe Tews
  */
-class Smarty_Internal_Method_AddDefaultModifiers
-{
+class Smarty_Internal_Method_AddDefaultModifiers {
+
     /**
      * Valid for Smarty and template object
      *
@@ -29,14 +29,14 @@ class Smarty_Internal_Method_AddDefaultModifiers
      *
      * @return \Smarty|\Smarty_Internal_Template
      */
-    public function addDefaultModifiers(Smarty_Internal_TemplateBase $obj, $modifiers)
-    {
-        $smarty = $obj->_getSmartyObj();
-        if (is_array($modifiers)) {
-            $smarty->default_modifiers = array_merge($smarty->default_modifiers, $modifiers);
+    public function addDefaultModifiers ( Smarty_Internal_TemplateBase $obj , $modifiers ) {
+        $smarty = $obj->_getSmartyObj ();
+        if ( is_array ( $modifiers ) ) {
+            $smarty->default_modifiers = array_merge ( $smarty->default_modifiers , $modifiers );
         } else {
             $smarty->default_modifiers[] = $modifiers;
         }
         return $obj;
     }
+
 }

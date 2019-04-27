@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Smarty package.
  *
@@ -11,7 +12,7 @@
 /*
  * Load and register Smarty Autoloader
  */
-if (!class_exists('Smarty_Autoloader')) {
+if ( ! class_exists ( 'Smarty_Autoloader' ) ) {
     require __DIR__ . '/Autoloader.php';
 }
-Smarty_Autoloader::register();
+Smarty_Autoloader::register ();

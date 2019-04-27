@@ -9,8 +9,7 @@
  * @subpackage PluginsInternal
  * @author     Uwe Tews
  */
-class Smarty_Internal_Method_AddAutoloadFilters extends Smarty_Internal_Method_SetAutoloadFilters
-{
+class Smarty_Internal_Method_AddAutoloadFilters extends Smarty_Internal_Method_SetAutoloadFilters {
 
     /**
      * Add autoload filters
@@ -26,27 +25,26 @@ class Smarty_Internal_Method_AddAutoloadFilters extends Smarty_Internal_Method_S
      *
      * @return \Smarty|\Smarty_Internal_Template
      */
-    public function addAutoloadFilters(Smarty_Internal_TemplateBase $obj, $filters, $type = null)
-    {
-        $smarty = $obj->_getSmartyObj();
-        if ($type !== null) {
-            $this->_checkFilterType($type);
-            if (!empty($smarty->autoload_filters[ $type ])) {
-                $smarty->autoload_filters[ $type ] = array_merge($smarty->autoload_filters[ $type ], (array) $filters);
+    public function addAutoloadFilters ( Smarty_Internal_TemplateBase $obj , $filters , $type = null ) {
+        $smarty = $obj->_getSmartyObj ();
+        if ( $type !== null ) {
+            $this->_checkFilterType ( $type );
+            if ( ! empty ( $smarty->autoload_filters[$type] ) ) {
+                $smarty->autoload_filters[$type] = array_merge ( $smarty->autoload_filters[$type] , ( array ) $filters );
             } else {
-                $smarty->autoload_filters[ $type ] = (array) $filters;
+                $smarty->autoload_filters[$type] = ( array ) $filters;
             }
         } else {
-            foreach ((array) $filters as $type => $value) {
-                $this->_checkFilterType($type);
-                if (!empty($smarty->autoload_filters[ $type ])) {
-                    $smarty->autoload_filters[ $type ] =
-                        array_merge($smarty->autoload_filters[ $type ], (array) $value);
+            foreach ( ( array ) $filters as $type => $value ) {
+                $this->_checkFilterType ( $type );
+                if ( ! empty ( $smarty->autoload_filters[$type] ) ) {
+                    $smarty->autoload_filters[$type] = array_merge ( $smarty->autoload_filters[$type] , ( array ) $value );
                 } else {
-                    $smarty->autoload_filters[ $type ] = (array) $value;
+                    $smarty->autoload_filters[$type] = ( array ) $value;
                 }
             }
         }
         return $obj;
     }
+
 }

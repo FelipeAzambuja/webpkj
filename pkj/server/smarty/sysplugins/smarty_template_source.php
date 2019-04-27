@@ -9,8 +9,8 @@
  * @author     Rodney Rehm
  *
  */
-class Smarty_Template_Source
-{
+class Smarty_Template_Source {
+
     /**
      * Unique Template ID
      *
@@ -133,11 +133,9 @@ class Smarty_Template_Source
      * @param string          $name     resource name
      *
      */
-    public function __construct(Smarty $smarty, $resource, $type, $name)
-    {
-        $this->handler =
-            isset($smarty->_cache[ 'resource_handlers' ][ $type ]) ? $smarty->_cache[ 'resource_handlers' ][ $type ] :
-                Smarty_Resource::load($smarty, $type);
+    public function __construct ( Smarty $smarty , $resource , $type , $name ) {
+        $this->handler = isset ( $smarty->_cache['resource_handlers'][$type] ) ? $smarty->_cache['resource_handlers'][$type] :
+                Smarty_Resource::load ( $smarty , $type );
         $this->smarty = $smarty;
         $this->resource = $resource;
         $this->type = $type;
@@ -155,20 +153,19 @@ class Smarty_Template_Source
      * @return Smarty_Template_Source Source Object
      * @throws SmartyException
      */
-    public static function load(Smarty_Internal_Template $_template = null, Smarty $smarty = null,
-                                $template_resource = null)
-    {
-        if ($_template) {
+    public static function load ( Smarty_Internal_Template $_template = null , Smarty $smarty = null ,
+            $template_resource = null ) {
+        if ( $_template ) {
             $smarty = $_template->smarty;
             $template_resource = $_template->template_resource;
         }
-        if (empty($template_resource)) {
-            throw new SmartyException('Source: Missing  name');
+        if ( empty ( $template_resource ) ) {
+            throw new SmartyException ( 'Source: Missing  name' );
         }
         // parse resource_name, load resource handler, identify unique resource name
-        if (preg_match('/^([A-Za-z0-9_\-]{2,})[:]([\s\S]*)$/', $template_resource, $match)) {
-            $type = $match[ 1 ];
-            $name = $match[ 2 ];
+        if ( preg_match ( '/^([A-Za-z0-9_\-]{2,})[:]([\s\S]*)$/' , $template_resource , $match ) ) {
+            $type = $match[1];
+            $name = $match[2];
         } else {
             // no resource given, use default
             // or single character before the colon is not a resource type, but part of the filepath
@@ -176,11 +173,11 @@ class Smarty_Template_Source
             $name = $template_resource;
         }
         // create new source  object
-        $source = new Smarty_Template_Source($smarty, $template_resource, $type, $name);
-        $source->handler->populate($source, $_template);
-        if (!$source->exists && isset($_template->smarty->default_template_handler_func)) {
-            Smarty_Internal_Method_RegisterDefaultTemplateHandler::_getDefaultTemplate($source);
-            $source->handler->populate($source, $_template);
+        $source = new Smarty_Template_Source ( $smarty , $template_resource , $type , $name );
+        $source->handler->populate ( $source , $_template );
+        if ( ! $source->exists && isset ( $_template->smarty->default_template_handler_func ) ) {
+            Smarty_Internal_Method_RegisterDefaultTemplateHandler::_getDefaultTemplate ( $source );
+            $source->handler->populate ( $source , $_template );
         }
         return $source;
     }
@@ -190,10 +187,9 @@ class Smarty_Template_Source
      *
      * @return int
      */
-    public function getTimeStamp()
-    {
-        if (!isset($this->timestamp)) {
-            $this->handler->populateTimestamp($this);
+    public function getTimeStamp () {
+        if ( ! isset ( $this->timestamp ) ) {
+            $this->handler->populateTimestamp ( $this );
         }
         return $this->timestamp;
     }
@@ -203,8 +199,8 @@ class Smarty_Template_Source
      *
      * @return string
      */
-    public function getContent()
-    {
-        return isset($this->content) ? $this->content : $this->handler->getContent($this);
+    public function getContent () {
+        return isset ( $this->content ) ? $this->content : $this->handler->getContent ( $this );
     }
+
 }

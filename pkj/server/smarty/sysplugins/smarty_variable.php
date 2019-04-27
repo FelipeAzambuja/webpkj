@@ -7,8 +7,8 @@
  * @package    Smarty
  * @subpackage Template
  */
-class Smarty_Variable
-{
+class Smarty_Variable {
+
     /**
      * template variable
      *
@@ -29,8 +29,7 @@ class Smarty_Variable
      * @param mixed   $value   the value to assign
      * @param boolean $nocache if true any output of this variable will be not cached
      */
-    public function __construct($value = null, $nocache = false)
-    {
+    public function __construct ( $value = null , $nocache = false ) {
         $this->value = $value;
         $this->nocache = $nocache;
     }
@@ -40,9 +39,8 @@ class Smarty_Variable
      *
      * @return string
      */
-    public function __toString()
-    {
-        return (string) $this->value;
+    public function __toString () {
+        return ( string ) $this->value;
     }
-}
 
+}

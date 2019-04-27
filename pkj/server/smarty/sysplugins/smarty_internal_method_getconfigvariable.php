@@ -9,8 +9,8 @@
  * @subpackage PluginsInternal
  * @author     Uwe Tews
  */
-class Smarty_Internal_Method_GetConfigVariable
-{
+class Smarty_Internal_Method_GetConfigVariable {
+
     /**
      * Valid for all objects
      *
@@ -27,8 +27,8 @@ class Smarty_Internal_Method_GetConfigVariable
      *
      * @return null|string  the value of the config variable
      */
-    public function getConfigVariable(Smarty_Internal_Data $data, $varName = null, $errorEnable = true)
-    {
-        return $data->ext->configLoad->_getConfigVariable($data, $varName, $errorEnable);
+    public function getConfigVariable ( Smarty_Internal_Data $data , $varName = null , $errorEnable = true ) {
+        return $data->ext->configLoad->_getConfigVariable ( $data , $varName , $errorEnable );
     }
+
 }

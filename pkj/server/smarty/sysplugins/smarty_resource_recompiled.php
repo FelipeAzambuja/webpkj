@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Smarty Resource Plugin
  *
@@ -14,8 +15,8 @@
  * @package    Smarty
  * @subpackage TemplateResources
  */
-abstract class Smarty_Resource_Recompiled extends Smarty_Resource
-{
+abstract class Smarty_Resource_Recompiled extends Smarty_Resource {
+
     /**
      * Flag that it's an recompiled resource
      *
@@ -37,31 +38,29 @@ abstract class Smarty_Resource_Recompiled extends Smarty_Resource
      *
      * @throws Exception
      */
-    public function process(Smarty_Internal_Template $_smarty_tpl)
-    {
+    public function process ( Smarty_Internal_Template $_smarty_tpl ) {
         $compiled = &$_smarty_tpl->compiled;
-        $compiled->file_dependency = array();
-        $compiled->includes = array();
+        $compiled->file_dependency = array ();
+        $compiled->includes = array ();
         $compiled->nocache_hash = null;
         $compiled->unifunc = null;
-        $level = ob_get_level();
-        ob_start();
-        $_smarty_tpl->loadCompiler();
+        $level = ob_get_level ();
+        ob_start ();
+        $_smarty_tpl->loadCompiler ();
         // call compiler
         try {
-            eval("?>" . $_smarty_tpl->compiler->compileTemplate($_smarty_tpl));
-        }
-        catch (Exception $e) {
-            unset($_smarty_tpl->compiler);
-            while (ob_get_level() > $level) {
-                ob_end_clean();
+            eval ( "?>" . $_smarty_tpl->compiler->compileTemplate ( $_smarty_tpl ) );
+        } catch ( Exception $e ) {
+            unset ( $_smarty_tpl->compiler );
+            while ( ob_get_level () > $level ) {
+                ob_end_clean ();
             }
             throw $e;
         }
         // release compiler object to free memory
-        unset($_smarty_tpl->compiler);
-        ob_get_clean();
-        $compiled->timestamp = time();
+        unset ( $_smarty_tpl->compiler );
+        ob_get_clean ();
+        $compiled->timestamp = time ();
         $compiled->exists = true;
     }
 
@@ -73,20 +72,20 @@ abstract class Smarty_Resource_Recompiled extends Smarty_Resource
      *
      * @return void
      */
-    public function populateCompiledFilepath(Smarty_Template_Compiled $compiled, Smarty_Internal_Template $_template)
-    {
+    public function populateCompiledFilepath ( Smarty_Template_Compiled $compiled , Smarty_Internal_Template $_template ) {
         $compiled->filepath = false;
         $compiled->timestamp = false;
         $compiled->exists = false;
     }
 
     /*
-       * Disable timestamp checks for recompiled resource.
-       *
-       * @return bool
-       */
-    public function checkTimestamps()
-    {
+     * Disable timestamp checks for recompiled resource.
+     *
+     * @return bool
+     */
+
+    public function checkTimestamps () {
         return false;
     }
+
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Smarty shared plugin
  *
@@ -16,28 +17,27 @@
  *
  * @return int
  */
-function smarty_make_timestamp($string)
-{
-    if (empty($string)) {
+function smarty_make_timestamp ( $string ) {
+    if ( empty ( $string ) ) {
         // use "now":
-        return time();
-    } elseif ($string instanceof DateTime ||
-              (interface_exists('DateTimeInterface', false) && $string instanceof DateTimeInterface)
+        return time ();
+    } elseif ( $string instanceof DateTime ||
+            (interface_exists ( 'DateTimeInterface' , false ) && $string instanceof DateTimeInterface)
     ) {
-        return (int) $string->format('U'); // PHP 5.2 BC
-    } elseif (strlen($string) == 14 && ctype_digit($string)) {
+        return ( int ) $string->format ( 'U' ); // PHP 5.2 BC
+    } elseif ( strlen ( $string ) == 14 && ctype_digit ( $string ) ) {
         // it is mysql timestamp format of YYYYMMDDHHMMSS?
-        return mktime(substr($string, 8, 2), substr($string, 10, 2), substr($string, 12, 2), substr($string, 4, 2),
-                      substr($string, 6, 2), substr($string, 0, 4));
-    } elseif (is_numeric($string)) {
+        return mktime ( substr ( $string , 8 , 2 ) , substr ( $string , 10 , 2 ) , substr ( $string , 12 , 2 ) , substr ( $string , 4 , 2 ) ,
+                substr ( $string , 6 , 2 ) , substr ( $string , 0 , 4 ) );
+    } elseif ( is_numeric ( $string ) ) {
         // it is a numeric string, we handle it as timestamp
-        return (int) $string;
+        return ( int ) $string;
     } else {
         // strtotime should handle it
-        $time = strtotime($string);
-        if ($time == - 1 || $time === false) {
+        $time = strtotime ( $string );
+        if ( $time == - 1 || $time === false ) {
             // strtotime() was not able to parse $string, use "now":
-            return time();
+            return time ();
         }
 
         return $time;

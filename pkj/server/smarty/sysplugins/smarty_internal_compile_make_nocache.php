@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Smarty Internal Plugin Compile Make_Nocache
  * Compiles the {make_nocache} tag
@@ -14,29 +15,29 @@
  * @package    Smarty
  * @subpackage Compiler
  */
-class Smarty_Internal_Compile_Make_Nocache extends Smarty_Internal_CompileBase
-{
+class Smarty_Internal_Compile_Make_Nocache extends Smarty_Internal_CompileBase {
+
     /**
      * Attribute definition: Overwrites base class.
      *
      * @var array
      * @see Smarty_Internal_CompileBase
      */
-    public $option_flags = array();
+    public $option_flags = array ();
 
     /**
      * Array of names of required attribute required by tag
      *
      * @var array
      */
-    public $required_attributes = array('var');
+    public $required_attributes = array ('var');
 
     /**
      * Shorttag attribute order defined by its names
      *
      * @var array
      */
-    public $shorttag_order = array('var');
+    public $shorttag_order = array ('var');
 
     /**
      * Compiles code for the {make_nocache} tag
@@ -48,12 +49,11 @@ class Smarty_Internal_Compile_Make_Nocache extends Smarty_Internal_CompileBase
      * @return string compiled code
      * @throws \SmartyCompilerException
      */
-    public function compile($args, Smarty_Internal_TemplateCompilerBase $compiler, $parameter)
-    {
+    public function compile ( $args , Smarty_Internal_TemplateCompilerBase $compiler , $parameter ) {
         // check and get attributes
-        $_attr = $this->getAttributes($compiler, $args);
-        if ($compiler->template->caching) {
-            $output = "<?php \$_smarty_tpl->smarty->ext->_make_nocache->save(\$_smarty_tpl, {$_attr[ 'var' ]});\n?>\n";
+        $_attr = $this->getAttributes ( $compiler , $args );
+        if ( $compiler->template->caching ) {
+            $output = "<?php \$_smarty_tpl->smarty->ext->_make_nocache->save(\$_smarty_tpl, {$_attr['var']});\n?>\n";
             $compiler->has_code = true;
             $compiler->suppressNocacheProcessing = true;
             return $output;
@@ -61,4 +61,5 @@ class Smarty_Internal_Compile_Make_Nocache extends Smarty_Internal_CompileBase
             return true;
         }
     }
+
 }

@@ -9,8 +9,8 @@
  * @subpackage PluginsInternal
  * @author     Uwe Tews
  */
-class Smarty_Internal_Method_RegisterCacheResource
-{
+class Smarty_Internal_Method_RegisterCacheResource {
+
     /**
      * Valid for Smarty and template object
      *
@@ -30,11 +30,11 @@ class Smarty_Internal_Method_RegisterCacheResource
      *
      * @return \Smarty|\Smarty_Internal_Template
      */
-    public function registerCacheResource(Smarty_Internal_TemplateBase $obj, $name,
-                                          Smarty_CacheResource $resource_handler)
-    {
-        $smarty = $obj->_getSmartyObj();
-        $smarty->registered_cache_resources[ $name ] = $resource_handler;
+    public function registerCacheResource ( Smarty_Internal_TemplateBase $obj , $name ,
+            Smarty_CacheResource $resource_handler ) {
+        $smarty = $obj->_getSmartyObj ();
+        $smarty->registered_cache_resources[$name] = $resource_handler;
         return $obj;
     }
+
 }

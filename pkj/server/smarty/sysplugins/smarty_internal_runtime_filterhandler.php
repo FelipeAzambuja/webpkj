@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Smarty Internal Plugin Filter Handler
  * Smarty filter handler class
@@ -14,8 +15,8 @@
  * @package    Smarty
  * @subpackage PluginsInternal
  */
-class Smarty_Internal_Runtime_FilterHandler
-{
+class Smarty_Internal_Runtime_FilterHandler {
+
     /**
      * Run filters over content
      * The filters will be lazy loaded if required
@@ -30,40 +31,40 @@ class Smarty_Internal_Runtime_FilterHandler
      * @throws SmartyException
      * @return string                   the filtered content
      */
-    public function runFilter($type, $content, Smarty_Internal_Template $template)
-    {
+    public function runFilter ( $type , $content , Smarty_Internal_Template $template ) {
         // loop over autoload filters of specified type
-        if (!empty($template->smarty->autoload_filters[ $type ])) {
-            foreach ((array) $template->smarty->autoload_filters[ $type ] as $name) {
+        if ( ! empty ( $template->smarty->autoload_filters[$type] ) ) {
+            foreach ( ( array ) $template->smarty->autoload_filters[$type] as $name ) {
                 $plugin_name = "Smarty_{$type}filter_{$name}";
-                if (function_exists($plugin_name)) {
+                if ( function_exists ( $plugin_name ) ) {
                     $callback = $plugin_name;
-                } elseif (class_exists($plugin_name, false) && is_callable(array($plugin_name, 'execute'))) {
-                    $callback = array($plugin_name, 'execute');
-                } elseif ($template->smarty->loadPlugin($plugin_name, false)) {
-                    if (function_exists($plugin_name)) {
+                } elseif ( class_exists ( $plugin_name , false ) && is_callable ( array ($plugin_name , 'execute') ) ) {
+                    $callback = array ($plugin_name , 'execute');
+                } elseif ( $template->smarty->loadPlugin ( $plugin_name , false ) ) {
+                    if ( function_exists ( $plugin_name ) ) {
                         // use loaded Smarty2 style plugin
                         $callback = $plugin_name;
-                    } elseif (class_exists($plugin_name, false) && is_callable(array($plugin_name, 'execute'))) {
+                    } elseif ( class_exists ( $plugin_name , false ) && is_callable ( array ($plugin_name , 'execute') ) ) {
                         // loaded class of filter plugin
-                        $callback = array($plugin_name, 'execute');
+                        $callback = array ($plugin_name , 'execute');
                     } else {
-                        throw new SmartyException("Auto load {$type}-filter plugin method \"{$plugin_name}::execute\" not callable");
+                        throw new SmartyException ( "Auto load {$type}-filter plugin method \"{$plugin_name}::execute\" not callable" );
                     }
                 } else {
                     // nothing found, throw exception
-                    throw new SmartyException("Unable to auto load {$type}-filter plugin \"{$plugin_name}\"");
+                    throw new SmartyException ( "Unable to auto load {$type}-filter plugin \"{$plugin_name}\"" );
                 }
-                $content = call_user_func($callback, $content, $template);
+                $content = call_user_func ( $callback , $content , $template );
             }
         }
         // loop over registered filters of specified type
-        if (!empty($template->smarty->registered_filters[ $type ])) {
-            foreach ($template->smarty->registered_filters[ $type ] as $key => $name) {
-                $content = call_user_func($template->smarty->registered_filters[ $type ][ $key ], $content, $template);
+        if ( ! empty ( $template->smarty->registered_filters[$type] ) ) {
+            foreach ( $template->smarty->registered_filters[$type] as $key => $name ) {
+                $content = call_user_func ( $template->smarty->registered_filters[$type][$key] , $content , $template );
             }
         }
         // return filtered output
         return $content;
     }
+
 }

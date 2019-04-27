@@ -9,8 +9,8 @@
  * @subpackage PluginsInternal
  * @author     Uwe Tews
  */
-class Smarty_Internal_Method_GetDebugTemplate
-{
+class Smarty_Internal_Method_GetDebugTemplate {
+
     /**
      * Valid for Smarty and template object
      *
@@ -27,9 +27,9 @@ class Smarty_Internal_Method_GetDebugTemplate
      *
      * @return string
      */
-    public function getDebugTemplate(Smarty_Internal_TemplateBase $obj)
-    {
-        $smarty = $obj->_getSmartyObj();
+    public function getDebugTemplate ( Smarty_Internal_TemplateBase $obj ) {
+        $smarty = $obj->_getSmartyObj ();
         return $smarty->debug_tpl;
     }
+
 }

@@ -9,8 +9,8 @@
  * @subpackage PluginsInternal
  * @author     Uwe Tews
  */
-class Smarty_Internal_Method_ClearAssign
-{
+class Smarty_Internal_Method_ClearAssign {
+
     /**
      * Valid for all objects
      *
@@ -29,16 +29,16 @@ class Smarty_Internal_Method_ClearAssign
      *
      * @return \Smarty_Internal_Data|\Smarty_Internal_Template|\Smarty
      */
-    public function clearAssign(Smarty_Internal_Data $data, $tpl_var)
-    {
-        if (is_array($tpl_var)) {
-            foreach ($tpl_var as $curr_var) {
-                unset($data->tpl_vars[ $curr_var ]);
+    public function clearAssign ( Smarty_Internal_Data $data , $tpl_var ) {
+        if ( is_array ( $tpl_var ) ) {
+            foreach ( $tpl_var as $curr_var ) {
+                unset ( $data->tpl_vars[$curr_var] );
             }
         } else {
-            unset($data->tpl_vars[ $tpl_var ]);
+            unset ( $data->tpl_vars[$tpl_var] );
         }
 
         return $data;
     }
+
 }

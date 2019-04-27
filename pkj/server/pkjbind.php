@@ -1,181 +1,186 @@
 <?php
 $bindDebug = false;
-if ($bindDebug) {
-    error_reporting(-1);
-    ini_set("display_errors", "On");
+if ( $bindDebug ) {
+    error_reporting ( -1 );
+    ini_set ( "display_errors" , "On" );
 }
-$noUse = get_defined_functions();
-if (isset($_POST["CMD"])) {
-    set_error_handler(function ($severity, $message, $filename, $lineno) {
-        if (error_reporting() === 0) {
+$noUse = get_defined_functions ();
+if ( isset ( $_POST["CMD"] ) ) {
+    set_error_handler ( function ($severity , $message , $filename , $lineno) {
+        if ( error_reporting () === 0 ) {
             return;
         }
-        throw new ErrorException($message, 0, $severity, $filename, $lineno);
-    });
+        throw new ErrorException ( $message , 0 , $severity , $filename , $lineno );
+    } );
     try {
         $cmd = $_POST["CMD"];
-        header('Content-Type: text/javascript; charset=UTF-8');
-        if (in_array($cmd, $noUse)) {
-            if ($bindDebug) {
+        header ( 'Content-Type: text/javascript; charset=UTF-8' );
+        if ( in_array ( $cmd , $noUse ) ) {
+            if ( $bindDebug ) {
                 echo "console.log(\"função proibida\");";
             }
-            exit();
+            exit ();
         }
-        if (isset($_POST["PAGE"])) {
-            if (len($_POST["PAGE"]) > 0) {
-                $home = replace(conf::$pkjHome, "/pkj", "");
-                if (startswith($_POST["PAGE"], $home)) {
-                    $pagina = __DIR__ . "/../../" . replace($_POST["PAGE"], $home, "");
-                } else {
-                    $pagina = __DIR__ . "/../../" . $_POST["PAGE"];
-                }
-
-                show_errors(true);
-                ob_start();
+        if ( isset ( $_POST["PAGE"] ) ) {
+            if ( len ( $_POST["PAGE"] ) > 0 ) {
+                $pagina = realpath ( getcwd () . '/public/' . $_POST['PAGE'] );
+                show_errors ( true );
+                ob_end_clean ();
                 require_once $pagina;
-                ob_end_clean();
+                ob_end_clean ();
             }
         }
         $tmp2 = $_POST;
-        addslashes_array($tmp2);
-        unset($tmp2["CMD"]);
-        unset($tmp2["PAGE"]);
-        unset($tmp2["HOST"]);
-        if (isset($tmp2['post0'])) {
-            if ($tmp2["post0"] === "") {
-                unset($tmp2["post0"]);
+        addslashes_array ( $tmp2 );
+        unset ( $tmp2["CMD"] );
+        unset ( $tmp2["PAGE"] );
+        unset ( $tmp2["HOST"] );
+        if ( isset ( $tmp2['post0'] ) ) {
+            if ( $tmp2["post0"] === "" ) {
+                unset ( $tmp2["post0"] );
             }
         }
 
-        if (function_exists($cmd)) {
+        if ( function_exists ( $cmd ) ) {
 //            if (isset($_POST["MUSTACHE"])) {
 //                call_user_func($cmd, $tmp2, $_POST["MUSTACHE"]);
 //            } else {
-            array_walk_recursive($tmp2, function(&$v, $k) {
+            array_walk_recursive ( $tmp2 , function(&$v , $k) {
                 $v = ($v === '') ? null : $v;
-                $v = (is_numeric(str_replace(['.', ','], '', $v)) ) ? cdbl($v) : $v;
-            });
-            call_user_func($cmd, $tmp2);
+                $v = (is_numeric ( str_replace ( ['.' , ','] , '' , $v ) ) ) ? cdbl ( $v ) : $v;
+            } );
+            call_user_func ( $cmd , $tmp2 );
 //            }
         } else {
-            console("Função não existe");
+            console ( "Função não existe" );
         }
-    } catch (Throwable $t) {
+    } catch ( Throwable $t ) {
         ?>
-        console.error("<?php echo JS::addslashes(jTraceEx($t)) ?>");
+        console.error("<?php echo JS::addslashes ( jTraceEx ( $t ) ) ?>");
         <?php
-        exit();
-    } catch (Exception $exc) {
+        exit ();
+    } catch ( Exception $exc ) {
         ?>
-        console.error("<?php echo JS::addslashes(jTraceEx($exc)) ?>");
+        console.error("<?php echo JS::addslashes ( jTraceEx ( $exc ) ) ?>");
         <?php
     } finally {
         
     }
-    bindUpdate();
-    exit();
+    bindUpdate ();
+    exit ();
 }
 
-function __normalizePath($path) {
-    $parts = array(); // Array to build a new path from the good parts
-    $path = str_replace('\\', '/', $path); // Replace backslashes with forwardslashes
-    $path = preg_replace('/\/+/', '/', $path); // Combine multiple slashes into a single slash
-    $segments = explode('/', $path); // Collect path segments
+function __normalizePath ( $path ) {
+    $parts = array (); // Array to build a new path from the good parts
+    $path = str_replace ( '\\' , '/' , $path ); // Replace backslashes with forwardslashes
+    $path = preg_replace ( '/\/+/' , '/' , $path ); // Combine multiple slashes into a single slash
+    $segments = explode ( '/' , $path ); // Collect path segments
     $test = ''; // Initialize testing variable
-    foreach ($segments as $segment) {
-        if ($segment != '.') {
-            $test = array_pop($parts);
-            if (is_null($test))
+    foreach ( $segments as $segment ) {
+        if ( $segment != '.' ) {
+            $test = array_pop ( $parts );
+            if ( is_null ( $test ) )
                 $parts[] = $segment;
-            else if ($segment == '..') {
-                if ($test == '..')
+            else if ( $segment == '..' ) {
+                if ( $test == '..' )
                     $parts[] = $test;
 
-                if ($test == '..' || $test == '')
+                if ( $test == '..' || $test == '' )
                     $parts[] = $segment;
-            }
-            else {
+            } else {
                 $parts[] = $test;
                 $parts[] = $segment;
             }
         }
     }
-    return implode('/', $parts);
+    return implode ( '/' , $parts );
 }
 
 class JS {
 
 //TODO implementar javascript
-    public static function alert($mensagem) {
-        ?>alert("<?php echo JS::addslashes($mensagem) ?>");<?php
+    public static function alert ( $mensagem ) {
+        ?>alert("<?php echo JS::addslashes ( $mensagem ) ?>");<?php
     }
 
-    public static function console($mensagem) {
-        if (is_array($mensagem)) {
-            ?>console.log(<?php echo json_encode($mensagem) ?>);<?php
+    public static function console ( $mensagem ) {
+        if ( is_array ( $mensagem ) ) {
+            ?>console.log(<?php echo json_encode ( $mensagem ) ?>);<?php
+            if ( json_last_error () !== JSON_ERROR_NONE ) {
+                console ( json_last_error_msg () );
+                die;
+            }
         } else {
-            ?>console.log("<?= JS::addslashes($mensagem) ?>");<?php
+            ?>console.log("<?= JS::addslashes ( $mensagem ) ?>");<?php
         }
     }
 
     //trocar 
-    public static function popup($mensagem, $id = "") {
-        ?>popup("<?php echo JS::addslashes($mensagem) ?>","<?php echo JS::addslashes($id) ?>");<?php
+    public static function popup ( $mensagem , $id = "" ) {
+        ?>popup("<?php echo JS::addslashes ( $mensagem ) ?>","<?php echo JS::addslashes ( $id ) ?>");<?php
     }
 
-    public static function popup_close($id = "") {
+    public static function popup_close ( $id = "" ) {
         ?>popup_close("<?= $id ?>");<?php
     }
 
-    public static function redirect($pagina, $data = "") {
-        if ($data !== "") {
-            $data = "?" . http_build_query($data);
+    public static function redirect ( $pagina , $data = "" ) {
+        if ( $data !== "" ) {
+            $data = "?" . http_build_query ( $data );
         }
         ?>window.location.href="<?= $pagina . $data ?>";<?php
     }
 
-    public static function _addslashes($s) {
+    public static function _addslashes ( $s ) {
 
-        $l = strlen($s);
-        for ($i = 0; $i < $l; $i ++) {
-            switch ($s[$i]) {
+        $l = strlen ( $s );
+        for ( $i = 0; $i < $l; $i ++ ) {
+            switch ( $s[$i] ) {
                 case '\\': // \
-                    $s = substring($s, 0, $i) . '\\\\' . substring($s, $i + 1);
+                    $s = substring ( $s , 0 , $i ) . '\\\\' . substring ( $s , $i + 1 );
                     $i = $i + 1;
                     break;
                 case '"': // "
-                    $s = substring($s, 0, $i) . '\\"' . substring($s, $i + 1);
+                    $s = substring ( $s , 0 , $i ) . '\\"' . substring ( $s , $i + 1 );
                     $i = $i + 1;
                     break;
             }
         }
-        $s = str_replace(PHP_EOL, '\n', $s);
+        $s = str_replace ( PHP_EOL , '\n' , $s );
         return $s;
     }
 
-    public static function addslashes($s) {
-        if (is_array($s)) {
-            $s = json_encode($s);
+    public static function addslashes ( $s ) {
+        if ( is_array ( $s ) ) {
+            $s = json_encode ( $s , JSON_UNESCAPED_UNICODE );
+            if ( json_last_error () !== JSON_ERROR_NONE ) {
+                console ( json_last_error_msg () );
+                die;
+            }
         }
-        $s = strval($s);
-        $s = str_replace(PHP_EOL, '\n', json_encode($s));
-        $s = (strlen($s) > 0) ? $s : '""';
+        $s = strval ( $s );
+        $s = str_replace ( PHP_EOL , '\n' , json_encode ( $s , JSON_UNESCAPED_UNICODE ) );
+        if ( json_last_error () !== JSON_ERROR_NONE ) {
+            console ( json_last_error_msg () );
+            die;
+        }
+        $s = (strlen ( $s ) > 0) ? $s : '""';
         return '"+' . $s . '+"';
 //        $s = str_replace('*/', '* /', $s);//buaaa
         return '"+_heredoc(function(){/* ' . $s . ' */})+"';
 //        $a = array('<','>','\'','\\','"','\n','\r',PHP_EOL);
 //        $b = array('\\x3C','\\x3E','\\\'','\\\\','\\"','\\n','\\r','');
 //        return str_replace($a, $b, $s);
-        $s = str_replace(PHP_EOL, '', $s);
-        $l = strlen($s);
-        for ($i = 0; $i < $l; $i ++) {
-            switch ($s[$i]) {
+        $s = str_replace ( PHP_EOL , '' , $s );
+        $l = strlen ( $s );
+        for ( $i = 0; $i < $l; $i ++ ) {
+            switch ( $s[$i] ) {
                 case '\\': // \
-                    $s = substring($s, 0, $i) . '\\\\' . substring($s, $i + 1);
+                    $s = substring ( $s , 0 , $i ) . '\\\\' . substring ( $s , $i + 1 );
                     $i = $i + 1;
                     break;
                 case '"': // "
-                    $s = substring($s, 0, $i) . '\\"' . substring($s, $i + 1);
+                    $s = substring ( $s , 0 , $i ) . '\\"' . substring ( $s , $i + 1 );
                     $i = $i + 1;
                     break;
             }
@@ -189,22 +194,22 @@ class JS {
  * New instance of Bind
  * @return \Bind
  */
-function bind($form = array()) {
-    return new Bind($form);
+function bind ( $form = array () ) {
+    return new Bind ( $form );
 }
 
-function bindUpdate() {
-    bind(array())->update();
+function bindUpdate () {
+    bind ( array () )->update ();
 }
 
-function mustache($id, $html, $data = array()) {
-    $html = JS::addslashes($html);
+function mustache ( $id , $html , $data = array () ) {
+    $html = JS::addslashes ( $html );
     ?>
-    var bind_tmp1 = Mustache.render("<?php echo $html ?>", <?php echo json_encode($data) ?>);
+    var bind_tmp1 = Mustache.render("<?php echo $html ?>", <?php echo json_encode ( $data ) ?>);
     Mustache.parse(bind_tmp1);
     $("*[id='<?php echo $id ?>']").html(bind_tmp1);
     <?php
-    bindUpdate();
+    bindUpdate ();
 }
 
 class Bind {
@@ -212,11 +217,11 @@ class Bind {
     var $ids;
     var $form;
 
-    function __construct($form) {
+    function __construct ( $form ) {
         $this->form = $form;
     }
 
-    function update() {
+    function update () {
         ?>tagUpdate();<?php
     }
 
@@ -226,11 +231,11 @@ class Bind {
      * @param type $value
      * @return \Bind
      */
-    function setValue($id, $value) {
+    function setValue ( $id , $value ) {
 //        $value = JS::addslashes($value);
-        $value = str_replace('*/', '* /', $value); //buaaa
-        $this->jquery($id, "val( _heredoc(function(){/* {$value} */}) )");
-        $this->jquery($id, "attr('value', _heredoc(function(){/* {$value} */}) )");
+        $value = str_replace ( '*/' , '* /' , $value ); //buaaa
+        $this->jquery ( $id , "val( _heredoc(function(){/* {$value} */}) )" );
+        $this->jquery ( $id , "attr('value', _heredoc(function(){/* {$value} */}) )" );
         return $this;
     }
 
@@ -239,15 +244,15 @@ class Bind {
      * @param type $id
      * @return type
      */
-    function getValue($id) {
+    function getValue ( $id ) {
         return $this->form[$id];
     }
 
-    function value($id, $value = null) {
-        if ($value == null) {
-            return $this->getValue($id);
+    function value ( $id , $value = null ) {
+        if ( $value == null ) {
+            return $this->getValue ( $id );
         } else {
-            $this->setValue($id, $value);
+            $this->setValue ( $id , $value );
             return $this;
         }
     }
@@ -257,10 +262,10 @@ class Bind {
      * @param type $id
      * @param type $html
      */
-    function setHtml($id, $html) {
+    function setHtml ( $id , $html ) {
 
-        $html = JS::addslashes($html);
-        $this->jquery($id, "html(\"$html\")");
+        $html = JS::addslashes ( $html );
+        $this->jquery ( $id , "html(\"$html\")" );
         return $this;
     }
 
@@ -269,8 +274,8 @@ class Bind {
      * @param type $id
      * @param type $html
      */
-    function html($id, $html) {
-        $this->setHtml($id, $html);
+    function html ( $id , $html ) {
+        $this->setHtml ( $id , $html );
         return $this;
     }
 
@@ -279,9 +284,9 @@ class Bind {
      * @param type $id
      * @param type $text
      */
-    function setText($id, $text) {
-        $text = JS::addslashes($text);
-        $this->jquery($id, "text(\"$text\")");
+    function setText ( $id , $text ) {
+        $text = JS::addslashes ( $text );
+        $this->jquery ( $id , "text(\"$text\")" );
         return $this;
     }
 
@@ -290,9 +295,9 @@ class Bind {
      * @param type $id
      * @param type $text
      */
-    function append($id, $text) {
-        $text = JS::addslashes($text);
-        $this->jquery($id, "append(\"$text\")");
+    function append ( $id , $text ) {
+        $text = JS::addslashes ( $text );
+        $this->jquery ( $id , "append(\"$text\")" );
         return $this;
     }
 
@@ -301,8 +306,8 @@ class Bind {
      * @param type $id
      * @param type $text
      */
-    function text($id, $text) {
-        $this->setText($id, $text);
+    function text ( $id , $text ) {
+        $this->setText ( $id , $text );
         return $this;
     }
 
@@ -310,18 +315,18 @@ class Bind {
      * Enable a html element
      * @param type $id
      */
-    function setEnable($id) {
-        $this->jquery($id, "removeAttr(\"disabled\")");
+    function setEnable ( $id ) {
+        $this->jquery ( $id , "removeAttr(\"disabled\")" );
         return $this;
     }
 
-    function enable($id) {
-        $this->setEnable($id);
+    function enable ( $id ) {
+        $this->setEnable ( $id );
         return $this;
     }
 
-    function focus($id) {
-        $this->jquery($id, "focus()");
+    function focus ( $id ) {
+        $this->jquery ( $id , "focus()" );
         return $this;
     }
 
@@ -329,29 +334,29 @@ class Bind {
      * Disable a html element
      * @param type $id
      */
-    function setDisable($id) {
-        $this->jquery($id, "attr(\"disabled\",\"true\")");
+    function setDisable ( $id ) {
+        $this->jquery ( $id , "attr(\"disabled\",\"true\")" );
         return $this;
     }
 
-    function disable($id) {
-        $this->setDisable($id);
+    function disable ( $id ) {
+        $this->setDisable ( $id );
         return $this;
     }
 
-    function show($id) {
-        $this->jquery($id, "show()");
+    function show ( $id ) {
+        $this->jquery ( $id , "show()" );
         return $this;
     }
 
-    function hide($id) {
-        $this->jquery($id, "hide()");
+    function hide ( $id ) {
+        $this->jquery ( $id , "hide()" );
         return $this;
     }
 
-    function attr($id, $name, $value) {
-        $value = JS::addslashes($value);
-        $this->jquery($id, "attr(\"$name\",\"$value\")");
+    function attr ( $id , $name , $value ) {
+        $value = JS::addslashes ( $value );
+        $this->jquery ( $id , "attr(\"$name\",\"$value\")" );
         return $this;
     }
 
@@ -360,37 +365,37 @@ class Bind {
      * @param type $id
      * @return \UploadParser
      */
-    function upload($id) {
-        return new UploadParser($this->form[$id]);
+    function upload ( $id ) {
+        return new UploadParser ( $this->form[$id] );
     }
 
-    function setInterval($function, $time, $parameters = array(), $page = "") {
-        if (isset($_POST["PAGE"]) && $page === "") {
+    function setInterval ( $function , $time , $parameters = array () , $page = "" ) {
+        if ( isset ( $_POST["PAGE"] ) && $page === "" ) {
             $page = $_POST["PAGE"];
         }
         ?>
         eventos["<?= $function ?>"] = setInterval(function () {
-        bindCall("<?= $page ?>","<?= $function ?>",<?= json_encode($parameters, JSON_FORCE_OBJECT) ?>)
+        bindCall("<?= $page ?>","<?= $function ?>",<?= json_encode ( $parameters , JSON_FORCE_OBJECT ) ?>)
         },<?= $time ?>);
         <?php
     }
 
-    function setTimeout($function, $time, $parameters = array(), $page = "") {
-        if (isset($_POST["PAGE"]) && $page === "") {
+    function setTimeout ( $function , $time , $parameters = array () , $page = "" ) {
+        if ( isset ( $_POST["PAGE"] ) && $page === "" ) {
             $page = $_POST["PAGE"];
         }
         ?>
         eventos["<?= $function ?>"] = setTimeout(function () {
-        bindCall("<?= $page ?>","<?= $function ?>",<?= json_encode($parameters, JSON_FORCE_OBJECT) ?>)
+        bindCall("<?= $page ?>","<?= $function ?>",<?= json_encode ( $parameters , JSON_FORCE_OBJECT ) ?>)
         },<?= $time ?>);
         <?php
     }
 
-    function stopInterval($function) {
+    function stopInterval ( $function ) {
         ?>clearInterval(eventos["<?= $function ?>"])<?php
     }
 
-    function stopTimeout($function) {
+    function stopTimeout ( $function ) {
         ?>clearTimeout(eventos["<?= $function ?>"])<?php
     }
 
@@ -399,26 +404,26 @@ class Bind {
      * @param type $id id 
      * @return type this
      */
-    function setFocus($id) {
-        return $this->jquery($id, "focus()");
+    function setFocus ( $id ) {
+        return $this->jquery ( $id , "focus()" );
     }
 
-    function autocomplete($id, $values) {
-        $values = json_encode($values);
-        jquery($id, "attr('data-autocomplete','$values')");
+    function autocomplete ( $id , $values ) {
+        $values = json_encode ( $values );
+        jquery ( $id , "attr('data-autocomplete','$values')" );
     }
 
-    function combo($id, $values, $names = []) {
+    function combo ( $id , $values , $names = [] ) {
         $html = "";
-        if ($names === []) {
+        if ( $names === [] ) {
             $names = $values;
         }
-        for ($index = 0; $index < count($values); $index++) {
+        for ( $index = 0; $index < count ( $values ); $index ++ ) {
             $v = $values[$index];
             $n = $names[$index];
             $html .= "<option value='$v'>$n</option>";
         }
-        html($id, $html);
+        html ( $id , $html );
     }
 
     /**
@@ -426,16 +431,16 @@ class Bind {
      * @param type $id
      * @param type $code
      */
-    function jquery($id, $code) {
-        if (startswith($id, "#")) {
+    function jquery ( $id , $code ) {
+        if ( startswith ( $id , "#" ) ) {
             //$id = replace($id, "#", "");
             ?>$("<?php echo $id ?>").<?php echo $code ?>;<?php
             ?>_pkj_postfix($("*[id='<?php echo $id ?>'],*[input-id='<?php echo $id ?>']"));<?php
         } else {
-            ?>$("*[<?php echo $id ?>]").<?php echo $code ?>;<?php
-            ?>_pkj_postfix($("*[<?php echo $id ?>]"));<?php
+            ?>$("<?php echo $id ?>").<?php echo $code ?>;<?php
+            ?>_pkj_postfix($("<?php echo $id ?>"));<?php
         }
-        
+
         return $this;
     }
 
@@ -444,8 +449,61 @@ class Bind {
      * @param string $message
      * @param string $type error,success,info,warn
      */
-    function notify($message, $type = 'success') {
-        ?>$.notify("<?= JS::addslashes($message) ?>",'<?= $type ?>');<?php
+    function notify ( $message , $type = 'success' ) {
+        ?>$.notify("<?= JS::addslashes ( $message ) ?>",'<?= $type ?>');<?php
+    }
+
+}
+
+/**
+ * 
+ * @param type $value
+ * @return \Base64Parser
+ */
+function base64_parse ( $value ) {
+    return new Base64Parser ( $value );
+}
+
+class Base64Parser {
+
+    private $raw = "";
+    private $parse = [null , null , null , null];
+
+    function __construct ( $value ) {
+        $this->raw = $value;
+        $this->parse = preg_split ( '/(,|;|:)/' , $value );
+    }
+
+    function is_ok () {
+        return count ( array_filter ( $this->parse , function($value) {
+                            return $value !== null;
+                        } ) ) > 0;
+    }
+
+    function error () {
+        if ( $this->parse[1] === null ) {
+            return 'Não foi possivel encontrar o mime';
+        }
+        if ( $this->parse[3] === null ) {
+            return 'Não foi possivel encontrar o data';
+        }
+        return 'Sem erro ?';
+    }
+
+    function base64 () {
+        return $this->parse[3];
+    }
+
+    function data () {
+        return base64_decode ( $this->base64 () );
+    }
+
+    function mime () {
+        return $this->parse[1];
+    }
+
+    function raw () {
+        return $this->raw;
     }
 
 }
@@ -455,47 +513,47 @@ class Bind {
  * @param type $value
  * @return \UploadParser
  */
-function upload_parser($value) {
-    return new UploadParser($value);
+function upload_parser ( $value ) {
+    return new UploadParser ( $value );
 }
 
 class UploadParser {
 
     private $raw = "";
 
-    function __construct($name, $array = null) {
-        if ($array === null) {
+    function __construct ( $name , $array = null ) {
+        if ( $array === null ) {
             $array = $_FILES;
         }
-        $this->raw = isset($array[$name]) ? $array[$name] : null;
+        $this->raw = isset ( $array[$name] ) ? $array[$name] : null;
     }
 
     /**
      * Get a extension of file
      * @return string
      */
-    function ext() {
-        if (!$this->is_ok()) {
+    function ext () {
+        if ( ! $this->is_ok () ) {
             return false;
         }
-        $ext = explode("/", $this->mime());
+        $ext = explode ( "/" , $this->mime () );
         $ext = $ext[1];
-        if ($ext === "vnd.oasis.opendocument.spreadsheet") {
+        if ( $ext === "vnd.oasis.opendocument.spreadsheet" ) {
             $ext = "ods";
-        } else if ($ext === "vnd.oasis.opendocument.text") {
+        } else if ( $ext === "vnd.oasis.opendocument.text" ) {
             $ext = "odt";
-        } else if ($ext === "plain") {
+        } else if ( $ext === "plain" ) {
             $ext = "txt";
-        } else if ($ext === "x-7z-compressed") {
+        } else if ( $ext === "x-7z-compressed" ) {
             $ext = "7z";
-        } else if ($ext === "x-rar") {
+        } else if ( $ext === "x-rar" ) {
             $ext = "rar";
         }
         return $ext;
     }
 
-    function mime() {
-        if (!$this->is_ok()) {
+    function mime () {
+        if ( ! $this->is_ok () ) {
             return false;
         }
         return $this->raw['type'];
@@ -505,30 +563,30 @@ class UploadParser {
      * Return base64 format of file
      * @return type
      */
-    function base64() {
-        if (!$this->is_ok()) {
+    function base64 () {
+        if ( ! $this->is_ok () ) {
             return false;
         }
-        return base64_encode($this->data());
+        return base64_encode ( $this->data () );
     }
 
     /**
      * Get binary of file
      * @return type
      */
-    function data() {
-        if (!$this->is_ok()) {
+    function data () {
+        if ( ! $this->is_ok () ) {
             return false;
         }
-        return file_get_contents($this->raw['tmp_name']);
+        return file_get_contents ( $this->raw['tmp_name'] );
     }
 
     /**
      * Try a get name of file
      * @return type
      */
-    function name() {
-        if (!$this->is_ok()) {
+    function name () {
+        if ( ! $this->is_ok () ) {
             return false;
         }
         return $this->raw['name'];
@@ -538,7 +596,7 @@ class UploadParser {
      * Get my raw format dont use please
      * @return type
      */
-    function raw() {
+    function raw () {
         return $this->raw;
     }
 
@@ -546,30 +604,30 @@ class UploadParser {
      * 
      * @return int size in bytes
      */
-    function size() {
-        if (!$this->is_ok()) {
+    function size () {
+        if ( ! $this->is_ok () ) {
             return false;
         }
         return $this->raw['size'];
     }
 
-    function error_code() {
-        if ($this->raw === null) {
+    function error_code () {
+        if ( $this->raw === null ) {
             return 99;
         }
         return $this->raw['error'];
     }
 
-    function error() {
-        return $this->codeToMessage($this->error_code());
+    function error () {
+        return $this->codeToMessage ( $this->error_code () );
     }
 
-    function is_ok() {
-        return $this->error_code() === 0;
+    function is_ok () {
+        return $this->error_code () === 0;
     }
 
-    private function codeToMessage($code) {
-        switch ($code) {
+    private function codeToMessage ( $code ) {
+        switch ( $code ) {
             case UPLOAD_ERR_OK:
                 $message = 'No error';
             case UPLOAD_ERR_INI_SIZE:
@@ -606,37 +664,37 @@ class UploadParser {
      * @param type $fileName
      * @return boolean
      */
-    function save($fileName = '') {
-        if ($fileName === '') {
-            $fileName = $this->name();
+    function save ( $fileName = '' ) {
+        if ( $fileName === '' ) {
+            $fileName = $this->name ();
         }
-        if (strpos($fileName, '.') === false) {
-            $fileName = $fileName . '.' . $this->ext();
+        if ( strpos ( $fileName , '.' ) === false ) {
+            $fileName = $fileName . '.' . $this->ext ();
         }
-        file_put_contents($fileName, $this->data());
+        file_put_contents ( $fileName , $this->data () );
     }
 
     /**
      * 
      * @return \Intervention\Image\Image
      */
-    function image() {
-        return image($this->data());
+    function image () {
+        return image ( $this->data () );
     }
 
 }
 
-function c(...$vars) {
+function c ( ...$vars ) {
     Kint::$mode_default = Kint::MODE_TEXT;
     Kint::$return = true;
-    console(Kint::dump(...$vars));
+    console ( Kint::dump ( ...$vars ) );
 }
 
-function cd(...$vars) {
+function cd ( ...$vars ) {
     Kint::$mode_default = Kint::MODE_TEXT;
     Kint::$return = true;
-    console(Kint::dump(...$vars));
-    exit();
+    console ( Kint::dump ( ...$vars ) );
+    exit ();
 }
 
 /**
@@ -644,8 +702,8 @@ function cd(...$vars) {
  * @param type $varname
  * @return \Vue
  */
-function vue($varname) {
-    return new Vue($varname);
+function vue ( $varname ) {
+    return new Vue ( $varname );
 }
 
 class Vue {
@@ -653,17 +711,17 @@ class Vue {
     var $varname = '';
     var $data = [];
 
-    function __construct($varname) {
+    function __construct ( $varname ) {
         $this->varname = $varname;
         $this->data = @$_POST['vue'][$varname];
     }
 
-    function data($data = null) {
-        if ($data === null) {
+    function data ( $data = null ) {
+        if ( $data === null ) {
             return $this->data;
         } else {
-            foreach ($data as $key => $value) {
-                $value = json_encode($value);
+            foreach ( $data as $key => $value ) {
+                $value = json_encode ( $value );
                 echo "{$this->varname}.{$key} = {$value};";
             }
         }
@@ -671,14 +729,14 @@ class Vue {
 
 }
 
-function js_set($name, $value) {
-    $value = json_encode($value, JSON_NUMERIC_CHECK);
+function js_set ( $name , $value ) {
+    $value = json_encode ( $value , JSON_NUMERIC_CHECK );
     echo "{$name} = {$value};";
 }
 
-function js_call($function, $params = []) {
-    $params = implode(',', array_map(function($value) {
-                return json_encode($value);
-            }, $params));
+function js_call ( $function , $params = [] ) {
+    $params = implode ( ',' , array_map ( function($value) {
+                return json_encode ( $value );
+            } , $params ) );
     echo "{$function}({$params});";
 }

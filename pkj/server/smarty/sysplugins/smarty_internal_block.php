@@ -7,8 +7,8 @@
  * @subpackage PluginsInternal
  * @author     Uwe Tews
  */
-class Smarty_Internal_Block
-{
+class Smarty_Internal_Block {
+
     /**
      * Block name
      *
@@ -73,8 +73,7 @@ class Smarty_Internal_Block
      * @param string   $name     block name
      * @param int|null $tplIndex index of outer level {block} if nested
      */
-    public function __construct($name, $tplIndex)
-    {
+    public function __construct ( $name , $tplIndex ) {
         $this->name = $name;
         $this->tplIndex = $tplIndex;
     }
@@ -84,7 +83,8 @@ class Smarty_Internal_Block
      *
      * @param \Smarty_Internal_Template $tpl
      */
-    public function callBlock(Smarty_Internal_Template $tpl)
-    {
+    public function callBlock ( Smarty_Internal_Template $tpl ) {
+        
     }
+
 }

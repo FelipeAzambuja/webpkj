@@ -9,8 +9,8 @@
  * @subpackage PluginsInternal
  * @author     Uwe Tews
  */
-class Smarty_Internal_Method_ClearAllCache
-{
+class Smarty_Internal_Method_ClearAllCache {
+
     /**
      * Valid for Smarty object
      *
@@ -30,11 +30,11 @@ class Smarty_Internal_Method_ClearAllCache
      *
      * @return integer number of cache files deleted
      */
-    public function clearAllCache(Smarty $smarty, $exp_time = null, $type = null)
-    {
-        $smarty->_clearTemplateCache();
+    public function clearAllCache ( Smarty $smarty , $exp_time = null , $type = null ) {
+        $smarty->_clearTemplateCache ();
         // load cache resource and call clearAll
-        $_cache_resource = Smarty_CacheResource::load($smarty, $type);
-        return $_cache_resource->clearAll($smarty, $exp_time);
+        $_cache_resource = Smarty_CacheResource::load ( $smarty , $type );
+        return $_cache_resource->clearAll ( $smarty , $exp_time );
     }
+
 }

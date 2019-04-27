@@ -74,6 +74,7 @@ bind.exec = function (element, router, page, event) {
     var data = {};
     data.GET = $_GET;
     data.HOST = window.location.href;
+    data.PAGE = page;
     var cmd = el.attr(event);
     if (cmd.indexOf('(') > -1) {
         var real_cmd = cmd.split('(')[0];

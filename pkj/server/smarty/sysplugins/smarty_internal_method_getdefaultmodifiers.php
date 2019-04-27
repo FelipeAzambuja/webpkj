@@ -9,8 +9,8 @@
  * @subpackage PluginsInternal
  * @author     Uwe Tews
  */
-class Smarty_Internal_Method_GetDefaultModifiers
-{
+class Smarty_Internal_Method_GetDefaultModifiers {
+
     /**
      * Valid for Smarty and template object
      *
@@ -27,9 +27,9 @@ class Smarty_Internal_Method_GetDefaultModifiers
      *
      * @return array list of default modifiers
      */
-    public function getDefaultModifiers(Smarty_Internal_TemplateBase $obj)
-    {
-        $smarty = $obj->_getSmartyObj();
+    public function getDefaultModifiers ( Smarty_Internal_TemplateBase $obj ) {
+        $smarty = $obj->_getSmartyObj ();
         return $smarty->default_modifiers;
     }
+
 }

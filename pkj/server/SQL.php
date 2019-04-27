@@ -384,7 +384,7 @@ class SQL {
         $data = $this->db->query ( $this->sql , [] , $class );
         if ( count ( $this->join ) > 0 ) {
 
-            for ( $index = 0; $index < count ( $data ); $index ++  ) {
+            for ( $index = 0; $index < count ( $data ); $index ++ ) {
                 foreach ( $this->join as $j ) {
                     if ( $j[0] instanceof SQL ) {
                         $j[0] = clone $j[0];
@@ -461,7 +461,7 @@ class SQL {
             } else {
                 return $this->db->pdo->quote ( $value , PDO::PARAM_LOB );
             }
-        } else if ( is_numeric ( $value ) && $value[0] !== '0' ) {
+        } else if ( is_numeric ( $value ) ) {
             return format_number ( $value );
         } else if ( $is_date ) {
             return $this->db->pdo->quote ( cdate ( $value )->format ( 'Y-m-d H:i:s' ) , PDO::PARAM_STR );

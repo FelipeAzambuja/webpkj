@@ -9,8 +9,8 @@
  * @subpackage PluginsInternal
  * @author     Uwe Tews
  */
-class Smarty_Internal_Method_RegisterResource
-{
+class Smarty_Internal_Method_RegisterResource {
+
     /**
      * Valid for Smarty and template object
      *
@@ -34,11 +34,10 @@ class Smarty_Internal_Method_RegisterResource
      *
      * @return \Smarty|\Smarty_Internal_Template
      */
-    public function registerResource(Smarty_Internal_TemplateBase $obj, $name, $resource_handler)
-    {
-        $smarty = $obj->_getSmartyObj();
-        $smarty->registered_resources[ $name ] =
-            $resource_handler instanceof Smarty_Resource ? $resource_handler : array($resource_handler, false);
+    public function registerResource ( Smarty_Internal_TemplateBase $obj , $name , $resource_handler ) {
+        $smarty = $obj->_getSmartyObj ();
+        $smarty->registered_resources[$name] = $resource_handler instanceof Smarty_Resource ? $resource_handler : array ($resource_handler , false);
         return $obj;
     }
+
 }

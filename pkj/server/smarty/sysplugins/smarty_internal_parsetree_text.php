@@ -14,15 +14,14 @@
  * @subpackage Compiler
  * @ignore
  */
-class Smarty_Internal_ParseTree_Text extends Smarty_Internal_ParseTree
-{
+class Smarty_Internal_ParseTree_Text extends Smarty_Internal_ParseTree {
+
     /**
      * Create template text buffer
      *
      * @param string $data text
      */
-    public function __construct($data)
-    {
+    public function __construct ( $data ) {
         $this->data = $data;
     }
 
@@ -33,8 +32,8 @@ class Smarty_Internal_ParseTree_Text extends Smarty_Internal_ParseTree
      *
      * @return string text
      */
-    public function to_smarty_php(Smarty_Internal_Templateparser $parser)
-    {
+    public function to_smarty_php ( Smarty_Internal_Templateparser $parser ) {
         return $this->data;
     }
+
 }

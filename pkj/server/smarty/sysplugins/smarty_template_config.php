@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Smarty Config Source Plugin
  *
@@ -16,8 +17,8 @@
  * @author     Uwe Tews
  *
  */
-class Smarty_Template_Config extends Smarty_Template_Source
-{
+class Smarty_Template_Config extends Smarty_Template_Source {
+
     /**
      * array of section names, single section or null
      *
@@ -71,29 +72,29 @@ class Smarty_Template_Config extends Smarty_Template_Source
      * @return Smarty_Template_Config Source Object
      * @throws SmartyException
      */
-    public static function load(Smarty_Internal_Template $_template = null, Smarty $smarty = null,
-                                $template_resource = null)
-    {
-        static $_incompatible_resources = array('extends' => true, 'php' => true);
-        if ($_template) {
+    public static function load ( Smarty_Internal_Template $_template = null , Smarty $smarty = null ,
+            $template_resource = null ) {
+        static $_incompatible_resources = array ('extends' => true , 'php' => true);
+        if ( $_template ) {
             $smarty = $_template->smarty;
             $template_resource = $_template->template_resource;
         }
-        if (empty($template_resource)) {
-            throw new SmartyException('Source: Missing  name');
+        if ( empty ( $template_resource ) ) {
+            throw new SmartyException ( 'Source: Missing  name' );
         }
-         // parse resource_name, load resource handler
-        list($name, $type) = Smarty_Resource::parseResourceName($template_resource, $smarty->default_config_type);
+        // parse resource_name, load resource handler
+        list($name , $type) = Smarty_Resource::parseResourceName ( $template_resource , $smarty->default_config_type );
         // make sure configs are not loaded via anything smarty can't handle
-        if (isset($_incompatible_resources[ $type ])) {
-            throw new SmartyException ("Unable to use resource '{$type}' for config");
+        if ( isset ( $_incompatible_resources[$type] ) ) {
+            throw new SmartyException ( "Unable to use resource '{$type}' for config" );
         }
-        $source = new Smarty_Template_Config($smarty, $template_resource, $type, $name);
-        $source->handler->populate($source, $_template);
-        if (!$source->exists && isset($smarty->default_config_handler_func)) {
-            Smarty_Internal_Method_RegisterDefaultTemplateHandler::_getDefaultTemplate($source);
-            $source->handler->populate($source, $_template);
+        $source = new Smarty_Template_Config ( $smarty , $template_resource , $type , $name );
+        $source->handler->populate ( $source , $_template );
+        if ( ! $source->exists && isset ( $smarty->default_config_handler_func ) ) {
+            Smarty_Internal_Method_RegisterDefaultTemplateHandler::_getDefaultTemplate ( $source );
+            $source->handler->populate ( $source , $_template );
         }
         return $source;
     }
+
 }
