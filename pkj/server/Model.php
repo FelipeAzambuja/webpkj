@@ -2,6 +2,10 @@
 
 class Model implements arrayaccess {
 
+    function seed () {
+        return false;
+    }
+
     function relationOne ( $table , $field , $id = 'id' ) {
         return $this->relation ( $table , $field , $id , 'one' );
     }
@@ -422,8 +426,16 @@ class Model implements arrayaccess {
 
             $data[$key] = $this->sql->db->detranslate_field ( $value[1] );
         }
-
-        return $this->sql->create ( $data );
+        $r = $this->sql->create ( $data );
+        $seed = $this->seed ();
+        if ( $seed !== false && $this->get ()->count () < 1 ) {
+            db ()->begin_transaction ();
+            foreach ( $seed as $value ) {
+                $this->fromArray ( $value )->insert ();
+            }
+            db ()->commit_transaction ();
+        }
+        return $r;
     }
 
     private function __parse_doc ( $comment ) {

@@ -5,7 +5,7 @@ function mostrar_popup ( $form ) {
     ob_start ();
     ?>
     <form class="p-3">
-Teste
+        Teste
     </form>
     <?php
     popup ( ob_get_clean () );
