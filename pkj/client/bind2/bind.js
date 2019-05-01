@@ -21,7 +21,7 @@ bind.refresh = function () {
                         event.preventDefault();
                         var elemento = $(event.target);
                         if (elemento.prop('tagName') === 'INPUT' || elemento.prop('tagName') === 'SELECT') {
-                            $(elemento.parents('form')).find('*[submit]').trigger('click');
+                            $(elemento.parents('form')).find('*[click]').trigger('click');
                         }
                         return false;
                     }
