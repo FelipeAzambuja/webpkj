@@ -13,7 +13,8 @@
 
         import ( 'izimodal' );
         import ( 'bootstrap' );
-        import ( 'datatables' );
+//        import ( 'datatables' );
+        import ( 'bstable' );
         import ( 'mask' );
         import ( 'vuejs' );
         import ( 'icheck' );

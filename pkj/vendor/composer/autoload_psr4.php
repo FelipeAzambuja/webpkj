@@ -19,6 +19,7 @@ return array(
     'Mpdf\\' => array($vendorDir . '/mpdf/mpdf/src'),
     'Intervention\\Image\\' => array($vendorDir . '/intervention/image/src/Intervention/Image'),
     'GuzzleHttp\\Psr7\\' => array($vendorDir . '/guzzlehttp/psr7/src'),
+    'Faker\\' => array($vendorDir . '/fzaninotto/faker/src/Faker'),
     'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
     '' => array($vendorDir . '/nesbot/carbon/src'),
 );

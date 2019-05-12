@@ -1,0 +1,20 @@
+{
+    "name": "bstable",
+    "files": [
+        "bootstrap-table.min.css",
+        "bootstrap-table.min.js",
+        "locale/bootstrap-table-pt-BR.min.js",
+        "extensions/toolbar/bootstrap-table-toolbar.js",
+        "extensions/accent-neutralise/bootstrap-table-accent-neutralise.js",
+        "extensions/i18n-enhance/bootstrap-table-i18n-enhance.js",
+        "extensions/copy-rows/bootstrap-table-copy-rows.js",
+        "extensions/mobile/bootstrap-table-mobile.js",
+        "extensions/table-export/libs/FileSaver/FileSaver.min.js",
+        "extensions/table-export/libs/js-xlsx/xlsx.core.min.js",
+        "extensions/export/bootstrap-table-export.min.js",
+        "extensions/table-export/tableExport.min.js"
+    ],
+    "onload": "",
+    "update": "",
+    "author": "Bootstrap Table Team"
+}

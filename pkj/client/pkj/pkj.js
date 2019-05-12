@@ -221,6 +221,32 @@ function tagUpdate() {
         });
     }, 1);
     setTimeout(function () {
+        $('table.bstable').each(function (i, e) {
+            var responsive = $(e).hasClass("bstable-responsive");
+            $(e).bootstrapTable({
+                'toolbar': '.bstable-toolbar',
+//                'showRefresh':"true",
+                'toggle': 'table',
+                'showColumns': true,
+                'showExport': true,
+//                'detailView':true,
+                'trimOnSearch': true,
+                'pagination': true,
+                'search': true,
+                'url': $(e).attr('ajax'),
+                'export': true,
+                'locale': 'pt-br',
+                'copyBtn': true,
+                'mobileResponsive': responsive
+            });/*.tableExport({
+             type: 'excel',
+             mso: {fileFormat: 'xmlss',
+             worksheetName: ['Table 1', 'Table 2', 'Table 3']
+             }
+             });*/
+        });
+    });
+    setTimeout(function () {
         if (typeof ($.fn.dataTableExt) !== "undefined") {
             $(".datatables").each(function (i, e) {
 //            $(function () {
@@ -232,7 +258,7 @@ function tagUpdate() {
 
                     var tabela = $(e).attr('width', '100%').DataTable({
                         lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Todos"]],
-                        bStateSave:true,
+                        bStateSave: true,
                         dom: "<'row'<'col-md-1 dt-l-fix'l><'col-sm-12 col-md-5 dt-buttons-main'B><'col-sm-12 col-md-6'f>>" + "<'row'<'col-sm-12't>>" + "<'row'<'col-sm-12 col-md-5'i><'col-sm-12 col-md-7 dt-buttons-main'p>>",
 //                        lengthChange: false,
                         buttons: [

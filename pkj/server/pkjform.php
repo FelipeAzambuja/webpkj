@@ -161,17 +161,11 @@ function text ( $id , $plus = "" , $size = 3 ) {
 }
 
 function _form_parse_attr ( $attr = '' ) {
-    $retorno = [];
-    foreach ( explode ( ' ' , $attr ) as $a ) {
-        $value = explode ( '=' , $a );
-        if ( count ( $value ) > 1 ) {
-            $retorno[$value[0]] = $value[1];
-        }
+    $attributes = new SimpleXMLElement("<element $attr />");
+    if ( ! isset ( $attributes['value'] ) ) {
+        $attributes['value'] = '';
     }
-    if ( ! isset ( $retorno['value'] ) ) {
-        $retorno['value'] = '';
-    }
-    return $retorno;
+    return $attributes;
 }
 
 function textarea ( $id , $plus = "" , $size = 3 ) {

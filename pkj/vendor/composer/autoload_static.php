@@ -51,6 +51,10 @@ class ComposerStaticInit6ead548f87cef46d4fdd1dc737727a9d
         array (
             'GuzzleHttp\\Psr7\\' => 16,
         ),
+        'F' => 
+        array (
+            'Faker\\' => 6,
+        ),
         'D' => 
         array (
             'DeepCopy\\' => 9,
@@ -109,6 +113,10 @@ class ComposerStaticInit6ead548f87cef46d4fdd1dc737727a9d
         'GuzzleHttp\\Psr7\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
+        ),
+        'Faker\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker',
         ),
         'DeepCopy\\' => 
         array (

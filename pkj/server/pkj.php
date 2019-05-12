@@ -1,4 +1,11 @@
 <?php
+/**
+ * 
+ * @return \Faker\Factory
+ */
+function faker () {
+    return Faker\Factory::create ( conf::$local );
+}
 
 function uniqueID ( $lenght = 13 ) {
     // uniqid gives 13 chars, but you could adjust it to your needs.
