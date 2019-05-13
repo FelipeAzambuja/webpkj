@@ -7,4 +7,6 @@ Partindo do projeto inicial **pkj.php**, este framework foi criado para agilizar
 
 Qualquer duvida prefira enviar um e-mail para felipe@newbgp.com.br
 
+###  [Veja a documentação](docs/WebPKJ.md) 
+
 [Enviar email](mailto:felipe@newbgp.com.br?subject=WEBPKJ)

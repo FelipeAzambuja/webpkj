@@ -71,15 +71,15 @@ switch ( $argv[1] ) {
             }
         }
         break;
-    case "update":
-        echo "Fazendo download" . PHP_EOL;
-        file_put_contents ( "tmp.zip" , file_get_contents ( $repo ) );
-        $zip = new ZipArchive;
-        $zip->open ( "tmp.zip" );
-        $zip->extractTo ( "pkj" );
-        $zip->close ();
-        unlink ( "tmp.zip" );
-        break;
+//    case "update":
+//        echo "Fazendo download" . PHP_EOL;
+//        file_put_contents ( "tmp.zip" , file_get_contents ( $repo ) );
+//        $zip = new ZipArchive;
+//        $zip->open ( "tmp.zip" );
+//        $zip->extractTo ( "pkj" );
+//        $zip->close ();
+//        unlink ( "tmp.zip" );
+//        break;
     case "tables":
         $pdo = conf::$pkj_bd_sis_conexao;
 //        $climate = new League\CLImate\CLImate();
@@ -89,64 +89,64 @@ switch ( $argv[1] ) {
         }
         s ( $table );
         break;
-    case "config":
-    case "configurar":
-        echo 'Depreciado, logo irei atualizar';
-        exit ();
-        $pkj = dirname ( __FILE__ ) . DIRECTORY_SEPARATOR . "pkj" . DIRECTORY_SEPARATOR . "server" . DIRECTORY_SEPARATOR . "pkjall.php";
-        $pkj = str_replace ( "\\" , "/" , $pkj );
-
-        echo "Qual a banco de dados (sqlite,pgsql,mysql,sqlsrv)?" . PHP_EOL;
-        $servidor = trim ( fgets ( STDIN ) );
-
-        //sem acento :(
-        echo "Qual o endereco do banco de dados ?" . PHP_EOL;
-        $endereco = trim ( fgets ( STDIN ) );
-        if ( $servidor === "sqlite" ) {
-            $endereco = "../../{$endereco}";
-        }
-
-        echo "Qual o usuario do banco de dados?" . PHP_EOL;
-        $usuario = trim ( fgets ( STDIN ) );
-
-        echo "Qual a senha do banco de dados?" . PHP_EOL;
-        $senha = trim ( fgets ( STDIN ) );
-
-        echo "Qual o database do banco de dados?" . PHP_EOL;
-        $base = trim ( fgets ( STDIN ) );
-
-        $s = '';
-        $s .= 'php_value auto_prepend_file "' . $pkj . '"' . PHP_EOL;
-        $s .= 'php_value output_buffering 0' . PHP_EOL;
-        $s .= 'php_value date.timezone "America/Sao_Paulo"' . PHP_EOL;
-        $s .= 'setenv pkj_dateformat "d/m/Y"' . PHP_EOL;
-        $s .= 'setenv pkj_servidor "' . $servidor . '"' . PHP_EOL;
-        $s .= 'setenv pkj_endereco "' . $endereco . '"' . PHP_EOL;
-        $s .= 'setenv pkj_usuario "' . $usuario . '"' . PHP_EOL;
-        $s .= 'setenv pkj_senha "' . $senha . '"' . PHP_EOL;
-        $s .= 'setenv pkj_base "' . $base . '"' . PHP_EOL;
-        $s .= 'setenv pkj_sessao "database"' . PHP_EOL;
-        $s .= '' . PHP_EOL;
-        $rewrite = <<<REWRITE
-            RewriteEngine On
-
-            RewriteCond %{REQUEST_FILENAME} !-f
-            RewriteCond %{REQUEST_URI} !^/public
-            RewriteRule ([^/]*).(css|js|png|svg|jpe?g)$ public/$1.$2 [L]
-
-            # Redirect Trailing Slashes If Not A Folder...
-            RewriteCond %{REQUEST_FILENAME} !-d
-            RewriteRule ^(.*)/$ /$1 [L,R=301]
-
-            # Handle Front Controller...
-            RewriteCond %{REQUEST_URI} !(\.css|\.js|\.png|\.jpg|\.gif|robots\.txt)$ [NC]
-            RewriteCond %{REQUEST_FILENAME} !-d
-            RewriteCond %{REQUEST_FILENAME} !-f
-            RewriteRule ^ index.php [L]        
-REWRITE;
-        $s .= $rewrite;
-        file_put_contents ( ".htaccess" , $s );
-        break;
+//    case "config":
+//    case "configurar":
+//        echo 'Depreciado, logo irei atualizar';
+//        exit ();
+//        $pkj = dirname ( __FILE__ ) . DIRECTORY_SEPARATOR . "pkj" . DIRECTORY_SEPARATOR . "server" . DIRECTORY_SEPARATOR . "pkjall.php";
+//        $pkj = str_replace ( "\\" , "/" , $pkj );
+//
+//        echo "Qual a banco de dados (sqlite,pgsql,mysql,sqlsrv)?" . PHP_EOL;
+//        $servidor = trim ( fgets ( STDIN ) );
+//
+//        //sem acento :(
+//        echo "Qual o endereco do banco de dados ?" . PHP_EOL;
+//        $endereco = trim ( fgets ( STDIN ) );
+//        if ( $servidor === "sqlite" ) {
+//            $endereco = "../../{$endereco}";
+//        }
+//
+//        echo "Qual o usuario do banco de dados?" . PHP_EOL;
+//        $usuario = trim ( fgets ( STDIN ) );
+//
+//        echo "Qual a senha do banco de dados?" . PHP_EOL;
+//        $senha = trim ( fgets ( STDIN ) );
+//
+//        echo "Qual o database do banco de dados?" . PHP_EOL;
+//        $base = trim ( fgets ( STDIN ) );
+//
+//        $s = '';
+//        $s .= 'php_value auto_prepend_file "' . $pkj . '"' . PHP_EOL;
+//        $s .= 'php_value output_buffering 0' . PHP_EOL;
+//        $s .= 'php_value date.timezone "America/Sao_Paulo"' . PHP_EOL;
+//        $s .= 'setenv pkj_dateformat "d/m/Y"' . PHP_EOL;
+//        $s .= 'setenv pkj_servidor "' . $servidor . '"' . PHP_EOL;
+//        $s .= 'setenv pkj_endereco "' . $endereco . '"' . PHP_EOL;
+//        $s .= 'setenv pkj_usuario "' . $usuario . '"' . PHP_EOL;
+//        $s .= 'setenv pkj_senha "' . $senha . '"' . PHP_EOL;
+//        $s .= 'setenv pkj_base "' . $base . '"' . PHP_EOL;
+//        $s .= 'setenv pkj_sessao "database"' . PHP_EOL;
+//        $s .= '' . PHP_EOL;
+//        $rewrite = <<<REWRITE
+//            RewriteEngine On
+//
+//            RewriteCond %{REQUEST_FILENAME} !-f
+//            RewriteCond %{REQUEST_URI} !^/public
+//            RewriteRule ([^/]*).(css|js|png|svg|jpe?g)$ public/$1.$2 [L]
+//
+//            # Redirect Trailing Slashes If Not A Folder...
+//            RewriteCond %{REQUEST_FILENAME} !-d
+//            RewriteRule ^(.*)/$ /$1 [L,R=301]
+//
+//            # Handle Front Controller...
+//            RewriteCond %{REQUEST_URI} !(\.css|\.js|\.png|\.jpg|\.gif|robots\.txt)$ [NC]
+//            RewriteCond %{REQUEST_FILENAME} !-d
+//            RewriteCond %{REQUEST_FILENAME} !-f
+//            RewriteRule ^ index.php [L]        
+//REWRITE;
+//        $s .= $rewrite;
+//        file_put_contents ( ".htaccess" , $s );
+//        break;
     case "top":
 //        $climate = new League\CLImate\CLImate();
         $table = $argv[2];
@@ -212,17 +212,17 @@ REWRITE;
             s ( $info );
         }
         break;
-    case "orm":
-        if ( ! isset ( $argv[2] ) ) {
-            echo "Qual a tabela ?" . PHP_EOL;
-            $argv[2] = fgets ( STDIN );
-        }
-        if ( isset ( $argv[3] ) ) {
-            orm2 ( $argv[2] , $argv[3] );
-        } else {
-            orm2 ( $argv[2] );
-        }
-        break;
+//    case "orm":
+//        if ( ! isset ( $argv[2] ) ) {
+//            echo "Qual a tabela ?" . PHP_EOL;
+//            $argv[2] = fgets ( STDIN );
+//        }
+//        if ( isset ( $argv[3] ) ) {
+//            orm2 ( $argv[2] , $argv[3] );
+//        } else {
+//            orm2 ( $argv[2] );
+//        }
+//        break;
     case "model":
         if ( ! isset ( $argv[2] ) ) {
             echo "Qual a tabela ?" . PHP_EOL;
@@ -372,6 +372,7 @@ function crud ( $tabela ) {
 }
 
 function ajuda () {
+    
     echo color ( "Ajuda" , Colors::$yellow ) . PHP_EOL;
 //    echo color("orm tabela", "white");
 //    echo " Cria a estrutura basica do orm com base na tabela informada" . PHP_EOL;
@@ -387,12 +388,14 @@ function ajuda () {
     echo " Mostra 10 registros da tabela" . PHP_EOL;
     echo color ( "insert tabela" , "white" );
     echo " Assistente para adicionar registros a tabela" . PHP_EOL;
-    echo color ( "config configurar" , "white" );
-    echo " Configura o webpkj" . PHP_EOL;
+//    echo color ( "config configurar" , "white" );
+//    echo " Configura o webpkj" . PHP_EOL;
+    echo color ( "install" , "white" );
+    echo " Roda os models para fazer a instalação das tabelas e seus registros no banco de dados" . PHP_EOL;
     echo color ( "update" , "white" );
-    echo " Atualiza a pasta pkj" . PHP_EOL;
-    echo color ( 'debug pagina "$variavel1,cmd1(),$variavel2"' , "white" );
-    echo " Executa esse debug aonde esta o Debug::wait() da pagina" . PHP_EOL;
+    echo " Atualiza a estrutura das tabelas conforme o model" . PHP_EOL;
+//    echo color ( 'debug pagina "$variavel1,cmd1(),$variavel2"' , "white" );
+//    echo " Executa esse debug aonde esta o Debug::wait() da pagina" . PHP_EOL;
 
 //    echo color("crud", "white");
 //    echo " Cria um 'crud' basico com base na tabela informada" . PHP_EOL;
