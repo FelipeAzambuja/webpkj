@@ -10,18 +10,18 @@ function tabela_aleatoria ( $form ) {
     <table class="bstable bstable-responsive" width="100%" >
         <thead>
             <tr>
-                <?php foreach ( range ( 1 , 30 ) as $value ): ?>
+                <?php foreach ( range ( 1 , 10 ) as $value ): ?>
                     <th>aaaaaaaaaaaaaaa</th>
                 <?php endforeach; ?>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ( range ( 0 , random_int ( 0 , 5000 ) ) as $i ): ?>
+            <?php foreach ( range ( 0 , random_int ( 0 , 500 ) ) as $i ): ?>
                 <?php
                 $data = $faker->dateTime;
                 ?>
                 <tr>
-                    <?php foreach ( range ( 1 , 30 ) as $value ): ?>
+                    <?php foreach ( range ( 1 , 10 ) as $value ): ?>
                         <td>dsadsadadadasdasdassdsa</td>
                     <?php endforeach; ?>
                 </tr>

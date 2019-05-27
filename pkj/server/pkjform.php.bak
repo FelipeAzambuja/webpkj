@@ -1,13 +1,6 @@
 <?php
 
 //color = default, primary, success, info, warning, danger, link
-function form_open ($plus = '') {
-    echo '<form '.$plus.'>';
-}
-
-function form_close () {
-    echo '</form>';
-}
 
 function row ( $class = "row" , $id = "" ) {
     if ( conf::$pkj_row ) {
@@ -19,11 +12,7 @@ function row ( $class = "row" , $id = "" ) {
     }
 }
 
-function label_check ( $id , $texto , $plus='' , $size=12 ) {
-    if(is_numeric($plus)){
-        $size = $plus;
-        $plus = '';
-    }
+function label_check ( $id , $texto , $plus , $size ) {
     ob_start ();
     check ( $id , $texto , $plus , 12 );
     echo div ( ob_get_clean () , $size , ' mt-4 ' );

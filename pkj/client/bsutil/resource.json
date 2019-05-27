@@ -1,0 +1,7 @@
+{
+    "name": "bsutil",
+    "files": ["bsutil.css"],
+    "onload":"",
+    "upload":"",
+    "author": "https://github.com/rishabh-rajgarhia/bootstrap-4-utilities"
+}
