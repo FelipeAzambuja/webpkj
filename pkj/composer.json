@@ -1,13 +1,16 @@
 {
-    "name": "NewBGP/server",
     "require": {
         "danielstjules/stringy": "^3.1",
         "kint-php/kint": "^2.2",
         "intervention/image": "^2.4",
         "nesbot/carbon": "^1.25",
-        "tightenco/collect": "^5.7",
-        "mpdf/mpdf": "^7.1",
+        "tightenco/collect": "*.*",
+        "mpdf/mpdf": "*.*",
         "phpmailer/phpmailer": "^6.0",
-        "fzaninotto/faker": "^1.8"
+        "paquettg/php-html-parser": "^2.0",
+        "php-curl-class/php-curl-class": "^8.6",
+        "katzgrau/klogger": "^1.2",
+        "fabpot/goutte": "^3.2",
+        "chillerlan/php-cache": "^4.1"
     }
 }

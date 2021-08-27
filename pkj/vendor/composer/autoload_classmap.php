@@ -6,11 +6,9 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'FPDF_TPL' => $vendorDir . '/setasign/fpdi/fpdf_tpl.php',
-    'FPDI' => $vendorDir . '/setasign/fpdi/fpdi.php',
-    'FilterASCII85' => $vendorDir . '/setasign/fpdi/filters/FilterASCII85.php',
-    'FilterASCIIHexDecode' => $vendorDir . '/setasign/fpdi/filters/FilterASCIIHexDecode.php',
-    'FilterLZW' => $vendorDir . '/setasign/fpdi/filters/FilterLZW.php',
+    'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
+    'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'Katzgrau\\KLogger\\Logger' => $vendorDir . '/katzgrau/klogger/src/Logger.php',
     'Kint' => $vendorDir . '/kint-php/kint/src/Kint.php',
     'Kint_Object' => $vendorDir . '/kint-php/kint/src/Object.php',
     'Kint_Object_Blob' => $vendorDir . '/kint-php/kint/src/Object/Blob.php',
@@ -88,6 +86,8 @@ return array(
     'Kint_Renderer_Text_Recursion' => $vendorDir . '/kint-php/kint/src/Renderer/Text/Recursion.php',
     'Kint_Renderer_Text_Trace' => $vendorDir . '/kint-php/kint/src/Renderer/Text/Trace.php',
     'Kint_SourceParser' => $vendorDir . '/kint-php/kint/src/SourceParser.php',
-    'fpdi_pdf_parser' => $vendorDir . '/setasign/fpdi/fpdi_pdf_parser.php',
-    'pdf_context' => $vendorDir . '/setasign/fpdi/pdf_context.php',
+    'Normalizer' => $vendorDir . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
+    'Stringable' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
+    'UnhandledMatchError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
+    'ValueError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
 );
