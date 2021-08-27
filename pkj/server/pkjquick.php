@@ -161,3 +161,18 @@ function smarty ( $file , $data = null , $cache = true ) {
     ob_end_clean ();
     return $html;
 }
+
+
+/**
+ * Cria um File cache 
+ * @return \chillerlan\SimpleCache\FileCache
+ */
+function cache($name = 'all'){
+    // https://github.com/chillerlan/php-cache
+    $diretorio_cache = __DIR__ . '/../../../cache/' . $name;
+    @mkdir($diretorio_cache, 775);
+    // echo is_writable($diretorio_cache);
+    $options_cache = new \chillerlan\SimpleCache\CacheOptions(['cacheFilestorage' => $diretorio_cache]);
+ 
+    return new \chillerlan\SimpleCache\FileCache($options_cache);
+}
